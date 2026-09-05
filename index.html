@@ -6,35 +6,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
-    --bg: #0f1218; --panel: #171b23; --line: #2a3140; --text: #d8dde6; --muted: #8a93a3;
+    --bg: #0c1016; --panel: #151a22; --panel-glass: rgba(21,26,34,.96); --line: #303847; --text: #e0e3e8; --muted: #9199a7;
     --knowledge: #2a3446; --state: #23384a; --gateway: #d4a63a; --pressure: #4a2f2f; --attractor: #3b2f5c;
     --forward: #4f8fe8; --unlock: #7fc1ff; --lateral: #7b8595; --defeater: #e0534f; --feedback: #b47cff;
     --backward: #f0963c; --reinterpretation: #3ec9b8; --global_modifier: #6d7a8c; --hl: #ffe066;
   }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; }
-  #app { display: grid; grid-template-columns: 250px 1fr 330px; height: 100vh; }
-  aside { background: var(--panel); border-color: var(--line); overflow: auto; padding: 12px; }
-  #left { border-right: 1px solid var(--line); } #right { border-left: 1px solid var(--line); }
-  h1 { font-size: 15px; margin: 0 0 8px; } h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; }
+  #app { display: flex; flex-direction: column; height: 100dvh; }
+  #bar { z-index: 4; min-height: 48px; display: flex; align-items: center; gap: 6px; padding: 7px 10px; background: #11161d; border-bottom: 1px solid var(--line); }
+  #bar h1 { margin: 0 auto 0 2px; white-space: nowrap; color: #eee7d8; font: 600 17px/1.1 Georgia, serif; }
+  #bar .group { display: flex; align-items: center; gap: 4px; }
+  #viewport { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+  aside { position: absolute; z-index: 3; top: 8px; bottom: 8px; width: min(320px, calc(100% - 24px)); background: var(--panel-glass); border: 1px solid var(--line); overflow: auto; padding: 14px; box-shadow: 0 12px 40px #0008; transition: transform .18s ease; }
+  #left { left: 8px; transform: translateX(calc(-100% - 12px)); } #left.open { transform: none; }
+  #right { right: 8px; width: min(380px, calc(100% - 24px)); transform: translateX(calc(100% + 12px)); } #right.open { transform: none; }
+  h1 { font: 600 18px/1.2 Georgia, serif; margin: 0 0 8px; } h2 { font-size: 12px; letter-spacing: .02em; color: var(--muted); margin: 14px 0 6px; }
   label.f { display: block; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  input[type=search], select { width: 100%; box-sizing: border-box; background: #0f1218; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 5px; }
-  button { background: #222938; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; cursor: pointer; margin: 2px 2px 2px 0; }
+  input[type=search], select { width: 100%; background: #0c1016; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 7px; }
+  #bar input[type=search] { width: clamp(150px, 24vw, 310px); }
+  button { background: #202735; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 6px 9px; cursor: pointer; }
+  button:hover, button[aria-pressed=true] { background: #313b4e; border-color: #59677e; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+  .close { float: right; margin: -4px -4px 0 8px; }
   .sw { display: inline-block; width: 22px; height: 0; border-top: 3px solid; vertical-align: middle; margin-right: 6px; }
   .pill { display: inline-block; padding: 1px 6px; border-radius: 10px; background: #222938; margin: 1px 2px; cursor: pointer; font-size: 12px; }
   .pill:hover { background: #2f3a50; }
   .neg { color: var(--defeater); } .pos { color: var(--forward); }
   #right p { margin: 6px 0; } #right .k { color: var(--muted); }
-  svg { width: 100%; height: 100%; display: block; }
+  svg { width: 100%; height: 100%; display: block; background: radial-gradient(circle at 30% 25%, #18202c 0, var(--bg) 48%); touch-action: none; }
   .lane { fill: #ffffff; fill-opacity: .025; stroke: var(--line); }
   .lane:nth-child(even) { fill-opacity: .05; }
-  .laneLabel, .stageLabel { fill: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
-  .stageLabel { font-size: 13px; fill: var(--text); } .stageSub { fill: var(--muted); font-size: 11px; }
+  .laneLabel, .stageLabel { fill: var(--muted); font-size: 12px; letter-spacing: .04em; }
+  .stageLabel { font: 600 15px Georgia, serif; fill: #ddd6c8; } .stageSub { fill: var(--muted); font-size: 11px; }
   .colLine { stroke: var(--line); stroke-dasharray: 2 6; }
   .rail { fill: none; stroke: var(--line); stroke-dasharray: 6 4; }
-  .edge { fill: none; opacity: .35; pointer-events: stroke; }
-  .edge.global_modifier { opacity: .18; }
-  .edge.lit { opacity: 1; } .edge.dim { opacity: .06; } .edge.hidden { display: none; }
-  .node { cursor: pointer; } .node.dim { opacity: .18; } .node.hidden { display: none; }
+  .edge { fill: none; opacity: .18; pointer-events: stroke; }
+  .edge.global_modifier { opacity: .1; }
+  .edge.lit { opacity: 1; } .edge.dim { opacity: .025; } .edge.incoming { stroke: var(--backward); } .edge.outgoing { stroke: var(--unlock); }
+  .edge.hidden { display: none; }
+  .node { cursor: pointer; } .node.dim { opacity: .11; } .node.prerequisite rect { stroke: var(--backward); } .node.consequence rect { stroke: var(--unlock); } .node.hidden { display: none; }
   .node rect { stroke-width: 1.5; }
   .node.knowledge rect { fill: var(--knowledge); stroke: #4a5670; }
   .node.state rect { fill: var(--state); stroke: #6aa4d8; stroke-width: 2; }
@@ -44,23 +55,41 @@
   .node.global rect { fill: #1d2a2a; stroke: #6fb3a5; }
   .node.isAttractor rect { filter: drop-shadow(0 0 8px #c9b2ff); }
   .node.selected rect { stroke: var(--hl); stroke-width: 3; }
+  .node:focus { outline: none; } .node:focus rect { stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 5px var(--hl)); }
   .node.match rect { stroke: var(--hl); }
   .node text { fill: var(--text); font-size: 11.5px; pointer-events: none; }
   .node .role { fill: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; }
   .node .key { fill: var(--gateway); font-size: 12px; }
-  #status { position: fixed; bottom: 8px; left: 260px; color: var(--muted); font-size: 12px; }
+  #root.overview .edge:not(.feedback), #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) { opacity: 0; pointer-events: none; }
+  #root.overview .edge.feedback { opacity: .25; }
+  #root.mid .node .role { display: none; } #root.mid .edge { opacity: .1; } #root.mid .edge.lit { opacity: 1; }
+  #status { position: absolute; z-index: 2; bottom: 10px; left: 50%; max-width: min(680px, calc(100% - 24px)); transform: translateX(-50%); padding: 5px 9px; color: #c2c8d1; background: #0c1016d9; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; pointer-events: none; }
+  #status:empty { display: none; }
+  @media (max-width: 820px) {
+    #bar { flex-wrap: wrap; } #bar h1 { order: -1; width: 100%; margin: 0; text-align: center; } #bar input[type=search] { order: 2; width: 100%; }
+    #bar .camera { margin-left: auto; } .optional { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
 </style>
 </head>
 <body>
 <div id="app">
-  <aside id="left">
-    <h1>Epistemological Civ Tree</h1>
-    <input id="search" type="search" placeholder="Search nodes… (Enter selects)">
-    <h2>Highlight cycle</h2>
-    <select id="cycle"><option value="">— none —</option></select>
+  <header id="bar">
+    <button id="filtersToggle" aria-controls="left" aria-expanded="false">Filters</button>
+    <h1>Epistemological Strategy Atlas</h1>
+    <input id="search" type="search" aria-label="Search concepts" placeholder="Search concepts…">
+    <div class="group camera" aria-label="Camera controls">
+      <button id="home" title="Focus early stages">Home</button><button id="fitAll">Fit all</button><button id="fitSelection" class="optional">Fit selection</button>
+    </div>
+    <button id="route" aria-pressed="false">Route</button>
+    <button id="inspectorToggle" aria-controls="right" aria-expanded="false">Inspector</button>
+  </header>
+  <main id="viewport">
+  <aside id="left" aria-label="Map filters" aria-hidden="true" inert>
+    <button class="close" data-close="left" aria-label="Close filters">×</button><h1>Map controls</h1>
+    <h2>Highlight cycle or trace</h2>
+    <label for="cycle">Cycle or trace</label><select id="cycle"><option value="">— none —</option></select>
     <div id="cycleDesc" style="color:var(--muted);margin-top:4px"></div>
-    <h2>Path</h2>
-    <div style="color:var(--muted)">Click a node, then shift-click another for the shortest path over visible edges.</div>
     <button id="clear">Clear highlights</button>
     <h2>Edge classes</h2><div id="edgeFilters"></div>
     <h2>Stages</h2><div id="stageFilters"></div>
@@ -68,10 +97,11 @@
     <h2>Node roles</h2>
     <div id="roleLegend"></div>
   </aside>
-  <svg id="canvas"><defs id="defs"></defs><g id="root"></g></svg>
-  <aside id="right"><h2>Inspector</h2><div id="inspector" style="color:var(--muted)">Click a node.</div></aside>
+  <svg id="canvas" role="application" aria-label="Interactive epistemological strategy map"><defs id="defs"></defs><g id="root"></g></svg>
+  <aside id="right" aria-label="Concept inspector" aria-hidden="true" inert><button class="close" data-close="right" aria-label="Close inspector">×</button><h1>Inspector</h1><div id="inspector" style="color:var(--muted)">Select a concept.</div></aside>
+  <div id="status" role="status" aria-live="polite"></div>
+  </main>
 </div>
-<div id="status"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 (async function () {
@@ -158,14 +188,17 @@
     .attr('stroke-dasharray', e => ({ reinterpretation: '8 5', feedback: '2 4', global_modifier: '1 4' })[e.transitionClass] ?? null)
     .attr('marker-end', e => `url(#arr-${e.transitionClass})`)
     .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}`))
-    .on('mouseleave', () => status(''));
+    .on('mouseleave', () => status(standingStatus));
 
   const nodeSel = root.append('g').selectAll('g').data(nodes).join('g')
     .attr('class', n => `node ${n.progressionRole}${n.stageScope === 'global' ? ' global' : ''}${attractorIds.has(n.id) ? ' isAttractor' : ''}`)
     .attr('transform', n => `translate(${n.x},${n.y})`)
-    .on('click', (ev, n) => ev.shiftKey && selected ? showPath(selected, n) : select(n))
-    .on('mouseenter', (ev, n) => { if (!mode) light(new Set([n.id]), touching(n.id)); })
-    .on('mouseleave', () => { if (!mode) unlight(); });
+    .attr('tabindex', 0).attr('role', 'button')
+    .attr('aria-label', n => `${n.label}, ${n.progressionRole}, ${n.stageScope === 'global' ? 'global' : `stage ${n.stage}`}`)
+    .on('click', (ev, n) => activateNode(n, ev.shiftKey))
+    .on('keydown', keyNode)
+    .on('mouseenter', (ev, n) => { if (!mode && !selected) light(new Set([n.id]), touching(n.id)); })
+    .on('mouseleave', () => { if (!mode && !selected) unlight(); });
   nodeSel.append('rect').attr('width', NW).attr('height', NH).attr('rx', n => n.progressionRole === 'state' ? NH / 2 : 5);
   nodeSel.append('text').attr('x', 8).attr('y', 17).text(n => trunc(n.label, 27));
   nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 32).text(n => n.progressionRole + (n.stageScope === 'global' ? ' · global' : '') + (attractorIds.has(n.id) ? ' · attractor' : ''));
@@ -173,39 +206,97 @@
   nodeSel.filter(n => n.unlocks?.length).append('title').text(n => 'unlocks: ' + n.unlocks.join(', '));
 
   // pan / zoom
-  const zoom = d3.zoom().scaleExtent([0.08, 3]).on('zoom', ev => root.attr('transform', ev.transform));
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const zoom = d3.zoom().scaleExtent([0.08, 3]).on('zoom', ev => {
+    const overview = ev.transform.k < .34;
+    root.attr('transform', ev.transform)
+      .classed('overview', overview)
+      .classed('mid', ev.transform.k >= .34 && ev.transform.k < .68);
+    nodeSel.attr('tabindex', n => overview && n.progressionRole !== 'gateway' && n.progressionRole !== 'attractor' && !attractorIds.has(n.id) ? -1 : 0);
+  });
   svg.call(zoom);
-  const box = svg.node().getBoundingClientRect();
-  svg.call(zoom.transform, d3.zoomIdentity.scale(Math.min(box.width / totalW, box.height / totalH) * 0.98));
+  const move = transform => (reducedMotion ? svg : svg.transition().duration(280)).call(zoom.transform, transform);
+  function fitBounds(x, yy, w, h, maxScale = 1.1) {
+    const b = svg.node().getBoundingClientRect(), pad = 44;
+    const k = Math.min(maxScale, (b.width - pad * 2) / w, (b.height - pad * 2) / h);
+    move(d3.zoomIdentity.translate(b.width / 2 - (x + w / 2) * k, b.height / 2 - (yy + h / 2) * k).scale(k));
+  }
+  function focusNode(n, scale = .9) {
+    const b = svg.node().getBoundingClientRect();
+    move(d3.zoomIdentity.translate(b.width / 2 - n.cx * scale, b.height / 2 - n.cy * scale).scale(scale));
+  }
+  function fitNodes(list, maxScale = .9) {
+    const x = d3.min(list, n => n.x), yy = d3.min(list, n => n.y);
+    fitBounds(x, yy, d3.max(list, n => n.x + NW) - x, d3.max(list, n => n.y + NH) - yy, maxScale);
+  }
+  function home() {
+    const k = .82;
+    move(d3.zoomIdentity.translate(20 - LEFT * k, 12).scale(k));
+  }
+  function fitAll() { fitBounds(0, 0, totalW, totalH, 1); }
+  home();
 
   // ---------- highlight state ----------
-  let selected = null, mode = null; // mode: 'cycle' | 'path' | null
+  let selected = null, mode = null, routeStart = null, standingStatus = ''; // mode: 'cycle' | 'path' | null
   function touching(id) { return new Set(edges.filter(e => e.source === id || e.target === id).map(e => e.id)); }
   function light(nodeIds, edgeIds) {
+    nodeSel.classed('prerequisite consequence', false); edgeSel.classed('incoming outgoing', false);
     nodeSel.classed('dim', n => !nodeIds.has(n.id) && !edgeTouches(n.id, edgeIds));
     edgeSel.classed('lit', e => edgeIds.has(e.id)).classed('dim', e => !edgeIds.has(e.id));
   }
   function edgeTouches(id, edgeIds) { return edges.some(e => edgeIds.has(e.id) && (e.source === id || e.target === id)); }
-  function unlight() { nodeSel.classed('dim', false); edgeSel.classed('lit', false).classed('dim', false); }
+  function unlight() {
+    nodeSel.classed('dim prerequisite consequence', false);
+    edgeSel.classed('lit dim incoming outgoing', false);
+  }
   function select(n) {
     selected = n; mode = null; d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text('');
     nodeSel.classed('selected', m => m === n);
-    light(new Set([n.id]), touching(n.id)); inspect(n);
+    const incoming = new Set(edges.filter(e => e.target === n.id).map(e => e.id));
+    const outgoing = new Set(edges.filter(e => e.source === n.id).map(e => e.id));
+    light(new Set([n.id]), new Set([...incoming, ...outgoing]));
+    edgeSel.classed('incoming', e => incoming.has(e.id)).classed('outgoing', e => outgoing.has(e.id));
+    nodeSel.classed('prerequisite', m => edges.some(e => incoming.has(e.id) && e.source === m.id))
+      .classed('consequence', m => edges.some(e => outgoing.has(e.id) && e.target === m.id));
+    inspect(n); toggleDrawer('right', true);
   }
   function showCycle(id) {
-    const c = D.cycles.find(c => c.id === id); if (!c) return unlight();
-    mode = 'cycle'; const s = new Set(c.nodes);
-    light(s, new Set(edges.filter(e => s.has(e.source) && s.has(e.target)).map(e => e.id)));
+    const c = D.cycles.find(c => c.id === id); if (!c) { mode = null; return unlight(); }
+    selected = null; nodeSel.classed('selected', false); mode = 'cycle';
+    const declared = c.edgeIds?.map(id => edges.find(e => e.id === id)).filter(Boolean);
+    const cycleEdges = declared?.length ? declared : edges.filter(e => c.nodes.includes(e.source) && c.nodes.includes(e.target));
+    const s = new Set(cycleEdges.flatMap(e => [e.source, e.target]));
+    light(s, new Set(cycleEdges.map(e => e.id)));
     d3.select('#cycleDesc').text(c.description);
+    toggleDrawer('right', false); if (innerWidth <= 820) toggleDrawer('left', false);
+    fitNodes([...s].map(id => byId.get(id)));
   }
   function showPath(a, b) { // BFS over visible edges
     const vis = edges.filter(e => visibleEdge(e)), prev = new Map([[a.id, null]]), q = [a.id];
     while (q.length && !prev.has(b.id)) { const u = q.shift(); for (const e of vis) if (e.source === u && !prev.has(e.target)) { prev.set(e.target, e); q.push(e.target); } }
     if (!prev.has(b.id)) return status(`No directed path from ${a.label} to ${b.label} over visible edges.`);
     const ids = new Set(), ns = new Set([b.id]); for (let e = prev.get(b.id); e; e = prev.get(e.source)) { ids.add(e.id); ns.add(e.source); }
-    mode = 'path'; light(ns, ids); status(`Path: ${[...ns].reverse().map(i => byId.get(i).label).join(' → ')}`);
+    mode = 'path'; light(ns, ids); fitNodes([...ns].map(id => byId.get(id))); status(`Path: ${[...ns].reverse().map(i => byId.get(i).label).join(' → ')}`, true);
   }
-  d3.select('#clear').on('click', () => { selected = null; mode = null; nodeSel.classed('selected', false); unlight(); d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text(''); status(''); });
+  function activateNode(n, shortcut) {
+    if ((routeStart && d3.select('#route').attr('aria-pressed') === 'true') || (shortcut && selected)) {
+      const start = routeStart || selected; showPath(start, n); routeStart = null; routeMode(false); return;
+    }
+    if (d3.select('#route').attr('aria-pressed') === 'true') {
+      routeStart = n; select(n); status(`Route start: ${n.label}. Choose a destination.`, true); return;
+    }
+    select(n);
+  }
+  function routeMode(on) {
+    d3.select('#route').attr('aria-pressed', on).text(on ? (routeStart ? 'Choose end' : 'Choose start') : 'Route');
+    if (!on) routeStart = null;
+  }
+  function clear() {
+    selected = null; mode = null; routeStart = null; standingStatus = ''; routeMode(false); nodeSel.classed('selected', false); unlight();
+    d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text(''); status('');
+  }
+  d3.select('#clear').on('click', clear);
+  d3.select('#route').on('click', function () { const on = this.getAttribute('aria-pressed') !== 'true'; routeMode(on); status(on ? 'Choose a route starting concept.' : 'Route mode cancelled.'); });
 
   // ---------- filters ----------
   const on = { edge: new Set(edgeClasses), stage: new Set([...stages.map(s => s.id), 'global']), layer: new Set(layers) };
@@ -232,7 +323,7 @@
   }).on('keydown', ev => {
     if (ev.key !== 'Enter') return;
     const q = ev.target.value.trim().toLowerCase(), n = nodes.find(n => n.label.toLowerCase().includes(q) || n.id.includes(q));
-    if (n) { select(n); const t = d3.zoomTransform(svg.node()); svg.transition().call(zoom.translateTo, n.cx, n.cy); }
+    if (n) { select(n); focusNode(n); status(`Selected ${n.label}.`, true); }
   });
 
   // ---------- inspector ----------
@@ -252,14 +343,43 @@
       <h2>Incoming pressure (${inc.length}) · net ${d3.sum(inc, e => e.weight).toFixed(2)}</h2>${inc.map(e => edgeRow(e, e.source)).join('') || '<p class="k">none</p>'}
       <h2>Outgoing pressure (${out.length})</h2>${out.map(e => edgeRow(e, e.target)).join('') || '<p class="k">none</p>'}
       ${fx.length ? `<h2>State effects</h2>${fx.map(f => `<p><b>${f.effectType}</b> <span class="k">when ${link(f.triggerNode)} is ${f.whenStatus.join('/')}</span><br>${f.description}<br><span class="k">${JSON.stringify(f.target)} ${f.weightDelta ?? f.confidenceDelta ?? f.pressureDelta ?? f.multiplier ?? ''}</span></p>`).join('')}` : ''}
-      <h2>In cycles</h2><p>${D.cycles.filter(c => c.nodes.includes(n.id)).map(c => `<span class="pill" data-cycle="${c.id}">${c.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
-    d3.select('#inspector').selectAll('.pill[data-id]').on('click', ev => { const m = byId.get(ev.target.dataset.id); select(m); svg.transition().call(zoom.translateTo, m.cx, m.cy); });
+      <h2>In cycles / traces</h2><p>${D.cycles.filter(c => c.nodes.includes(n.id)).map(c => `<span class="pill" data-cycle="${c.id}">${c.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
+    d3.select('#inspector').selectAll('.pill[data-id]').on('click', ev => { const m = byId.get(ev.target.dataset.id); select(m); focusNode(m); });
     d3.select('#inspector').selectAll('.pill[data-cycle]').on('click', ev => { d3.select('#cycle').property('value', ev.target.dataset.cycle); showCycle(ev.target.dataset.cycle); });
   }
+
+  // ---------- command bar + keyboard ----------
+  function toggleDrawer(id, open) {
+    const panel = document.getElementById(id), button = document.getElementById(id === 'left' ? 'filtersToggle' : 'inspectorToggle');
+    panel.classList.toggle('open', open); panel.toggleAttribute('inert', !open); panel.setAttribute('aria-hidden', !open); button.setAttribute('aria-expanded', open);
+  }
+  d3.select('#filtersToggle').on('click', function () { toggleDrawer('left', this.getAttribute('aria-expanded') !== 'true'); });
+  d3.select('#inspectorToggle').on('click', function () { toggleDrawer('right', this.getAttribute('aria-expanded') !== 'true'); });
+  d3.selectAll('[data-close]').on('click', function () { toggleDrawer(this.dataset.close, false); });
+  d3.select('#home').on('click', home); d3.select('#fitAll').on('click', fitAll);
+  d3.select('#fitSelection').on('click', () => selected ? focusNode(selected) : status('Select a concept first.'));
+  let cameraResizeTimer;
+  addEventListener('resize', () => { clearTimeout(cameraResizeTimer); cameraResizeTimer = setTimeout(() => selected ? focusNode(selected) : home(), 120); });
+
+  function keyNode(ev, n) {
+    if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); activateNode(n, ev.shiftKey); return; }
+    if (ev.key === 'Escape') { clear(); return; }
+    const dir = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[ev.key];
+    if (!dir) return;
+    ev.preventDefault();
+    const candidates = nodes.filter(m => m !== n && visibleNode(m)).map(m => {
+      const dx = m.cx - n.cx, dy = m.cy - n.cy, forward = dx * dir[0] + dy * dir[1];
+      return { m, score: forward > 0 ? Math.hypot(dx, dy) + Math.abs(dx * dir[1] - dy * dir[0]) * 1.5 : Infinity };
+    });
+    const next = d3.min(candidates, d => d.score); const hit = candidates.find(d => d.score === next)?.m;
+    if (hit) nodeSel.filter(m => m === hit).node().focus();
+  }
+  d3.select(document).on('keydown.clear', ev => { if (ev.key === 'Escape') { clear(); toggleDrawer('left', false); toggleDrawer('right', false); } });
+
   const deep = byId.get(new URLSearchParams(location.search).get('node'));
-  if (deep) { select(deep); svg.call(zoom.transform, d3.zoomIdentity.translate(box.width / 2 - deep.cx * 0.9, box.height / 2 - deep.cy * 0.9).scale(0.9)); }
+  if (deep) { select(deep); focusNode(deep); }
   function trunc(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
-  function status(t) { document.getElementById('status').textContent = t; }
+  function status(t, persist = false) { if (persist) standingStatus = t; document.getElementById('status').textContent = t; }
 })();
 </script>
 </body>

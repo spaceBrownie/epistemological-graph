@@ -2871,6 +2871,11 @@
         "hyp_actual_resurrection",
         "a_resurrection"
       ],
+      "edgeIds": [
+        "e111",
+        "e106",
+        "e110"
+      ],
       "description": "Theism raises the prior plausibility of resurrection; resurrection, if judged likely, then increases confidence in personal theism."
     },
     {
@@ -2880,7 +2885,14 @@
         "p_evil",
         "m_objective_value",
         "arg_moral",
+        "s_transcendence",
         "s_personal_theism"
+      ],
+      "edgeIds": [
+        "e077",
+        "e079",
+        "e042",
+        "e050"
       ],
       "description": "Evil pressures against theism, while the moral force of the objection itself can generate questions about objective value and its metaphysical grounding."
     },
@@ -2889,10 +2901,18 @@
       "label": "Resurrection → Christ → Scripture → worldview reinterpretation",
       "nodes": [
         "a_resurrection",
+        "s_christian_leading",
         "c_jesus_authority",
         "c_scripture",
-        "s_historic_christianity",
-        "s_personal_theism"
+        "c_ecclesiology",
+        "s_historic_christianity"
+      ],
+      "edgeIds": [
+        "e107",
+        "e113",
+        "e118",
+        "e119",
+        "e121"
       ],
       "description": "Historical confidence in resurrection upgrades Jesus' authority; Christ then changes the interpretation of scripture, metaphysics, suffering, and revelation."
     },
@@ -2906,17 +2926,28 @@
         "s_agnostic_naturalism",
         "p_miracle_prior"
       ],
+      "edgeIds": [
+        "e154",
+        "e158"
+      ],
       "description": "Suffering and hiddenness favor naturalism; naturalism then lowers miracle priors and can further reduce the probability assigned to resurrection."
     },
     {
       "id": "cycle_love_christian_coherence",
       "label": "Love ↔ Christian ontology loop",
       "nodes": [
-        "exp_love",
         "a_love",
-        "c_cross",
         "c_trinity",
-        "s_christian_leading"
+        "s_christian_leading",
+        "c_jesus_authority",
+        "c_christology"
+      ],
+      "edgeIds": [
+        "e127",
+        "e131",
+        "e113",
+        "e114",
+        "e116"
       ],
       "description": "Human love creates existential/metaphysical pressure; Christian doctrines interpret love as reflecting ultimate reality, which can increase perceived worldview coherence."
     },
@@ -2929,6 +2960,10 @@
         "s_closed_posture",
         "s_agnostic_naturalism",
         "p_institutional_distrust"
+      ],
+      "edgeIds": [
+        "e147",
+        "e149"
       ],
       "description": "Institutional failure or trauma can weaken trust, reduce willingness to revisit evidence, and stabilize a secular or agnostic state independently of purely analytic argument."
     }

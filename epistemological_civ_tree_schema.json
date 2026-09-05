@@ -51,7 +51,28 @@
       "type": "array"
     },
     "cycles": {
-      "type": "array"
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "nodes",
+          "edgeIds",
+          "description"
+        ],
+        "properties": {
+          "edgeIds": {
+            "description": "Ordered edge IDs forming a directed walk; the walk may be a closed cycle or an incomplete narrative trace when the graph has a data gap.",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
     },
     "attractors": {
       "type": "array"
