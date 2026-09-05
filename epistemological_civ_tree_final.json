@@ -1,0 +1,3224 @@
+{
+  "schema_version": "2.0.0",
+  "graph": {
+    "id": "epistemological_worldview_network",
+    "name": "Epistemological Worldview Network",
+    "description": "A philosophical state-transition and pressure network modeling how metaphysical, historical, moral, existential, social, and experiential evidence can move an agent among naturalism, agnosticism, theism, religious traditions, secular humanism, and historic Christianity. The graph intentionally supports cycles and competing attractors.",
+    "directed": true,
+    "weighted": true,
+    "allows_cycles": true,
+    "weight_semantics": {
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "description": "Positive weights indicate evidential/supportive pressure toward the target node; negative weights indicate defeater/counter-pressure. Magnitude represents rough relative influence, not empirical probability."
+    },
+    "node_types": [
+      "origin",
+      "question",
+      "experience",
+      "argument",
+      "evidence",
+      "pressure",
+      "state",
+      "worldview",
+      "religion",
+      "historical_claim",
+      "historical_event",
+      "hypothesis",
+      "doctrine",
+      "attractor",
+      "tension",
+      "meta_state"
+    ],
+    "edge_types": [
+      "raises_question",
+      "supports",
+      "weakens",
+      "transitions_to",
+      "opens_possibility",
+      "competes_with",
+      "reframes",
+      "reinforces",
+      "undercuts",
+      "historically_supports",
+      "historically_challenges",
+      "interprets",
+      "converges_on",
+      "feedback",
+      "branches_to",
+      "contains_pressure"
+    ],
+    "layers": [
+      "human_experience",
+      "epistemology",
+      "metaphysics",
+      "naturalism",
+      "moral_philosophy",
+      "religious_comparison",
+      "history",
+      "christianity",
+      "deconstruction",
+      "worldview_end_states",
+      "meta"
+    ],
+    "model": "layered_epistemic_state_network",
+    "progressionModel": "civilization_tech_tree_with_cycles",
+    "stage_semantics": "Typical epistemic availability/depth, not mandatory chronology."
+  },
+  "nodes": [
+    {
+      "id": "human_agent",
+      "label": "Human person inside reality",
+      "type": "origin",
+      "layer": "human_experience",
+      "description": "The epistemic agent whose worldview is being updated by argument, evidence, experience, history, and social context.",
+      "centrality_hint": 1.0,
+      "stage": 0,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "q_reality",
+      "label": "What is ultimately real?",
+      "type": "question",
+      "layer": "epistemology",
+      "description": "Metaphysical inquiry into the nature and ground of reality.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "q_knowledge",
+      "label": "What can I know?",
+      "type": "question",
+      "layer": "epistemology",
+      "description": "Epistemological inquiry into warrant, rationality, evidence, and certainty.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "q_history",
+      "label": "What happened?",
+      "type": "question",
+      "layer": "epistemology",
+      "description": "Historical inquiry into publicly accessible claims and events.",
+      "stage": 5,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "q_good_life",
+      "label": "What is ultimately good?",
+      "type": "question",
+      "layer": "epistemology",
+      "description": "Moral and existential inquiry into value, purpose, flourishing, and obligation.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_love",
+      "label": "Love and attachment",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Experience of self-giving love, relational value, and attachment to persons.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_beauty",
+      "label": "Beauty and awe",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Aesthetic experience of beauty, sublimity, harmony, and transcendence.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_moral",
+      "label": "Moral obligation and guilt",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Experience that some actions are genuinely right, wrong, owed, or forbidden.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_suffering",
+      "label": "Suffering and death",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Encounter with pain, mortality, tragedy, cruelty, loss, and apparent futility.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_consciousness",
+      "label": "Consciousness and first-person awareness",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Immediate experience of subjectivity, intentionality, reason, and selfhood.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_longing",
+      "label": "Longing and transcendence",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Persistent desire for meaning, permanence, communion, or fulfillment beyond finite goods.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_forgiveness",
+      "label": "Forgiveness and reconciliation",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Experience that genuine reconciliation can acknowledge debt while absorbing its cost.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "exp_religious",
+      "label": "Religious / mystical experience",
+      "type": "experience",
+      "layer": "human_experience",
+      "description": "Experiences interpreted as divine presence, transcendence, encounter, or sacredness.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_contingency",
+      "label": "Contingency / sufficient reason",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Why contingent reality exists rather than nothing.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_kalam",
+      "label": "Kalam cosmological argument",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Pressure from a finite or caused cosmos toward a transcendent cause.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_transcendental",
+      "label": "Transcendental argument",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Pressure from logic, rational normativity, intelligibility, or preconditions of knowledge.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_intelligibility",
+      "label": "Intelligibility of the universe",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "The apparent fit among mathematics, rational minds, and physical law.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_consciousness",
+      "label": "Argument from consciousness",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Pressure from first-person subjectivity against exhaustive reductive physicalism.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_moral",
+      "label": "Moral argument",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Pressure from objective moral facts, duties, and intrinsic human value.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_personhood",
+      "label": "Argument from personhood",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Pressure from the apparent intrinsic value and irreducibility of persons.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_beauty",
+      "label": "Aesthetic argument",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Weak-to-moderate pressure from beauty as potentially objective or revelatory.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_desire",
+      "label": "Argument from desire / longing",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Abductive pressure from persistent transcendent longing; not deductive proof.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "p_science",
+      "label": "Scientific explanatory success",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Natural explanations successfully account for large domains of observed reality.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_evolution",
+      "label": "Evolutionary explanation",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Biological complexity and behavior arise through natural processes without continual intervention.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_brain_mind",
+      "label": "Brain-mind dependence",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Strong correlation of mental life with physical brain states supports physicalist interpretations.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_evil",
+      "label": "Problem of evil",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Apparently gratuitous suffering pressures against an omnipotent, omniscient, perfectly good God.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_animal_suffering",
+      "label": "Problem of animal suffering",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Pre-human predation, disease, pain, and extinction challenge many free-will or soul-making defenses.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_hiddenness",
+      "label": "Divine hiddenness",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Sincere nonbelief and ambiguous divine presence pressure against a perfectly loving personal God.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_pluralism",
+      "label": "Religious diversity",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Conflicting sincere religious claims reduce confidence in any single revelatory tradition.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_miracle_prior",
+      "label": "Low prior probability of miracles",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Under naturalism, resurrection and miracle claims begin with severe prior improbability.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_textual_tension",
+      "label": "Textual and doctrinal tensions",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "Internal interpretive disputes, difficult texts, and doctrinal complexity create epistemic friction.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_church_failure",
+      "label": "Church scandal and hypocrisy",
+      "type": "pressure",
+      "layer": "deconstruction",
+      "description": "Moral failure of religious institutions can operate as evidential and emotional counter-pressure.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_trauma",
+      "label": "Religious trauma / bad witness",
+      "type": "pressure",
+      "layer": "deconstruction",
+      "description": "Harm associated with religious communities can close or distort further inquiry.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_moral_conflict",
+      "label": "Moral conflict with doctrine",
+      "type": "pressure",
+      "layer": "deconstruction",
+      "description": "Perceived incompatibility between doctrine and moral intuitions can drive deconstruction.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_institutional_distrust",
+      "label": "Institutional distrust",
+      "type": "pressure",
+      "layer": "deconstruction",
+      "description": "Suspicion that institutions preserve power or tradition rather than truth.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_argument_fatigue",
+      "label": "Argument fatigue / epistemic closure",
+      "type": "pressure",
+      "layer": "deconstruction",
+      "description": "Repeated unresolved dispute may lead an agent to stop engaging competing arguments.",
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "s_radical_uncertainty",
+      "label": "Radical uncertainty",
+      "type": "state",
+      "layer": "epistemology",
+      "description": "No worldview has yet gained decisive explanatory priority.",
+      "stage": 0,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_naturalism_competitive",
+      "label": "Naturalism highly competitive",
+      "type": "state",
+      "layer": "naturalism",
+      "description": "Naturalism offers strong explanatory simplicity and empirical continuity.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_transcendence",
+      "label": "Transcendence plausible",
+      "type": "state",
+      "layer": "metaphysics",
+      "description": "A ground beyond contingent physical reality becomes plausible.",
+      "stage": 2,
+      "stageScope": "local",
+      "prerequisites": {
+        "anyOf": [
+          "arg_contingency",
+          "arg_kalam",
+          "arg_transcendental",
+          "arg_intelligibility",
+          "arg_consciousness",
+          "arg_moral"
+        ]
+      },
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "s_mindlike_ground",
+      "label": "Mind-like ground plausible",
+      "type": "state",
+      "layer": "metaphysics",
+      "description": "Ultimate reality appears increasingly compatible with reason, mind, normativity, or personhood.",
+      "stage": 2,
+      "stageScope": "local",
+      "prerequisites": {
+        "anyOf": [
+          "arg_consciousness",
+          "arg_transcendental",
+          "arg_moral",
+          "arg_personhood"
+        ]
+      },
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_personal_theism",
+      "label": "Personal theism",
+      "type": "worldview",
+      "layer": "metaphysics",
+      "description": "A personal, rational, transcendent divine ground becomes the leading metaphysical hypothesis.",
+      "stage": 2,
+      "stageScope": "local",
+      "prerequisites": {
+        "anyOf": [
+          "s_transcendence",
+          "s_mindlike_ground",
+          "m_objective_value"
+        ]
+      },
+      "unlocks": [
+        "s_revelation_possible"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "s_impersonal_absolute",
+      "label": "Impersonal / transpersonal absolute",
+      "type": "worldview",
+      "layer": "metaphysics",
+      "description": "Ultimate reality is conceived as impersonal, nondual, structural, or transpersonal.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_agnostic_theism",
+      "label": "Agnostic classical-theism territory",
+      "type": "state",
+      "layer": "epistemology",
+      "description": "Theism remains plausible but evil, hiddenness, and uncertainty prevent confident commitment.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_agnostic_naturalism",
+      "label": "Agnostic naturalism",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "Naturalism is favored while metaphysical uncertainty remains.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_secular_humanism",
+      "label": "Secular humanism",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "Human dignity, ethics, and meaning are retained without transcendent revelation.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_closed_posture",
+      "label": "Epistemically closed posture",
+      "type": "meta_state",
+      "layer": "deconstruction",
+      "description": "The agent ceases meaningful engagement with counterarguments or alternative hypotheses.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_christian_leading",
+      "label": "Christianity leading hypothesis",
+      "type": "state",
+      "layer": "christianity",
+      "description": "Christianity becomes the strongest current explanatory model, though not yet full commitment.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "a_resurrection"
+        ]
+      },
+      "unlocks": [
+        "c_jesus_authority",
+        "c_early_church"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "s_historic_christianity",
+      "label": "Historic / apostolic Christianity",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "Christian commitment interpreted through historic ecclesial, sacramental, and creedal categories.",
+      "stage": 8,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "s_christian_leading"
+        ],
+        "anyOf": [
+          "c_ecclesiology",
+          "c_incarnation",
+          "c_trinity",
+          "c_cross"
+        ]
+      },
+      "unlocks": [
+        "s_christian_with_tension"
+      ],
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_christian_with_tension",
+      "label": "Christian commitment with unresolved tensions",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "Christianity is affirmed while evil, hiddenness, pluralism, and interpretive problems remain real.",
+      "stage": 8,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "s_historic_christianity"
+        ]
+      },
+      "progressionRole": "state"
+    },
+    {
+      "id": "r_judaism",
+      "label": "Judaism",
+      "type": "religion",
+      "layer": "religious_comparison",
+      "description": "The historical covenantal and monotheistic matrix from which Christianity emerges.",
+      "stage": 4,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "r_christianity",
+      "label": "Christianity",
+      "type": "religion",
+      "layer": "religious_comparison",
+      "description": "Claims that God uniquely acts and reveals himself in Jesus Christ.",
+      "stage": 4,
+      "stageScope": "local",
+      "unlocks": [
+        "h_jesus"
+      ],
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "r_islam",
+      "label": "Islam",
+      "type": "religion",
+      "layer": "religious_comparison",
+      "description": "Strict monotheism, prophetic revelation, Qur'an, and later reinterpretation of Jesus.",
+      "stage": 4,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "r_hindu",
+      "label": "Hindu traditions",
+      "type": "religion",
+      "layer": "religious_comparison",
+      "description": "Plural family of metaphysical, devotional, ritual, and liberation traditions.",
+      "stage": 4,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "r_buddhism",
+      "label": "Buddhist traditions",
+      "type": "religion",
+      "layer": "religious_comparison",
+      "description": "Non-theistic or differently-theistic traditions centered on suffering, impermanence, and liberation.",
+      "stage": 4,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "s_revelation_possible",
+      "label": "Revelation becomes a live possibility",
+      "type": "state",
+      "layer": "religious_comparison",
+      "description": "If personal theism is plausible, alleged divine self-disclosure becomes evidence worth testing.",
+      "stage": 3,
+      "stageScope": "local",
+      "prerequisites": {
+        "anyOf": [
+          "s_personal_theism",
+          "exp_religious"
+        ]
+      },
+      "unlocks": [
+        "s_compare_religions"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "s_compare_religions",
+      "label": "Comparative religious investigation",
+      "type": "state",
+      "layer": "religious_comparison",
+      "description": "Religious traditions are compared historically, philosophically, morally, and phenomenologically.",
+      "stage": 4,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "s_revelation_possible"
+        ]
+      },
+      "unlocks": [
+        "r_judaism",
+        "r_christianity",
+        "r_islam",
+        "r_hindu",
+        "r_buddhism"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "h_jesus",
+      "label": "Jesus of Nazareth",
+      "type": "historical_event",
+      "layer": "history",
+      "description": "The first-century Jewish teacher around whom Christianity emerges.",
+      "stage": 5,
+      "stageScope": "local",
+      "prerequisites": {
+        "anyOf": [
+          "r_christianity",
+          "r_judaism",
+          "q_history"
+        ]
+      },
+      "unlocks": [
+        "h_crucifixion",
+        "h_empty_tomb",
+        "h_appearances",
+        "h_disciples",
+        "h_paul_james",
+        "h_early_worship"
+      ],
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_crucifixion",
+      "label": "Crucifixion of Jesus",
+      "type": "historical_event",
+      "layer": "history",
+      "description": "Jesus is executed under Roman authority; a high-confidence historical datum.",
+      "stage": 5,
+      "stageScope": "local",
+      "unlocks": [
+        "h_resurrection_question"
+      ],
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_empty_tomb",
+      "label": "Empty tomb tradition",
+      "type": "historical_claim",
+      "layer": "history",
+      "description": "Early Christian claim that Jesus' burial place was found empty.",
+      "stage": 5,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_appearances",
+      "label": "Post-death appearance traditions",
+      "type": "historical_claim",
+      "layer": "history",
+      "description": "Claims that individuals and groups experienced Jesus alive after his death.",
+      "stage": 5,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_disciples",
+      "label": "Transformation of disciples",
+      "type": "evidence",
+      "layer": "history",
+      "description": "Followers move from defeat to public resurrection proclamation.",
+      "stage": 5,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_paul_james",
+      "label": "Paul and James",
+      "type": "evidence",
+      "layer": "history",
+      "description": "Early conversions/transformations treated as data requiring explanation.",
+      "stage": 5,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_early_worship",
+      "label": "Early exalted devotion to Jesus",
+      "type": "evidence",
+      "layer": "history",
+      "description": "Very early Jewish-Christian devotion assigns Jesus extraordinary divine significance.",
+      "stage": 5,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "h_resurrection_question",
+      "label": "What best explains the resurrection data?",
+      "type": "question",
+      "layer": "history",
+      "description": "The central historical bottleneck in the Christian hypothesis space.",
+      "stage": 6,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "h_jesus",
+          "h_crucifixion"
+        ],
+        "anyOf": [
+          "h_empty_tomb",
+          "h_appearances",
+          "h_disciples",
+          "h_paul_james",
+          "h_early_worship"
+        ]
+      },
+      "unlocks": [
+        "hyp_actual_resurrection",
+        "hyp_natural_resurrection"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "hyp_natural_resurrection",
+      "label": "Naturalistic resurrection explanations",
+      "type": "hypothesis",
+      "layer": "history",
+      "description": "Vision, legend, cognitive dissonance, memory development, social dynamics, or mixed natural mechanisms.",
+      "stage": 6,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "h_resurrection_question"
+        ]
+      },
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "hyp_actual_resurrection",
+      "label": "Actual bodily resurrection",
+      "type": "hypothesis",
+      "layer": "history",
+      "description": "God raised Jesus from the dead.",
+      "stage": 6,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "h_resurrection_question"
+        ]
+      },
+      "unlocks": [
+        "a_resurrection"
+      ],
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "c_jesus_authority",
+      "label": "Jesus' epistemic authority upgraded",
+      "type": "state",
+      "layer": "christianity",
+      "description": "If resurrection is likely, Jesus' teachings gain substantially greater evidential weight.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "s_christian_leading"
+        ]
+      },
+      "unlocks": [
+        "c_christology",
+        "c_scripture"
+      ],
+      "progressionRole": "state"
+    },
+    {
+      "id": "c_christology",
+      "label": "Christology",
+      "type": "doctrine",
+      "layer": "christianity",
+      "description": "Inquiry into Jesus' divine/human identity.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "c_jesus_authority"
+        ]
+      },
+      "unlocks": [
+        "c_incarnation",
+        "c_cross",
+        "c_trinity"
+      ],
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "c_incarnation",
+      "label": "Incarnation",
+      "type": "doctrine",
+      "layer": "christianity",
+      "description": "The transcendent Creator genuinely enters embodied human history.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "c_christology"
+        ]
+      },
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "c_cross",
+      "label": "Cross as self-giving reconciliation",
+      "type": "doctrine",
+      "layer": "christianity",
+      "description": "Evil is neither ignored nor ultimate; reconciliation occurs through costly self-giving.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "c_christology"
+        ]
+      },
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "c_trinity",
+      "label": "Trinitarian ontology",
+      "type": "doctrine",
+      "layer": "christianity",
+      "description": "Ultimate reality is one divine being whose life eternally contains relation and love.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "c_christology"
+        ]
+      },
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "c_scripture",
+      "label": "Scripture reread through Christ",
+      "type": "state",
+      "layer": "christianity",
+      "description": "Biblical texts are recursively reinterpreted in light of resurrection and Christology.",
+      "stage": 7,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "c_jesus_authority"
+        ]
+      },
+      "unlocks": [
+        "c_ecclesiology"
+      ],
+      "progressionRole": "state"
+    },
+    {
+      "id": "c_restoration",
+      "label": "Resurrection and cosmic restoration",
+      "type": "doctrine",
+      "layer": "christianity",
+      "description": "Creation, embodiment, and persons are restored rather than discarded.",
+      "stage": 7,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "c_ecclesiology",
+      "label": "Church / sacrament / apostolic community",
+      "type": "doctrine",
+      "layer": "christianity",
+      "description": "Conversion leads into visible communal, sacramental, and apostolic questions.",
+      "stage": 8,
+      "stageScope": "local",
+      "prerequisites": {
+        "anyOf": [
+          "c_scripture",
+          "c_early_church"
+        ]
+      },
+      "unlocks": [
+        "s_historic_christianity"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "c_early_church",
+      "label": "Early post-apostolic Christianity",
+      "type": "evidence",
+      "layer": "christianity",
+      "description": "Ignatius, Clement, Justin, Irenaeus and others provide evidence about early ecclesial Christianity.",
+      "stage": 8,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "m_objective_value",
+      "label": "Objective value / moral realism",
+      "type": "state",
+      "layer": "moral_philosophy",
+      "description": "Moral claims are treated as more than individual or social preference.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "m_intrinsic_personhood",
+      "label": "Intrinsic dignity of persons",
+      "type": "state",
+      "layer": "moral_philosophy",
+      "description": "Persons are experienced as ends possessing value that exceeds instrumental utility.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "m_value_fundamental",
+      "label": "Value may be fundamental",
+      "type": "state",
+      "layer": "moral_philosophy",
+      "description": "Goodness, beauty, or normativity may belong to reality rather than being wholly projected.",
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "m_constructed_meaning",
+      "label": "Meaning constructed rather than discovered",
+      "type": "state",
+      "layer": "worldview_end_states",
+      "description": "Meaning is humanly generated within an indifferent or non-teleological cosmos.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "m_naturalistic_morality",
+      "label": "Naturalistic moral realism / anti-realism",
+      "type": "state",
+      "layer": "moral_philosophy",
+      "description": "Secular accounts ground, reconstruct, or deflate morality without divine command.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "a_resurrection",
+      "label": "Attractor: Resurrection",
+      "type": "attractor",
+      "layer": "meta",
+      "description": "High-centrality historical attractor. If rejected, historic Christianity collapses; if accepted, it recursively updates earlier metaphysical priors.",
+      "attractor_strength": 0.95,
+      "stage": 6,
+      "stageScope": "local",
+      "prerequisites": {
+        "allOf": [
+          "hyp_actual_resurrection"
+        ]
+      },
+      "unlocks": [
+        "s_christian_leading"
+      ],
+      "progressionRole": "gateway"
+    },
+    {
+      "id": "a_love",
+      "label": "Attractor: Love",
+      "type": "attractor",
+      "layer": "meta",
+      "description": "Existential attractor connecting personhood, morality, forgiveness, Trinity, cross, and ultimate value.",
+      "attractor_strength": 0.8,
+      "stage": 7,
+      "stageScope": "local",
+      "progressionRole": "attractor"
+    },
+    {
+      "id": "a_naturalism",
+      "label": "Attractor: Naturalistic simplicity",
+      "type": "attractor",
+      "layer": "meta",
+      "description": "Explanatory attractor favoring a worldview in which suffering, hiddenness, and causal closure require no divine reason.",
+      "attractor_strength": 0.82,
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "attractor"
+    },
+    {
+      "id": "a_coherence",
+      "label": "Attractor: Global explanatory coherence",
+      "type": "attractor",
+      "layer": "meta",
+      "description": "Meta-attractor favoring the worldview that best integrates metaphysics, history, morality, experience, and explanatory cost.",
+      "attractor_strength": 1.0,
+      "stage": null,
+      "stageScope": "global",
+      "progressionRole": "attractor"
+    },
+    {
+      "id": "t_christian_evil",
+      "label": "Residual tension: evil and suffering",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Christianity must reconcile divine goodness with apparently gratuitous suffering.",
+      "stage": 8,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_christian_hiddenness",
+      "label": "Residual tension: divine hiddenness",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Christianity must explain sincere nonbelief and ambiguous divine presence.",
+      "stage": 8,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_christian_pluralism",
+      "label": "Residual tension: religious pluralism",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Christianity must account for sincere competing revelations and traditions.",
+      "stage": 8,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_christian_church",
+      "label": "Residual tension: church failure",
+      "type": "tension",
+      "layer": "meta",
+      "description": "The moral witness of Christianity is compromised by institutional and personal failures.",
+      "stage": 8,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_naturalism_consciousness",
+      "label": "Residual tension: consciousness",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Naturalism must explain subjectivity and intentional awareness.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_naturalism_normativity",
+      "label": "Residual tension: normativity",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Naturalism must account for logical, moral, and rational oughts.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_naturalism_value",
+      "label": "Residual tension: intrinsic value",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Naturalism must explain whether persons and values are objectively significant.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "t_naturalism_existence",
+      "label": "Residual tension: existence and intelligibility",
+      "type": "tension",
+      "layer": "meta",
+      "description": "Naturalism may leave the existence and rational structure of reality as brute facts.",
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e001",
+      "source": "human_agent",
+      "target": "q_reality",
+      "type": "raises_question",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e002",
+      "source": "human_agent",
+      "target": "q_knowledge",
+      "type": "raises_question",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e003",
+      "source": "human_agent",
+      "target": "q_history",
+      "type": "raises_question",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 5
+    },
+    {
+      "id": "e004",
+      "source": "human_agent",
+      "target": "q_good_life",
+      "type": "raises_question",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e005",
+      "source": "human_agent",
+      "target": "exp_love",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e006",
+      "source": "human_agent",
+      "target": "exp_beauty",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e007",
+      "source": "human_agent",
+      "target": "exp_moral",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e008",
+      "source": "human_agent",
+      "target": "exp_suffering",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e009",
+      "source": "human_agent",
+      "target": "exp_consciousness",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e010",
+      "source": "human_agent",
+      "target": "exp_longing",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e011",
+      "source": "human_agent",
+      "target": "exp_forgiveness",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e012",
+      "source": "human_agent",
+      "target": "exp_religious",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e013",
+      "source": "human_agent",
+      "target": "s_radical_uncertainty",
+      "type": "transitions_to",
+      "weight": 0.8,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e014",
+      "source": "q_reality",
+      "target": "arg_contingency",
+      "type": "branches_to",
+      "weight": 0.65,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e015",
+      "source": "q_reality",
+      "target": "arg_kalam",
+      "type": "branches_to",
+      "weight": 0.65,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e016",
+      "source": "q_reality",
+      "target": "arg_intelligibility",
+      "type": "branches_to",
+      "weight": 0.65,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e017",
+      "source": "q_knowledge",
+      "target": "arg_transcendental",
+      "type": "branches_to",
+      "weight": 0.65,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e018",
+      "source": "q_knowledge",
+      "target": "arg_consciousness",
+      "type": "branches_to",
+      "weight": 0.65,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e019",
+      "source": "q_good_life",
+      "target": "arg_moral",
+      "type": "branches_to",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e020",
+      "source": "q_good_life",
+      "target": "arg_desire",
+      "type": "branches_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e021",
+      "source": "q_history",
+      "target": "h_jesus",
+      "type": "branches_to",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e022",
+      "source": "exp_love",
+      "target": "arg_personhood",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e023",
+      "source": "exp_love",
+      "target": "arg_moral",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e024",
+      "source": "exp_love",
+      "target": "a_love",
+      "type": "converges_on",
+      "weight": 0.8,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e025",
+      "source": "exp_beauty",
+      "target": "arg_beauty",
+      "type": "supports",
+      "weight": 0.5,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e026",
+      "source": "exp_beauty",
+      "target": "m_value_fundamental",
+      "type": "supports",
+      "weight": 0.35,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e027",
+      "source": "exp_moral",
+      "target": "arg_moral",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e028",
+      "source": "exp_moral",
+      "target": "m_objective_value",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e029",
+      "source": "exp_consciousness",
+      "target": "arg_consciousness",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e030",
+      "source": "exp_consciousness",
+      "target": "arg_transcendental",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e031",
+      "source": "exp_longing",
+      "target": "arg_desire",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e032",
+      "source": "exp_forgiveness",
+      "target": "a_love",
+      "type": "converges_on",
+      "weight": 0.65,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e033",
+      "source": "exp_suffering",
+      "target": "p_evil",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e034",
+      "source": "exp_suffering",
+      "target": "p_animal_suffering",
+      "type": "supports",
+      "weight": 0.75,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e035",
+      "source": "exp_suffering",
+      "target": "p_hiddenness",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e036",
+      "source": "exp_religious",
+      "target": "s_revelation_possible",
+      "type": "supports",
+      "weight": 0.35,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e037",
+      "source": "arg_contingency",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.75,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e038",
+      "source": "arg_kalam",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e039",
+      "source": "arg_transcendental",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e040",
+      "source": "arg_intelligibility",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e041",
+      "source": "arg_consciousness",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e042",
+      "source": "arg_moral",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e043",
+      "source": "arg_personhood",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.5,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e044",
+      "source": "arg_beauty",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.25,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e045",
+      "source": "arg_desire",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.25,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e046",
+      "source": "arg_transcendental",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e047",
+      "source": "arg_consciousness",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e048",
+      "source": "arg_moral",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e049",
+      "source": "arg_personhood",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e050",
+      "source": "s_transcendence",
+      "target": "s_personal_theism",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e051",
+      "source": "s_transcendence",
+      "target": "s_impersonal_absolute",
+      "type": "transitions_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e052",
+      "source": "s_mindlike_ground",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e053",
+      "source": "m_objective_value",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.35,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e054",
+      "source": "m_intrinsic_personhood",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.35,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e055",
+      "source": "m_value_fundamental",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.25,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e056",
+      "source": "arg_personhood",
+      "target": "m_intrinsic_personhood",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e057",
+      "source": "s_radical_uncertainty",
+      "target": "s_naturalism_competitive",
+      "type": "transitions_to",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 2
+    },
+    {
+      "id": "e058",
+      "source": "p_science",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e059",
+      "source": "p_evolution",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e060",
+      "source": "p_brain_mind",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e061",
+      "source": "p_evil",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.85,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e062",
+      "source": "p_animal_suffering",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e063",
+      "source": "p_hiddenness",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e064",
+      "source": "p_pluralism",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e065",
+      "source": "p_miracle_prior",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.75,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e066",
+      "source": "p_evil",
+      "target": "s_personal_theism",
+      "type": "weakens",
+      "weight": -0.85,
+      "transitionClass": "defeater",
+      "stageDelta": 1
+    },
+    {
+      "id": "e067",
+      "source": "p_animal_suffering",
+      "target": "s_personal_theism",
+      "type": "weakens",
+      "weight": -0.9,
+      "transitionClass": "defeater",
+      "stageDelta": 1
+    },
+    {
+      "id": "e068",
+      "source": "p_hiddenness",
+      "target": "s_personal_theism",
+      "type": "weakens",
+      "weight": -0.82,
+      "transitionClass": "defeater",
+      "stageDelta": 1
+    },
+    {
+      "id": "e069",
+      "source": "p_pluralism",
+      "target": "s_revelation_possible",
+      "type": "weakens",
+      "weight": -0.6,
+      "transitionClass": "defeater",
+      "stageDelta": 2
+    },
+    {
+      "id": "e070",
+      "source": "p_evil",
+      "target": "s_agnostic_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e071",
+      "source": "p_animal_suffering",
+      "target": "s_agnostic_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e072",
+      "source": "p_hiddenness",
+      "target": "s_agnostic_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e073",
+      "source": "p_pluralism",
+      "target": "s_agnostic_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e074",
+      "source": "s_personal_theism",
+      "target": "s_agnostic_theism",
+      "type": "transitions_to",
+      "weight": 0.5,
+      "label": "under unresolved evil/hiddenness",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e075",
+      "source": "s_agnostic_theism",
+      "target": "s_personal_theism",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "label": "if positive evidence accumulates",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e076",
+      "source": "s_agnostic_theism",
+      "target": "s_agnostic_naturalism",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "label": "if defeaters dominate",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e077",
+      "source": "p_evil",
+      "target": "m_objective_value",
+      "type": "feedback",
+      "weight": 0.45,
+      "label": "evil objection presupposes morally significant suffering",
+      "transitionClass": "feedback",
+      "stageDelta": 0
+    },
+    {
+      "id": "e078",
+      "source": "p_animal_suffering",
+      "target": "m_objective_value",
+      "type": "feedback",
+      "weight": 0.35,
+      "transitionClass": "feedback",
+      "stageDelta": 0
+    },
+    {
+      "id": "e079",
+      "source": "m_objective_value",
+      "target": "arg_moral",
+      "type": "reinforces",
+      "weight": 0.55,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e080",
+      "source": "s_personal_theism",
+      "target": "s_revelation_possible",
+      "type": "opens_possibility",
+      "weight": 0.75,
+      "transitionClass": "unlock",
+      "stageDelta": 1
+    },
+    {
+      "id": "e081",
+      "source": "s_agnostic_theism",
+      "target": "s_revelation_possible",
+      "type": "opens_possibility",
+      "weight": 0.45,
+      "transitionClass": "unlock",
+      "stageDelta": 1
+    },
+    {
+      "id": "e082",
+      "source": "s_revelation_possible",
+      "target": "s_compare_religions",
+      "type": "transitions_to",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e083",
+      "source": "s_compare_religions",
+      "target": "r_judaism",
+      "type": "branches_to",
+      "weight": 0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e084",
+      "source": "s_compare_religions",
+      "target": "r_christianity",
+      "type": "branches_to",
+      "weight": 0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e085",
+      "source": "s_compare_religions",
+      "target": "r_islam",
+      "type": "branches_to",
+      "weight": 0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e086",
+      "source": "s_compare_religions",
+      "target": "r_hindu",
+      "type": "branches_to",
+      "weight": 0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e087",
+      "source": "s_compare_religions",
+      "target": "r_buddhism",
+      "type": "branches_to",
+      "weight": 0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e088",
+      "source": "r_hindu",
+      "target": "s_impersonal_absolute",
+      "type": "supports",
+      "weight": 0.65,
+      "label": "especially nondual / Vedantic trajectories",
+      "transitionClass": "backward",
+      "stageDelta": -2
+    },
+    {
+      "id": "e089",
+      "source": "r_islam",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "label": "tawhid / revelation",
+      "transitionClass": "backward",
+      "stageDelta": -2
+    },
+    {
+      "id": "e090",
+      "source": "r_judaism",
+      "target": "h_jesus",
+      "type": "historically_supports",
+      "weight": 0.45,
+      "label": "historical and theological matrix",
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e091",
+      "source": "r_christianity",
+      "target": "h_jesus",
+      "type": "historically_supports",
+      "weight": 0.8,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e092",
+      "source": "h_jesus",
+      "target": "h_crucifixion",
+      "type": "historically_supports",
+      "weight": 0.95,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e093",
+      "source": "h_crucifixion",
+      "target": "h_resurrection_question",
+      "type": "historically_supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e094",
+      "source": "h_empty_tomb",
+      "target": "h_resurrection_question",
+      "type": "historically_supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e095",
+      "source": "h_appearances",
+      "target": "h_resurrection_question",
+      "type": "historically_supports",
+      "weight": 0.75,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e096",
+      "source": "h_disciples",
+      "target": "h_resurrection_question",
+      "type": "historically_supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e097",
+      "source": "h_paul_james",
+      "target": "h_resurrection_question",
+      "type": "historically_supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e098",
+      "source": "h_early_worship",
+      "target": "h_resurrection_question",
+      "type": "historically_supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e099",
+      "source": "h_resurrection_question",
+      "target": "hyp_natural_resurrection",
+      "type": "branches_to",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e100",
+      "source": "h_resurrection_question",
+      "target": "hyp_actual_resurrection",
+      "type": "branches_to",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e101",
+      "source": "p_miracle_prior",
+      "target": "hyp_actual_resurrection",
+      "type": "weakens",
+      "weight": -0.85,
+      "transitionClass": "defeater",
+      "stageDelta": 5
+    },
+    {
+      "id": "e102",
+      "source": "s_personal_theism",
+      "target": "p_miracle_prior",
+      "type": "undercuts",
+      "weight": -0.55,
+      "label": "if God exists, miracle prior rises",
+      "transitionClass": "defeater",
+      "stageDelta": -1
+    },
+    {
+      "id": "e103",
+      "source": "s_agnostic_theism",
+      "target": "p_miracle_prior",
+      "type": "undercuts",
+      "weight": -0.25,
+      "transitionClass": "defeater",
+      "stageDelta": -1
+    },
+    {
+      "id": "e104",
+      "source": "r_islam",
+      "target": "h_crucifixion",
+      "type": "historically_challenges",
+      "weight": -0.55,
+      "label": "later Islamic interpretation creates tension with earlier crucifixion evidence",
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e105",
+      "source": "h_crucifixion",
+      "target": "r_islam",
+      "type": "weakens",
+      "weight": -0.45,
+      "label": "historical proximity favors earlier sources on Jesus' death",
+      "transitionClass": "defeater",
+      "stageDelta": -1
+    },
+    {
+      "id": "e106",
+      "source": "hyp_actual_resurrection",
+      "target": "a_resurrection",
+      "type": "converges_on",
+      "weight": 0.95,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e107",
+      "source": "a_resurrection",
+      "target": "s_christian_leading",
+      "type": "supports",
+      "weight": 0.95,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e108",
+      "source": "hyp_natural_resurrection",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "backward",
+      "stageDelta": -4
+    },
+    {
+      "id": "e109",
+      "source": "hyp_natural_resurrection",
+      "target": "s_christian_leading",
+      "type": "weakens",
+      "weight": -0.75,
+      "transitionClass": "defeater",
+      "stageDelta": 1
+    },
+    {
+      "id": "e110",
+      "source": "a_resurrection",
+      "target": "s_personal_theism",
+      "type": "feedback",
+      "weight": 0.85,
+      "label": "resurrection increases confidence in an acting personal God",
+      "transitionClass": "feedback",
+      "stageDelta": -4
+    },
+    {
+      "id": "e111",
+      "source": "s_personal_theism",
+      "target": "hyp_actual_resurrection",
+      "type": "feedback",
+      "weight": 0.6,
+      "label": "personal theism raises antecedent plausibility of miracle",
+      "transitionClass": "feedback",
+      "stageDelta": 4
+    },
+    {
+      "id": "e112",
+      "source": "a_resurrection",
+      "target": "p_miracle_prior",
+      "type": "undercuts",
+      "weight": -0.75,
+      "transitionClass": "defeater",
+      "stageDelta": -5
+    },
+    {
+      "id": "e113",
+      "source": "s_christian_leading",
+      "target": "c_jesus_authority",
+      "type": "transitions_to",
+      "weight": 0.8,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e114",
+      "source": "c_jesus_authority",
+      "target": "c_christology",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e115",
+      "source": "c_christology",
+      "target": "c_incarnation",
+      "type": "interprets",
+      "weight": 0.8,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e116",
+      "source": "c_christology",
+      "target": "c_trinity",
+      "type": "interprets",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e117",
+      "source": "c_christology",
+      "target": "c_cross",
+      "type": "interprets",
+      "weight": 0.75,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e118",
+      "source": "c_jesus_authority",
+      "target": "c_scripture",
+      "type": "reframes",
+      "weight": 0.8,
+      "transitionClass": "reinterpretation",
+      "stageDelta": 0
+    },
+    {
+      "id": "e119",
+      "source": "c_scripture",
+      "target": "c_ecclesiology",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e120",
+      "source": "c_early_church",
+      "target": "c_ecclesiology",
+      "type": "historically_supports",
+      "weight": 0.75,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e121",
+      "source": "c_ecclesiology",
+      "target": "s_historic_christianity",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e122",
+      "source": "s_christian_leading",
+      "target": "s_historic_christianity",
+      "type": "transitions_to",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e123",
+      "source": "c_incarnation",
+      "target": "s_historic_christianity",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e124",
+      "source": "c_trinity",
+      "target": "s_historic_christianity",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e125",
+      "source": "c_cross",
+      "target": "s_historic_christianity",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e126",
+      "source": "c_restoration",
+      "target": "s_historic_christianity",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e127",
+      "source": "c_trinity",
+      "target": "a_love",
+      "type": "converges_on",
+      "weight": 0.8,
+      "label": "relationality and love within ultimate reality",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e128",
+      "source": "c_cross",
+      "target": "a_love",
+      "type": "converges_on",
+      "weight": 0.9,
+      "label": "self-giving love and costly reconciliation",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e129",
+      "source": "c_incarnation",
+      "target": "a_love",
+      "type": "converges_on",
+      "weight": 0.75,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e130",
+      "source": "m_intrinsic_personhood",
+      "target": "a_love",
+      "type": "converges_on",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 6
+    },
+    {
+      "id": "e131",
+      "source": "a_love",
+      "target": "s_christian_leading",
+      "type": "supports",
+      "weight": 0.45,
+      "label": "existential coherence, not standalone proof",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e132",
+      "source": "a_love",
+      "target": "a_coherence",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e133",
+      "source": "a_resurrection",
+      "target": "a_coherence",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e134",
+      "source": "c_cross",
+      "target": "p_evil",
+      "type": "reframes",
+      "weight": 0.35,
+      "label": "God enters suffering; does not eliminate evidential problem",
+      "transitionClass": "reinterpretation",
+      "stageDelta": -6
+    },
+    {
+      "id": "e135",
+      "source": "c_restoration",
+      "target": "p_evil",
+      "type": "reframes",
+      "weight": 0.4,
+      "transitionClass": "reinterpretation",
+      "stageDelta": -6
+    },
+    {
+      "id": "e136",
+      "source": "c_restoration",
+      "target": "p_animal_suffering",
+      "type": "reframes",
+      "weight": 0.25,
+      "transitionClass": "reinterpretation",
+      "stageDelta": -6
+    },
+    {
+      "id": "e137",
+      "source": "c_incarnation",
+      "target": "p_hiddenness",
+      "type": "reframes",
+      "weight": 0.3,
+      "transitionClass": "reinterpretation",
+      "stageDelta": -6
+    },
+    {
+      "id": "e138",
+      "source": "p_church_failure",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.75,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e139",
+      "source": "p_church_failure",
+      "target": "s_historic_christianity",
+      "type": "weakens",
+      "weight": -0.6000000000000001,
+      "transitionClass": "defeater",
+      "stageDelta": null
+    },
+    {
+      "id": "e140",
+      "source": "p_trauma",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.85,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e141",
+      "source": "p_trauma",
+      "target": "s_historic_christianity",
+      "type": "weakens",
+      "weight": -0.68,
+      "transitionClass": "defeater",
+      "stageDelta": null
+    },
+    {
+      "id": "e142",
+      "source": "p_moral_conflict",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e143",
+      "source": "p_moral_conflict",
+      "target": "s_historic_christianity",
+      "type": "weakens",
+      "weight": -0.5599999999999999,
+      "transitionClass": "defeater",
+      "stageDelta": 7
+    },
+    {
+      "id": "e144",
+      "source": "p_institutional_distrust",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.65,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e145",
+      "source": "p_institutional_distrust",
+      "target": "s_historic_christianity",
+      "type": "weakens",
+      "weight": -0.52,
+      "transitionClass": "defeater",
+      "stageDelta": 7
+    },
+    {
+      "id": "e146",
+      "source": "p_argument_fatigue",
+      "target": "s_closed_posture",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e147",
+      "source": "p_trauma",
+      "target": "s_closed_posture",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e148",
+      "source": "p_institutional_distrust",
+      "target": "s_closed_posture",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e149",
+      "source": "s_closed_posture",
+      "target": "s_agnostic_naturalism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "label": "one possible settling state",
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e150",
+      "source": "s_closed_posture",
+      "target": "s_secular_humanism",
+      "type": "transitions_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e151",
+      "source": "s_agnostic_naturalism",
+      "target": "s_secular_humanism",
+      "type": "transitions_to",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e152",
+      "source": "s_secular_humanism",
+      "target": "m_constructed_meaning",
+      "type": "interprets",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e153",
+      "source": "s_secular_humanism",
+      "target": "m_naturalistic_morality",
+      "type": "interprets",
+      "weight": 0.75,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e154",
+      "source": "p_evil",
+      "target": "a_naturalism",
+      "type": "converges_on",
+      "weight": 0.85,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e155",
+      "source": "p_hiddenness",
+      "target": "a_naturalism",
+      "type": "converges_on",
+      "weight": 0.8,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e156",
+      "source": "p_animal_suffering",
+      "target": "a_naturalism",
+      "type": "converges_on",
+      "weight": 0.9,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e157",
+      "source": "p_science",
+      "target": "a_naturalism",
+      "type": "converges_on",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e158",
+      "source": "a_naturalism",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.85,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e159",
+      "source": "a_naturalism",
+      "target": "a_coherence",
+      "type": "supports",
+      "weight": 0.75,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e160",
+      "source": "exp_love",
+      "target": "s_secular_humanism",
+      "type": "supports",
+      "weight": 0.25,
+      "label": "human love/value can be retained without theism",
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e161",
+      "source": "m_intrinsic_personhood",
+      "target": "s_secular_humanism",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e162",
+      "source": "m_objective_value",
+      "target": "m_naturalistic_morality",
+      "type": "opens_possibility",
+      "weight": 0.45,
+      "transitionClass": "unlock",
+      "stageDelta": 1
+    },
+    {
+      "id": "e163",
+      "source": "s_historic_christianity",
+      "target": "s_christian_with_tension",
+      "type": "transitions_to",
+      "weight": 0.85,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e164",
+      "source": "t_christian_evil",
+      "target": "s_christian_with_tension",
+      "type": "contains_pressure",
+      "weight": -0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e165",
+      "source": "t_christian_hiddenness",
+      "target": "s_christian_with_tension",
+      "type": "contains_pressure",
+      "weight": -0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e166",
+      "source": "t_christian_pluralism",
+      "target": "s_christian_with_tension",
+      "type": "contains_pressure",
+      "weight": -0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e167",
+      "source": "t_christian_church",
+      "target": "s_christian_with_tension",
+      "type": "contains_pressure",
+      "weight": -0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e168",
+      "source": "p_evil",
+      "target": "t_christian_evil",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "forward",
+      "stageDelta": 7
+    },
+    {
+      "id": "e169",
+      "source": "p_hiddenness",
+      "target": "t_christian_hiddenness",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "forward",
+      "stageDelta": 7
+    },
+    {
+      "id": "e170",
+      "source": "p_pluralism",
+      "target": "t_christian_pluralism",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "forward",
+      "stageDelta": 7
+    },
+    {
+      "id": "e171",
+      "source": "p_church_failure",
+      "target": "t_christian_church",
+      "type": "supports",
+      "weight": 0.85,
+      "transitionClass": "global_modifier",
+      "stageDelta": null
+    },
+    {
+      "id": "e172",
+      "source": "arg_consciousness",
+      "target": "t_naturalism_consciousness",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e173",
+      "source": "t_naturalism_consciousness",
+      "target": "s_agnostic_naturalism",
+      "type": "contains_pressure",
+      "weight": -0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e174",
+      "source": "arg_transcendental",
+      "target": "t_naturalism_normativity",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e175",
+      "source": "t_naturalism_normativity",
+      "target": "s_agnostic_naturalism",
+      "type": "contains_pressure",
+      "weight": -0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e176",
+      "source": "arg_moral",
+      "target": "t_naturalism_value",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e177",
+      "source": "t_naturalism_value",
+      "target": "s_agnostic_naturalism",
+      "type": "contains_pressure",
+      "weight": -0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e178",
+      "source": "arg_contingency",
+      "target": "t_naturalism_existence",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1
+    },
+    {
+      "id": "e179",
+      "source": "t_naturalism_existence",
+      "target": "s_agnostic_naturalism",
+      "type": "contains_pressure",
+      "weight": -0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0
+    },
+    {
+      "id": "e180",
+      "source": "s_christian_with_tension",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.9,
+      "label": "candidate for global explanatory fit",
+      "transitionClass": "lateral",
+      "stageDelta": null
+    },
+    {
+      "id": "e181",
+      "source": "s_secular_humanism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.7,
+      "label": "candidate for global explanatory fit",
+      "transitionClass": "lateral",
+      "stageDelta": null
+    },
+    {
+      "id": "e182",
+      "source": "s_agnostic_naturalism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.75,
+      "label": "candidate for global explanatory fit",
+      "transitionClass": "lateral",
+      "stageDelta": null
+    },
+    {
+      "id": "e183",
+      "source": "s_personal_theism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.65,
+      "label": "candidate for global explanatory fit",
+      "transitionClass": "lateral",
+      "stageDelta": null
+    },
+    {
+      "id": "e184",
+      "source": "s_impersonal_absolute",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.55,
+      "label": "candidate for global explanatory fit",
+      "transitionClass": "lateral",
+      "stageDelta": null
+    }
+  ],
+  "cycles": [
+    {
+      "id": "cycle_metaphysics_resurrection",
+      "label": "Theism ↔ Resurrection Bayesian loop",
+      "nodes": [
+        "s_personal_theism",
+        "hyp_actual_resurrection",
+        "a_resurrection"
+      ],
+      "description": "Theism raises the prior plausibility of resurrection; resurrection, if judged likely, then increases confidence in personal theism."
+    },
+    {
+      "id": "cycle_evil_morality",
+      "label": "Problem of evil ↔ Moral realism loop",
+      "nodes": [
+        "p_evil",
+        "m_objective_value",
+        "arg_moral",
+        "s_personal_theism"
+      ],
+      "description": "Evil pressures against theism, while the moral force of the objection itself can generate questions about objective value and its metaphysical grounding."
+    },
+    {
+      "id": "cycle_christ_reinterpretation",
+      "label": "Resurrection → Christ → Scripture → worldview reinterpretation",
+      "nodes": [
+        "a_resurrection",
+        "c_jesus_authority",
+        "c_scripture",
+        "s_historic_christianity",
+        "s_personal_theism"
+      ],
+      "description": "Historical confidence in resurrection upgrades Jesus' authority; Christ then changes the interpretation of scripture, metaphysics, suffering, and revelation."
+    },
+    {
+      "id": "cycle_naturalist_reinforcement",
+      "label": "Naturalist explanatory reinforcement",
+      "nodes": [
+        "p_evil",
+        "p_hiddenness",
+        "a_naturalism",
+        "s_agnostic_naturalism",
+        "p_miracle_prior"
+      ],
+      "description": "Suffering and hiddenness favor naturalism; naturalism then lowers miracle priors and can further reduce the probability assigned to resurrection."
+    },
+    {
+      "id": "cycle_love_christian_coherence",
+      "label": "Love ↔ Christian ontology loop",
+      "nodes": [
+        "exp_love",
+        "a_love",
+        "c_cross",
+        "c_trinity",
+        "s_christian_leading"
+      ],
+      "description": "Human love creates existential/metaphysical pressure; Christian doctrines interpret love as reflecting ultimate reality, which can increase perceived worldview coherence."
+    },
+    {
+      "id": "cycle_deconstruction_closure",
+      "label": "Deconstruction → closure reinforcement",
+      "nodes": [
+        "p_church_failure",
+        "p_trauma",
+        "s_closed_posture",
+        "s_agnostic_naturalism",
+        "p_institutional_distrust"
+      ],
+      "description": "Institutional failure or trauma can weaken trust, reduce willingness to revisit evidence, and stabilize a secular or agnostic state independently of purely analytic argument."
+    }
+  ],
+  "attractors": [
+    {
+      "node_id": "a_resurrection",
+      "domain": "historical_epistemic",
+      "role": "Christian falsification and recursive confirmation node",
+      "terminal_if_rejected_for_historic_christianity": true,
+      "terminal_if_accepted": false
+    },
+    {
+      "node_id": "a_love",
+      "domain": "existential_phenomenological",
+      "role": "Convergence node for personhood, value, self-giving, cross, and Trinity",
+      "terminal_if_rejected_for_historic_christianity": false,
+      "terminal_if_accepted": false
+    },
+    {
+      "node_id": "a_naturalism",
+      "domain": "explanatory_simplicity",
+      "role": "Attractor generated by suffering, hiddenness, scientific continuity, and low miracle priors",
+      "terminal_if_rejected_for_historic_christianity": false,
+      "terminal_if_accepted": false
+    },
+    {
+      "node_id": "a_coherence",
+      "domain": "meta",
+      "role": "Global inference-to-best-explanation attractor across all evidence families",
+      "terminal_if_rejected_for_historic_christianity": false,
+      "terminal_if_accepted": false
+    }
+  ],
+  "suggested_visual_groups": [
+    {
+      "id": "group_experience",
+      "label": "Human experience",
+      "layers": [
+        "human_experience"
+      ]
+    },
+    {
+      "id": "group_analytic",
+      "label": "Analytic / metaphysical arguments",
+      "layers": [
+        "epistemology",
+        "metaphysics",
+        "moral_philosophy"
+      ]
+    },
+    {
+      "id": "group_naturalist",
+      "label": "Naturalist and defeater pressures",
+      "layers": [
+        "naturalism"
+      ]
+    },
+    {
+      "id": "group_religion",
+      "label": "Comparative religion",
+      "layers": [
+        "religious_comparison"
+      ]
+    },
+    {
+      "id": "group_history",
+      "label": "Historical Jesus and resurrection",
+      "layers": [
+        "history"
+      ]
+    },
+    {
+      "id": "group_christianity",
+      "label": "Christian recursive interpretation",
+      "layers": [
+        "christianity"
+      ]
+    },
+    {
+      "id": "group_deconstruction",
+      "label": "Deconstruction and closure",
+      "layers": [
+        "deconstruction"
+      ]
+    },
+    {
+      "id": "group_outcomes",
+      "label": "Worldview settling states",
+      "layers": [
+        "worldview_end_states"
+      ]
+    },
+    {
+      "id": "group_meta",
+      "label": "Attractors, cycles, and unresolved tensions",
+      "layers": [
+        "meta"
+      ]
+    }
+  ],
+  "notes": {
+    "weights_are_illustrative": true,
+    "not_empirical_probabilities": true,
+    "recommended_runtime_behavior": [
+      "Allow node weights or priors to be adjusted per agent.",
+      "Allow edge weights to vary by agent history, trust, background, and current worldview.",
+      "Compute signed incoming pressure separately from transition probability.",
+      "Do not assume a DAG; feedback loops are intentional.",
+      "Consider attractor strength, hysteresis, and epistemic closure as separate from raw evidential weight.",
+      "Permit historical, analytic, experiential, and social edges to be toggled independently.",
+      "Track path history because the same node may be interpreted differently depending on traversal order."
+    ]
+  },
+  "progression": {
+    "stages": [
+      {
+        "id": 0,
+        "name": "Pre-theoretical experience",
+        "description": "Raw human experience and initial worldview uncertainty."
+      },
+      {
+        "id": 1,
+        "name": "Foundational inquiry",
+        "description": "Epistemology, metaphysics, logic, consciousness, morality, contingency, and intelligibility."
+      },
+      {
+        "id": 2,
+        "name": "Major worldview formation",
+        "description": "Naturalism, personal theism, impersonal/transpersonal ultimate reality, and agnostic intermediates."
+      },
+      {
+        "id": 3,
+        "name": "Revelation possibility",
+        "description": "Whether a personal transcendent reality could disclose itself."
+      },
+      {
+        "id": 4,
+        "name": "Comparative religion",
+        "description": "Competing traditions, revelation claims, and religious explanatory systems."
+      },
+      {
+        "id": 5,
+        "name": "Historical investigation",
+        "description": "Historical Jesus, crucifixion, early Christian claims, and competing explanations."
+      },
+      {
+        "id": 6,
+        "name": "Resurrection bottleneck",
+        "description": "The resurrection question as Christianity's principal falsification and convergence gateway."
+      },
+      {
+        "id": 7,
+        "name": "Christian interpretive expansion",
+        "description": "Christology, incarnation, cross, Trinity, scripture, restoration, and recursive reinterpretation."
+      },
+      {
+        "id": 8,
+        "name": "Ecclesial differentiation",
+        "description": "Church, sacrament, apostolic continuity, and historic Christian commitment."
+      }
+    ],
+    "statusModel": [
+      "locked",
+      "available",
+      "explored",
+      "accepted",
+      "rejected",
+      "contested",
+      "high_confidence"
+    ],
+    "unlockSemantics": {
+      "allOf": "Every listed prerequisite must be explored or accepted.",
+      "anyOf": "At least one listed prerequisite must be explored or accepted.",
+      "note": "Prerequisites indicate epistemic availability, not deductive entailment."
+    },
+    "layoutIntent": {
+      "primaryAxis": "stage",
+      "primaryAxisDirection": "left_to_right",
+      "secondaryAxis": "layer",
+      "secondaryAxisDirection": "top_to_bottom",
+      "globalNodes": "Render outside normal stage columns as persistent environmental modifiers.",
+      "backwardEdges": "Render as large curved arcs above or below the main progression lanes.",
+      "feedbackEdges": "Render distinctly from ordinary backward transitions.",
+      "defeaterEdges": "Visually distinguish signed negative pressure from ordinary branching."
+    }
+  },
+  "stateEffects": [
+    {
+      "id": "fx_personal_theism_miracle_prior",
+      "triggerNode": "s_personal_theism",
+      "whenStatus": [
+        "accepted",
+        "high_confidence"
+      ],
+      "effectType": "edge_weight_delta",
+      "target": {
+        "source": "p_miracle_prior",
+        "target": "hyp_actual_resurrection"
+      },
+      "weightDelta": 0.45,
+      "description": "If personal theism is accepted, miracle claims no longer carry the same naturalistic prior penalty."
+    },
+    {
+      "id": "fx_resurrection_theism",
+      "triggerNode": "a_resurrection",
+      "whenStatus": [
+        "accepted",
+        "high_confidence"
+      ],
+      "effectType": "node_confidence_delta",
+      "target": {
+        "node": "s_personal_theism"
+      },
+      "confidenceDelta": 0.35,
+      "description": "A judged-likely resurrection recursively increases confidence in an acting personal God."
+    },
+    {
+      "id": "fx_resurrection_jesus_authority",
+      "triggerNode": "a_resurrection",
+      "whenStatus": [
+        "accepted",
+        "high_confidence"
+      ],
+      "effectType": "unlock_and_confidence",
+      "target": {
+        "node": "c_jesus_authority"
+      },
+      "confidenceDelta": 0.6,
+      "description": "Resurrection functions as a credibility multiplier for Jesus' claims."
+    },
+    {
+      "id": "fx_cross_evil",
+      "triggerNode": "c_cross",
+      "whenStatus": [
+        "accepted",
+        "explored"
+      ],
+      "effectType": "pressure_reframe",
+      "target": {
+        "node": "p_evil"
+      },
+      "pressureDelta": 0.15,
+      "description": "The cross reframes divine relation to suffering but does not eliminate the evidential problem."
+    },
+    {
+      "id": "fx_restoration_suffering",
+      "triggerNode": "c_restoration",
+      "whenStatus": [
+        "accepted",
+        "explored"
+      ],
+      "effectType": "pressure_reframe",
+      "target": {
+        "nodes": [
+          "p_evil",
+          "p_animal_suffering"
+        ]
+      },
+      "pressureDelta": 0.15,
+      "description": "Cosmic restoration changes the Christian interpretation of suffering without fully resolving why it was permitted."
+    },
+    {
+      "id": "fx_naturalism_miracle_prior",
+      "triggerNode": "s_agnostic_naturalism",
+      "whenStatus": [
+        "accepted",
+        "high_confidence"
+      ],
+      "effectType": "edge_weight_delta",
+      "target": {
+        "source": "p_miracle_prior",
+        "target": "hyp_actual_resurrection"
+      },
+      "weightDelta": -0.1,
+      "description": "Naturalism further lowers the antecedent plausibility of a miracle explanation."
+    },
+    {
+      "id": "fx_closed_posture",
+      "triggerNode": "s_closed_posture",
+      "whenStatus": [
+        "accepted",
+        "active"
+      ],
+      "effectType": "global_incoming_weight_multiplier",
+      "target": {
+        "scope": "counterevidence"
+      },
+      "multiplier": 0.35,
+      "description": "Epistemic closure reduces responsiveness to reopening arguments regardless of nominal graph weight."
+    }
+  ]
+}

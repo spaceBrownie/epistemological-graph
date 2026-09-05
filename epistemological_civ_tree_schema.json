@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/epistemological-civ-tree.schema.json",
+  "title": "Epistemological Civ Tree Graph",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "graph",
+    "nodes",
+    "edges",
+    "progression"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "graph": {
+      "type": "object"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "type",
+          "layer",
+          "stage",
+          "stageScope",
+          "progressionRole"
+        ]
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "target",
+          "type",
+          "weight",
+          "transitionClass",
+          "stageDelta"
+        ]
+      }
+    },
+    "stateEffects": {
+      "type": "array"
+    },
+    "cycles": {
+      "type": "array"
+    },
+    "attractors": {
+      "type": "array"
+    },
+    "progression": {
+      "type": "object"
+    }
+  }
+}

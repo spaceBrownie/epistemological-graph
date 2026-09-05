@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Epistemological Civ Tree</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #0f1218; --panel: #171b23; --line: #2a3140; --text: #d8dde6; --muted: #8a93a3;
+    --knowledge: #2a3446; --state: #23384a; --gateway: #d4a63a; --pressure: #4a2f2f; --attractor: #3b2f5c;
+    --forward: #4f8fe8; --unlock: #7fc1ff; --lateral: #7b8595; --defeater: #e0534f; --feedback: #b47cff;
+    --backward: #f0963c; --reinterpretation: #3ec9b8; --global_modifier: #6d7a8c; --hl: #ffe066;
+  }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; }
+  #app { display: grid; grid-template-columns: 250px 1fr 330px; height: 100vh; }
+  aside { background: var(--panel); border-color: var(--line); overflow: auto; padding: 12px; }
+  #left { border-right: 1px solid var(--line); } #right { border-left: 1px solid var(--line); }
+  h1 { font-size: 15px; margin: 0 0 8px; } h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+  label.f { display: block; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  input[type=search], select { width: 100%; box-sizing: border-box; background: #0f1218; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 5px; }
+  button { background: #222938; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; cursor: pointer; margin: 2px 2px 2px 0; }
+  .sw { display: inline-block; width: 22px; height: 0; border-top: 3px solid; vertical-align: middle; margin-right: 6px; }
+  .pill { display: inline-block; padding: 1px 6px; border-radius: 10px; background: #222938; margin: 1px 2px; cursor: pointer; font-size: 12px; }
+  .pill:hover { background: #2f3a50; }
+  .neg { color: var(--defeater); } .pos { color: var(--forward); }
+  #right p { margin: 6px 0; } #right .k { color: var(--muted); }
+  svg { width: 100%; height: 100%; display: block; }
+  .lane { fill: #ffffff; fill-opacity: .025; stroke: var(--line); }
+  .lane:nth-child(even) { fill-opacity: .05; }
+  .laneLabel, .stageLabel { fill: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+  .stageLabel { font-size: 13px; fill: var(--text); } .stageSub { fill: var(--muted); font-size: 11px; }
+  .colLine { stroke: var(--line); stroke-dasharray: 2 6; }
+  .rail { fill: none; stroke: var(--line); stroke-dasharray: 6 4; }
+  .edge { fill: none; opacity: .35; pointer-events: stroke; }
+  .edge.global_modifier { opacity: .18; }
+  .edge.lit { opacity: 1; } .edge.dim { opacity: .06; } .edge.hidden { display: none; }
+  .node { cursor: pointer; } .node.dim { opacity: .18; } .node.hidden { display: none; }
+  .node rect { stroke-width: 1.5; }
+  .node.knowledge rect { fill: var(--knowledge); stroke: #4a5670; }
+  .node.state rect { fill: var(--state); stroke: #6aa4d8; stroke-width: 2; }
+  .node.gateway rect { fill: #2b2a1e; stroke: var(--gateway); stroke-width: 2.5; }
+  .node.pressure rect { fill: var(--pressure); stroke: #d07a6a; stroke-dasharray: 5 3; }
+  .node.attractor rect { fill: var(--attractor); stroke: #c9b2ff; stroke-width: 2.5; }
+  .node.global rect { fill: #1d2a2a; stroke: #6fb3a5; }
+  .node.isAttractor rect { filter: drop-shadow(0 0 8px #c9b2ff); }
+  .node.selected rect { stroke: var(--hl); stroke-width: 3; }
+  .node.match rect { stroke: var(--hl); }
+  .node text { fill: var(--text); font-size: 11.5px; pointer-events: none; }
+  .node .role { fill: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; }
+  .node .key { fill: var(--gateway); font-size: 12px; }
+  #status { position: fixed; bottom: 8px; left: 260px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="left">
+    <h1>Epistemological Civ Tree</h1>
+    <input id="search" type="search" placeholder="Search nodes… (Enter selects)">
+    <h2>Highlight cycle</h2>
+    <select id="cycle"><option value="">— none —</option></select>
+    <div id="cycleDesc" style="color:var(--muted);margin-top:4px"></div>
+    <h2>Path</h2>
+    <div style="color:var(--muted)">Click a node, then shift-click another for the shortest path over visible edges.</div>
+    <button id="clear">Clear highlights</button>
+    <h2>Edge classes</h2><div id="edgeFilters"></div>
+    <h2>Stages</h2><div id="stageFilters"></div>
+    <h2>Layers</h2><div id="layerFilters"></div>
+    <h2>Node roles</h2>
+    <div id="roleLegend"></div>
+  </aside>
+  <svg id="canvas"><defs id="defs"></defs><g id="root"></g></svg>
+  <aside id="right"><h2>Inspector</h2><div id="inspector" style="color:var(--muted)">Click a node.</div></aside>
+</div>
+<div id="status"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(async function () {
+  const D = await (await fetch('epistemological_civ_tree_final.json')).json();
+  const nodes = D.nodes, edges = D.edges, byId = new Map(nodes.map(n => [n.id, n]));
+  const stages = D.progression.stages, layers = D.graph.layers;
+  const attractorIds = new Set(D.attractors.map(a => a.node_id));
+  const edgeClasses = [...new Set(edges.map(e => e.transitionClass))];
+  const roles = [...new Set(nodes.map(n => n.progressionRole))];
+  const cssVar = k => getComputedStyle(document.documentElement).getPropertyValue('--' + k).trim();
+
+  // ---------- layout: deterministic stage columns × layer lanes, 2-wide grid inside cells ----------
+  const NW = 168, NH = 40, GX = 12, GY = 12, COLW = 2 * NW + 3 * GX + 40, LEFT = 150, TOP = 70, RAILH = 90;
+  const cells = d3.group(nodes.filter(n => n.stageScope !== 'global'), n => n.layer, n => n.stage);
+  const laneH = new Map(), laneY = new Map();
+  let y = TOP + RAILH;
+  for (const L of layers) {
+    const maxN = d3.max([...(cells.get(L)?.values() ?? [])], v => v.length) ?? 0;
+    const h = Math.max(1, Math.ceil(maxN / 2)) * (NH + GY) + GY + 18;
+    laneY.set(L, y); laneH.set(L, h); y += h;
+  }
+  const bottomRailY = y + 20, totalH = bottomRailY + RAILH;
+  const colX = s => LEFT + s * COLW;
+  const totalW = LEFT + stages.length * COLW;
+  for (const [L, byStage] of cells) for (const [s, list] of byStage) {
+    list.sort((a, b) => (roleRank(b) - roleRank(a)) || a.label.localeCompare(b.label));
+    list.forEach((n, i) => { n.x = colX(s) + GX + 20 + (i % 2) * (NW + GX); n.y = laneY.get(L) + 18 + GY + Math.floor(i / 2) * (NH + GY); });
+  }
+  function roleRank(n) { return { attractor: 4, gateway: 3, state: 2, pressure: 1, knowledge: 0 }[n.progressionRole] ?? 0; }
+  // global rails: human_experience on top, everything else on bottom
+  const topG = nodes.filter(n => n.stageScope === 'global' && n.layer === 'human_experience');
+  const botG = nodes.filter(n => n.stageScope === 'global' && n.layer !== 'human_experience');
+  const spread = (list, yy) => list.forEach((n, i) => { n.x = LEFT + 40 + i * ((totalW - LEFT - 80 - NW) / Math.max(1, list.length - 1)); n.y = yy; });
+  spread(topG, TOP + 20); spread(botG, bottomRailY + 20);
+  nodes.forEach(n => { n.cx = n.x + NW / 2; n.cy = n.y + NH / 2; });
+
+  // ---------- edge geometry ----------
+  function path(e) {
+    const s = byId.get(e.source), t = byId.get(e.target);
+    if (s.stageScope === 'global' || t.stageScope === 'global') {
+      const ay = s.cy < t.cy ? s.y + NH : s.y, by = s.cy < t.cy ? t.y : t.y + NH; // vertical drop from rail
+      return `M${s.cx},${ay} C${s.cx},${(ay + by) / 2} ${t.cx},${(ay + by) / 2} ${t.cx},${by}`;
+    }
+    const dx = t.x - s.x;
+    if (Math.abs(dx) < NW) { // lateral: loop out the right side
+      const o = 40 + Math.abs(t.cy - s.cy) * 0.08;
+      return `M${s.x + NW},${s.cy} C${s.x + NW + o},${s.cy} ${t.x + NW + o},${t.cy} ${t.x + NW},${t.cy}`;
+    }
+    if (dx > 0) { // forward S-curve
+      const m = (s.x + NW + t.x) / 2;
+      return `M${s.x + NW},${s.cy} C${m},${s.cy} ${m},${t.cy} ${t.x},${t.cy}`;
+    }
+    // backward arc: supportive above, counter-pressure below; height grows with stage span
+    const up = e.weight >= 0, h = 70 + Math.abs(dx) * 0.16;
+    const y0 = up ? Math.min(s.y, t.y) - h : Math.max(s.y, t.y) + NH + h;
+    const sy = up ? s.y : s.y + NH, ty = up ? t.y : t.y + NH;
+    return `M${s.cx},${sy} C${s.cx},${y0} ${t.cx},${y0} ${t.cx},${ty}`;
+  }
+
+  // ---------- render ----------
+  const svg = d3.select('#canvas'), root = d3.select('#root'), defs = d3.select('#defs');
+  for (const c of [...edgeClasses, 'hl']) defs.append('marker').attr('id', 'arr-' + c).attr('viewBox', '0 -4 8 8').attr('refX', 8).attr('markerWidth', 7).attr('markerHeight', 7).attr('orient', 'auto')
+    .append('path').attr('d', 'M0,-4L8,0L0,4Z').attr('fill', cssVar(c));
+
+  // lanes + stage columns
+  const bg = root.append('g');
+  for (const L of layers) {
+    bg.append('rect').attr('class', 'lane').attr('x', 0).attr('y', laneY.get(L)).attr('width', totalW).attr('height', laneH.get(L));
+    bg.append('text').attr('class', 'laneLabel').attr('x', 10).attr('y', laneY.get(L) + 14).text(L.replace(/_/g, ' '));
+  }
+  for (const s of stages) {
+    bg.append('line').attr('class', 'colLine').attr('x1', colX(s.id)).attr('x2', colX(s.id)).attr('y1', TOP + RAILH).attr('y2', bottomRailY);
+    bg.append('text').attr('class', 'stageLabel').attr('x', colX(s.id) + 20).attr('y', TOP - 28).text(`${s.id} · ${s.name}`);
+    bg.append('text').attr('class', 'stageSub').attr('x', colX(s.id) + 20).attr('y', TOP - 12).text(s.description.slice(0, 60));
+  }
+  for (const [yy, label] of [[TOP, 'Global pressures · human experience'], [bottomRailY, 'Global pressures · social / meta']]) {
+    bg.append('rect').attr('class', 'rail').attr('x', LEFT).attr('y', yy).attr('width', totalW - LEFT).attr('height', RAILH - 10).attr('rx', 8);
+    bg.append('text').attr('class', 'laneLabel').attr('x', LEFT + 10).attr('y', yy + 14).text(label);
+  }
+
+  const edgeSel = root.append('g').selectAll('path').data(edges).join('path')
+    .attr('class', e => 'edge ' + e.transitionClass).attr('d', path)
+    .attr('stroke', e => cssVar(e.transitionClass)).attr('stroke-width', e => 0.8 + Math.abs(e.weight) * 3)
+    .attr('stroke-dasharray', e => ({ reinterpretation: '8 5', feedback: '2 4', global_modifier: '1 4' })[e.transitionClass] ?? null)
+    .attr('marker-end', e => `url(#arr-${e.transitionClass})`)
+    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}`))
+    .on('mouseleave', () => status(''));
+
+  const nodeSel = root.append('g').selectAll('g').data(nodes).join('g')
+    .attr('class', n => `node ${n.progressionRole}${n.stageScope === 'global' ? ' global' : ''}${attractorIds.has(n.id) ? ' isAttractor' : ''}`)
+    .attr('transform', n => `translate(${n.x},${n.y})`)
+    .on('click', (ev, n) => ev.shiftKey && selected ? showPath(selected, n) : select(n))
+    .on('mouseenter', (ev, n) => { if (!mode) light(new Set([n.id]), touching(n.id)); })
+    .on('mouseleave', () => { if (!mode) unlight(); });
+  nodeSel.append('rect').attr('width', NW).attr('height', NH).attr('rx', n => n.progressionRole === 'state' ? NH / 2 : 5);
+  nodeSel.append('text').attr('x', 8).attr('y', 17).text(n => trunc(n.label, 27));
+  nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 32).text(n => n.progressionRole + (n.stageScope === 'global' ? ' · global' : '') + (attractorIds.has(n.id) ? ' · attractor' : ''));
+  nodeSel.filter(n => n.progressionRole === 'gateway').append('text').attr('class', 'key').attr('x', NW - 16).attr('y', 30).text('🔑');
+  nodeSel.filter(n => n.unlocks?.length).append('title').text(n => 'unlocks: ' + n.unlocks.join(', '));
+
+  // pan / zoom
+  const zoom = d3.zoom().scaleExtent([0.08, 3]).on('zoom', ev => root.attr('transform', ev.transform));
+  svg.call(zoom);
+  const box = svg.node().getBoundingClientRect();
+  svg.call(zoom.transform, d3.zoomIdentity.scale(Math.min(box.width / totalW, box.height / totalH) * 0.98));
+
+  // ---------- highlight state ----------
+  let selected = null, mode = null; // mode: 'cycle' | 'path' | null
+  function touching(id) { return new Set(edges.filter(e => e.source === id || e.target === id).map(e => e.id)); }
+  function light(nodeIds, edgeIds) {
+    nodeSel.classed('dim', n => !nodeIds.has(n.id) && !edgeTouches(n.id, edgeIds));
+    edgeSel.classed('lit', e => edgeIds.has(e.id)).classed('dim', e => !edgeIds.has(e.id));
+  }
+  function edgeTouches(id, edgeIds) { return edges.some(e => edgeIds.has(e.id) && (e.source === id || e.target === id)); }
+  function unlight() { nodeSel.classed('dim', false); edgeSel.classed('lit', false).classed('dim', false); }
+  function select(n) {
+    selected = n; mode = null; d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text('');
+    nodeSel.classed('selected', m => m === n);
+    light(new Set([n.id]), touching(n.id)); inspect(n);
+  }
+  function showCycle(id) {
+    const c = D.cycles.find(c => c.id === id); if (!c) return unlight();
+    mode = 'cycle'; const s = new Set(c.nodes);
+    light(s, new Set(edges.filter(e => s.has(e.source) && s.has(e.target)).map(e => e.id)));
+    d3.select('#cycleDesc').text(c.description);
+  }
+  function showPath(a, b) { // BFS over visible edges
+    const vis = edges.filter(e => visibleEdge(e)), prev = new Map([[a.id, null]]), q = [a.id];
+    while (q.length && !prev.has(b.id)) { const u = q.shift(); for (const e of vis) if (e.source === u && !prev.has(e.target)) { prev.set(e.target, e); q.push(e.target); } }
+    if (!prev.has(b.id)) return status(`No directed path from ${a.label} to ${b.label} over visible edges.`);
+    const ids = new Set(), ns = new Set([b.id]); for (let e = prev.get(b.id); e; e = prev.get(e.source)) { ids.add(e.id); ns.add(e.source); }
+    mode = 'path'; light(ns, ids); status(`Path: ${[...ns].reverse().map(i => byId.get(i).label).join(' → ')}`);
+  }
+  d3.select('#clear').on('click', () => { selected = null; mode = null; nodeSel.classed('selected', false); unlight(); d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text(''); status(''); });
+
+  // ---------- filters ----------
+  const on = { edge: new Set(edgeClasses), stage: new Set([...stages.map(s => s.id), 'global']), layer: new Set(layers) };
+  function checks(sel, key, items, labelFn, swatch) {
+    d3.select(sel).selectAll('label').data(items).join('label').attr('class', 'f').html(v => `<input type="checkbox" checked> ${swatch ? `<span class="sw" style="border-color:${cssVar(v)}"></span>` : ''}${labelFn(v)}`)
+      .select('input').on('change', (ev, v) => { ev.target.checked ? on[key].add(v) : on[key].delete(v); applyFilters(); });
+  }
+  checks('#edgeFilters', 'edge', edgeClasses, v => v.replace(/_/g, ' '), true);
+  checks('#stageFilters', 'stage', [...stages.map(s => s.id), 'global'], v => v === 'global' ? 'global (rails)' : `${v} · ${stages[v].name}`);
+  checks('#layerFilters', 'layer', layers, v => v.replace(/_/g, ' '));
+  const visibleNode = n => on.layer.has(n.layer) && on.stage.has(n.stageScope === 'global' ? 'global' : n.stage);
+  const visibleEdge = e => on.edge.has(e.transitionClass) && visibleNode(byId.get(e.source)) && visibleNode(byId.get(e.target));
+  function applyFilters() { nodeSel.classed('hidden', n => !visibleNode(n)); edgeSel.classed('hidden', e => !visibleEdge(e)); }
+
+  d3.select('#roleLegend').html(roles.map(r => `<div class="f"><span class="sw" style="border-color:${{ knowledge: '#4a5670', state: '#6aa4d8', gateway: cssVar('gateway'), pressure: '#d07a6a', attractor: '#c9b2ff' }[r]}"></span>${r}${r === 'gateway' ? ' 🔑' : ''}</div>`).join(''));
+  d3.select('#cycle').selectAll('option.c').data(D.cycles).join('option').attr('class', 'c').attr('value', c => c.id).text(c => c.label);
+  d3.select('#cycle').on('change', ev => showCycle(ev.target.value));
+
+  // ---------- search ----------
+  d3.select('#search').on('input', ev => {
+    const q = ev.target.value.trim().toLowerCase();
+    nodeSel.classed('match', n => q && (n.label.toLowerCase().includes(q) || n.id.includes(q)));
+    nodeSel.classed('dim', n => q && !(n.label.toLowerCase().includes(q) || n.id.includes(q)));
+  }).on('keydown', ev => {
+    if (ev.key !== 'Enter') return;
+    const q = ev.target.value.trim().toLowerCase(), n = nodes.find(n => n.label.toLowerCase().includes(q) || n.id.includes(q));
+    if (n) { select(n); const t = d3.zoomTransform(svg.node()); svg.transition().call(zoom.translateTo, n.cx, n.cy); }
+  });
+
+  // ---------- inspector ----------
+  function inspect(n) {
+    const link = id => `<span class="pill" data-id="${id}">${byId.get(id)?.label ?? id}</span>`;
+    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="${e.weight < 0 ? 'neg' : 'pos'}">${e.weight > 0 ? '+' : ''}${e.weight.toFixed(2)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}</div>`;
+    const inc = edges.filter(e => e.target === n.id), out = edges.filter(e => e.source === n.id);
+    const fx = D.stateEffects.filter(f => f.triggerNode === n.id || [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])].includes(n.id));
+    const attr = D.attractors.find(a => a.node_id === n.id);
+    d3.select('#inspector').style('color', null).html(`
+      <h1>${n.label}</h1>
+      <p class="k">${n.id} · ${n.type} · ${n.layer} · ${n.stageScope === 'global' ? 'global' : 'stage ' + n.stage} · <b>${n.progressionRole}</b>${n.attractor_strength != null ? ` · strength ${n.attractor_strength}` : ''}</p>
+      <p>${n.description}</p>
+      ${attr ? `<p><b>Attractor</b> · ${attr.domain}<br><span class="k">${attr.role}</span>${attr.terminal_if_rejected_for_historic_christianity ? '<br><span class="neg">terminal for historic Christianity if rejected</span>' : ''}</p>` : ''}
+      ${n.prerequisites ? `<h2>Prerequisites</h2>${Object.entries(n.prerequisites).map(([k, v]) => `<p><span class="k">${k}:</span> ${v.map(link).join(' ')}</p>`).join('')}` : ''}
+      ${n.unlocks?.length ? `<h2>Unlocks</h2><p>${n.unlocks.map(link).join(' ')}</p>` : ''}
+      <h2>Incoming pressure (${inc.length}) · net ${d3.sum(inc, e => e.weight).toFixed(2)}</h2>${inc.map(e => edgeRow(e, e.source)).join('') || '<p class="k">none</p>'}
+      <h2>Outgoing pressure (${out.length})</h2>${out.map(e => edgeRow(e, e.target)).join('') || '<p class="k">none</p>'}
+      ${fx.length ? `<h2>State effects</h2>${fx.map(f => `<p><b>${f.effectType}</b> <span class="k">when ${link(f.triggerNode)} is ${f.whenStatus.join('/')}</span><br>${f.description}<br><span class="k">${JSON.stringify(f.target)} ${f.weightDelta ?? f.confidenceDelta ?? f.pressureDelta ?? f.multiplier ?? ''}</span></p>`).join('')}` : ''}
+      <h2>In cycles</h2><p>${D.cycles.filter(c => c.nodes.includes(n.id)).map(c => `<span class="pill" data-cycle="${c.id}">${c.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
+    d3.select('#inspector').selectAll('.pill[data-id]').on('click', ev => { const m = byId.get(ev.target.dataset.id); select(m); svg.transition().call(zoom.translateTo, m.cx, m.cy); });
+    d3.select('#inspector').selectAll('.pill[data-cycle]').on('click', ev => { d3.select('#cycle').property('value', ev.target.dataset.cycle); showCycle(ev.target.dataset.cycle); });
+  }
+  const deep = byId.get(new URLSearchParams(location.search).get('node'));
+  if (deep) { select(deep); svg.call(zoom.transform, d3.zoomIdentity.translate(box.width / 2 - deep.cx * 0.9, box.height / 2 - deep.cy * 0.9).scale(0.9)); }
+  function trunc(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+  function status(t) { document.getElementById('status').textContent = t; }
+})();
+</script>
+</body>
+</html>
