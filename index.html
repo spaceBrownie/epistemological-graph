@@ -68,7 +68,12 @@
   .node .key { fill: var(--gateway); font-size: 12px; }
   #root.overview .edge:not(.feedback) { opacity: 0; pointer-events: none; }
   #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) { opacity: .45; pointer-events: none; }
-  #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) text { display: none; }
+  #root.overview .node text:not(.landmark) { display: none; }
+  /* overview: key nodes carry screen-size labels (collision-culled); clusters are zoom targets */
+  .node .landmark { display: none; fill: #eee7d8; font: 600 12px system-ui, sans-serif; text-anchor: middle; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+  #root.overview .node.labelled .landmark { display: inline; }
+  .cell { fill: transparent; pointer-events: none; cursor: zoom-in; }
+  #root.overview .cell { pointer-events: all; } #root.overview .cell:hover { fill: #ffffff10; stroke: var(--hl); stroke-width: 2; vector-effect: non-scaling-stroke; }
   #root.overview .edge.feedback { opacity: .25; }
   #root.overview .edge.lit { opacity: 1; } #root.overview .node.tourStop { opacity: 1; }
   .edge.lit { vector-effect: non-scaling-stroke; } /* lit paths stay legible when a whole tour is framed at overview zoom */
@@ -94,6 +99,9 @@
   .tourNav { display: flex; gap: 6px; justify-content: flex-end; }
   #tourNext { background: #3a3420; border-color: var(--gateway); }
   #viewport.touring #status { bottom: 196px; }
+  /* during a tour, collapse visually but never spatially: other edges vanish, other nodes become unlabeled terrain */
+  #viewport.touring:not(.showAll) #root .edge:not(.lit) { opacity: 0; pointer-events: none; }
+  #viewport.touring:not(.showAll) .node.dim { opacity: .22; } #viewport.touring:not(.showAll) .node.dim text { display: none; }
   #root .edge.lit.tourAhead { opacity: .28; } .edge.tourNow { opacity: 1; stroke-width: 4.5; }
   .node.tourAt rect { stroke: var(--hl); stroke-width: 3; }
   .tourMark circle { fill: #11161d; stroke: #59677e; stroke-width: 1.5; } .tourMark text { fill: var(--muted); font: 600 12px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }
@@ -225,6 +233,12 @@
     bg.append('text').attr('class', 'laneLabel').attr('x', LEFT + 10).attr('y', yy + 14).text(label);
   }
 
+  const clusters = [...cells].flatMap(([L, byStage]) => [...byStage].map(([st, list]) => ({ L, st, list })));
+  root.append('g').selectAll('rect').data(clusters).join('rect').attr('class', 'cell').attr('rx', 8)
+    .attr('x', c => colX(c.st) + 10).attr('y', c => laneY.get(c.L) + 4).attr('width', COLW - 20).attr('height', c => laneH.get(c.L) - 8)
+    .on('mouseenter', (ev, c) => status(`${c.L.replace(/_/g, ' ')} · ${stages[c.st].name}: ${c.list.length} concept${c.list.length > 1 ? 's' : ''}. Click to zoom in.`))
+    .on('mouseleave', () => status(standingStatus))
+    .on('click', (ev, c) => fitNodes(c.list));
   const edgeSel = root.append('g').selectAll('path').data(edges).join('path')
     .attr('class', e => 'edge ' + e.transitionClass).attr('d', path)
     .attr('stroke', e => cssVar(e.transitionClass)).attr('stroke-width', e => 0.8 + Math.abs(e.weight) * 3)
@@ -248,13 +262,15 @@
   // knowledge is the default role (50 of 92 nodes); only name the exceptions
   nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 43).text(n => [n.progressionRole === 'knowledge' ? '' : n.progressionRole, n.stageScope === 'global' ? 'global' : '', attractorIds.has(n.id) && n.progressionRole !== 'attractor' ? 'attractor' : ''].filter(Boolean).join(' · '));
   nodeSel.filter(n => n.progressionRole === 'gateway').append('text').attr('class', 'key').attr('x', NW - 18).attr('y', 44).text('🔑');
+  nodeSel.append('text').attr('class', 'landmark').text(n => trunc(n.label.replace(/^Attractor: /, ''), 34));
   nodeSel.filter(n => n.unlocks?.length).append('title').text(n => 'unlocks: ' + n.unlocks.join(', '));
 
   // pan / zoom
+  let tour = null, tourStep = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const zoom = d3.zoom().scaleExtent([0.08, 3]).on('zoom', ev => {
     const overview = ev.transform.k < .34;
-    drawAxes(ev.transform);
+    drawAxes(ev.transform); placeLandmarks(ev.transform);
     root.attr('transform', ev.transform)
       .classed('overview', overview)
       .classed('mid', ev.transform.k >= .34 && ev.transform.k < .68);
@@ -277,27 +293,54 @@
     laneAxis.attr('y', L => Math.min(t.applyY(laneY.get(L) + laneH.get(L)) - 6, Math.max(48, t.applyY(laneY.get(L)) + 16)))
       .attr('display', L => laneH.get(L) * t.k < 18 || t.applyY(laneY.get(L) + laneH.get(L)) < 48 ? 'none' : null);
   }
+  // greedy label placement: tour stops, then attractors, then gateways; try above the node, then below, else skip
+  const isKey = n => n.progressionRole === 'gateway' || n.progressionRole === 'attractor' || attractorIds.has(n.id);
+  function placeLandmarks(t) {
+    const rank = n => (tour?.nodeIds.has(n.id) ? 4 : 0) + (attractorIds.has(n.id) || n.progressionRole === 'attractor' ? 2 : 0) + (n.progressionRole === 'gateway' ? 1 : 0);
+    const boxes = [], shown = new Map(); // node id -> 'above' | 'below'
+    if (t.k < .34) for (const n of nodeSel.filter(function (n) { return !this.classList.contains('hidden') && (tour ? tour.nodeIds.has(n.id) : isKey(n)); }).data().sort((a, b) => rank(b) - rank(a))) {
+      const w = trunc(n.label.replace(/^Attractor: /, ''), 34).length * 6.8 + 8, x = t.applyX(n.cx) - w / 2;
+      for (const [side, y] of [['above', t.applyY(n.y) - 24], ['below', t.applyY(n.y + NH) + 2]]) {
+        const b = [x, y, x + w, y + 20];
+        if (boxes.some(o => b[0] < o[2] && o[0] < b[2] && b[1] < o[3] && o[1] < b[3])) continue;
+        boxes.push(b); shown.set(n.id, side); break;
+      }
+    }
+    nodeSel.classed('labelled', n => shown.has(n.id)).select('text.landmark')
+      .attr('transform', n => shown.get(n.id) === 'below' ? `translate(${NW / 2},${NH}) scale(${1 / t.k}) translate(0,15)` : `translate(${NW / 2},0) scale(${1 / t.k}) translate(0,-7)`);
+  }
+  const relabel = () => placeLandmarks(d3.zoomTransform(svg.node()));
   svg.call(zoom);
   const move = transform => (reducedMotion ? svg : svg.transition().duration(280)).call(zoom.transform, transform);
-  function fitBounds(x, yy, w, h, maxScale = 1.1) {
+  function boundsTransform(x, yy, w, h, maxScale = 1.1) {
     const b = svg.node().getBoundingClientRect(), pad = 44, dock = document.getElementById('tour');
     const top = pad + 30, bottom = dock.hidden ? pad : dock.offsetHeight + 24; // keep targets clear of the axis band and tour dock
     const k = Math.min(maxScale, (b.width - pad * 2) / w, (b.height - top - bottom) / h);
-    move(d3.zoomIdentity.translate(b.width / 2 - (x + w / 2) * k, top + (b.height - top - bottom) / 2 - (yy + h / 2) * k).scale(k));
+    return d3.zoomIdentity.translate(b.width / 2 - (x + w / 2) * k, top + (b.height - top - bottom) / 2 - (yy + h / 2) * k).scale(k);
+  }
+  function fitBounds(...args) { move(boundsTransform(...args)); }
+  function nodesTransform(list, maxScale = .9) {
+    const x = d3.min(list, n => n.x), yy = d3.min(list, n => n.y);
+    return boundsTransform(x, yy, d3.max(list, n => n.x + NW) - x, d3.max(list, n => n.y + NH) - yy, maxScale);
   }
   function focusNode(n, scale = .9) {
     const b = svg.node().getBoundingClientRect();
     move(d3.zoomIdentity.translate(b.width / 2 - n.cx * scale, b.height / 2 - n.cy * scale).scale(scale));
   }
-  function fitNodes(list, maxScale = .9) {
-    const x = d3.min(list, n => n.x), yy = d3.min(list, n => n.y);
-    fitBounds(x, yy, d3.max(list, n => n.x + NW) - x, d3.max(list, n => n.y + NH) - yy, maxScale);
+  function fitNodes(list, maxScale = .9) { move(nodesTransform(list, maxScale)); }
+  // one tour step: if both ends fit at a readable scale, frame them; otherwise start at the source and travel the edge to the destination
+  function travel(from, to) {
+    const both = nodesTransform([from, to]);
+    if (both.k >= .6) return move(both);
+    if (reducedMotion) return svg.call(zoom.transform, nodesTransform([to]));
+    svg.transition().duration(350).call(zoom.transform, nodesTransform([from]))
+      .transition().duration(1100).ease(d3.easeCubicInOut).call(zoom.transform, nodesTransform([to]));
   }
   function home() {
     const k = .82;
     move(d3.zoomIdentity.translate(20 - LEFT * k, 12).scale(k));
   }
-  function fitAll() { fitBounds(0, 0, totalW, totalH, 1); }
+  function fitAll() { fitBounds(0, 0, totalW, totalH, 1); status('Key concepts are labelled. Click any cluster to zoom in.'); }
   home();
 
   // ---------- highlight state ----------
@@ -320,7 +363,7 @@
   }
   function setConnectionOverride(on) {
     showAllConnections = on;
-    d3.select('#allConnections').attr('aria-pressed', on);
+    d3.select('#allConnections').attr('aria-pressed', on); d3.select('#viewport').classed('showAll', on);
     if (on) applyConnectionOverride();
     else if (selected) select(selected);
     else if (mode === 'tour') renderTour(false);
@@ -342,7 +385,6 @@
     const steps = c.edgeIds.map(id => edges.find(e => e.id === id)).filter(Boolean);
     return { ...c, steps, closed: steps.length > 1 && steps.at(-1).target === steps[0].source, nodeIds: new Set(steps.flatMap(e => [e.source, e.target])) };
   });
-  let tour = null, tourStep = 0;
   const stageSpan = t => { const ss = [...t.nodeIds].map(id => byId.get(id).stage).filter(v => v != null); return d3.min(ss) === d3.max(ss) ? `stage ${d3.min(ss)}` : `stages ${d3.min(ss)}–${d3.max(ss)}`; };
   const kind = t => t.closed ? 'Loop' : 'Open trace';
   d3.select('#tourMenu').selectAll('button').data(tours).join('button').attr('type', 'button')
@@ -369,6 +411,7 @@
     const t = tour, N = t.steps.length, cur = t.steps[tourStep - 1], whole = tourStep === 0 || tourStep > N;
     light(t.nodeIds, new Set(t.steps.map(e => e.id)));
     edgeSel.classed('tourNow', e => e === cur).classed('tourAhead', e => !whole && t.steps.indexOf(e) >= tourStep);
+    relabel();
     nodeSel.classed('tourAt', n => cur ? n.id === cur.source || n.id === cur.target : false).classed('tourStop', n => t.nodeIds.has(n.id));
     tourMarks.selectAll('g').classed('now', e => e === cur).classed('visited', (e, i) => i + 1 < tourStep || tourStep > N);
     d3.select('#tourSteps').selectAll('button').classed('visited', (e, i) => i + 1 < tourStep || tourStep > N).attr('aria-current', e => e === cur ? 'step' : null);
@@ -380,12 +423,12 @@
     d3.select('#tourText').html(text);
     d3.select('#tourPrev').property('disabled', tourStep === 0);
     d3.select('#tourNext').text(tourStep === 0 ? 'Start tour' : tourStep < N ? 'Next step' : tourStep === N ? 'Finish' : 'Restart');
-    if (frame) fitNodes(whole ? [...t.nodeIds].map(id => byId.get(id)) : [byId.get(cur.source), byId.get(cur.target)]);
+    if (frame) whole ? fitNodes([...t.nodeIds].map(id => byId.get(id))) : travel(byId.get(cur.source), byId.get(cur.target));
   }
   function endTour() {
     if (!tour) return;
     tour = null; mode = null; document.getElementById('tour').hidden = true; d3.select('#viewport').classed('touring', false);
-    tourMarks.selectAll('g').remove(); edgeSel.classed('tourNow tourAhead', false); nodeSel.classed('tourAt tourStop', false);
+    tourMarks.selectAll('g').remove(); edgeSel.classed('tourNow tourAhead', false); nodeSel.classed('tourAt tourStop', false); relabel();
   }
   d3.select('#tourNext').on('click', () => goTour(tourStep > tour.steps.length ? 1 : tourStep + 1));
   d3.select('#tourPrev').on('click', () => goTour(Math.max(0, tourStep - 1)));
@@ -412,7 +455,7 @@
     if (!on) routeStart = null;
   }
   function clear() {
-    endTour(); selected = null; mode = null; routeStart = null; lastPath = null; standingStatus = ''; showAllConnections = false; d3.select('#allConnections').attr('aria-pressed', false); routeMode(false); nodeSel.classed('selected', false); unlight();
+    endTour(); selected = null; mode = null; routeStart = null; lastPath = null; standingStatus = ''; showAllConnections = false; d3.select('#allConnections').attr('aria-pressed', false); d3.select('#viewport').classed('showAll', false); routeMode(false); nodeSel.classed('selected', false); unlight();
     status('');
   }
   d3.select('#clear').on('click', clear);
@@ -430,7 +473,7 @@
   checks('#layerFilters', 'layer', layers, v => v.replace(/_/g, ' '));
   const visibleNode = n => on.layer.has(n.layer) && on.stage.has(n.stageScope === 'global' ? 'global' : n.stage);
   const visibleEdge = e => on.edge.has(e.transitionClass) && visibleNode(byId.get(e.source)) && visibleNode(byId.get(e.target));
-  function applyFilters() { nodeSel.classed('hidden', n => !visibleNode(n)); edgeSel.classed('hidden', e => !visibleEdge(e)); }
+  function applyFilters() { nodeSel.classed('hidden', n => !visibleNode(n)); edgeSel.classed('hidden', e => !visibleEdge(e)); relabel(); }
 
   d3.select('#roleLegend').html(roles.map(r => `<div class="f"><span class="sw" style="border-color:${{ knowledge: '#4a5670', state: '#6aa4d8', gateway: cssVar('gateway'), pressure: '#d07a6a', attractor: '#c9b2ff' }[r]}"></span>${r}${r === 'gateway' ? ' 🔑' : ''}</div>`).join(''));
 
