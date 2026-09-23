@@ -392,9 +392,9 @@
   });
   const loopsOf = e => D.cycles.filter(c => c.edgeIds.includes(e.id)); // which declared loops/traces an edge belongs to
   const stageSpan = t => { const ss = [...t.nodeIds].map(id => byId.get(id).stage).filter(v => v != null); return d3.min(ss) === d3.max(ss) ? `stage ${d3.min(ss)}` : `stages ${d3.min(ss)}–${d3.max(ss)}`; };
-  const kind = t => ({ argument: 'Argument path', journey: 'Personal journey' })[t.kind] ?? (t.closed ? 'Loop' : 'Open trace');
+  const kind = t => ({ argument: 'Argument path', journey: 'Personal journey', return: 'Return journey' })[t.kind] ?? (t.closed ? 'Loop' : 'Open trace');
   const groups = [
-    ['Personal journeys', 'longest routes from a starting point', tours.filter(t => t.kind === 'journey')],
+    ['Personal journeys', 'leaving and returning, and the longest routes', [...tours.filter(t => t.kind === 'return'), ...tours.filter(t => t.kind === 'journey')]],
     ['Argument paths', 'where arguments settle', tours.filter(t => t.kind === 'argument')],
     ['Loops and traces', 'declared in the data', tours.filter(t => !t.authored)]];
   groups.filter(g => g[2].length).forEach(([title, sub, list], gi) => {
@@ -431,9 +431,11 @@
     d3.select('#tourSteps').selectAll('button').classed('visited', (e, i) => i + 1 < tourStep || tourStep > N).attr('aria-current', e => e === cur ? 'step' : null);
     const first = byId.get(t.steps[0].source), last = byId.get(t.steps.at(-1).target);
     const loops = [...new Set(t.steps.flatMap(loopsOf))];
+    const seenBefore = e => t.steps.slice(0, t.steps.indexOf(e)).some(p => p.source === e.target || p.target === e.target);
+    const back = e => seenBefore(e) ? `<span class="via">Back at ${byId.get(e.target).label}, where this began, but further along.</span>` : '';
     const via = e => t.authored && loopsOf(e).length ? `<span class="via">Inside: ${loopsOf(e).map(c => c.label).join('; ')}</span>` : '';
     const text = tourStep === 0 ? t.description
-      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b> <q>${cur.label || cur.type.replace(/_/g, ' ')}</q>${cur.explanation ? `<span class="why">${cur.explanation}</span>` : ''}${via(cur)}`
+      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b> <q>${cur.label || cur.type.replace(/_/g, ' ')}</q>${cur.explanation ? `<span class="why">${cur.explanation}</span>` : ''}${back(cur)}${via(cur)}`
       : t.authored ? argumentEnd(t, last, loops)
       : t.closed ? `Back at <b>${first.label}</b>. The loop closes, so each pass strengthens where it started.`
       : `The trace ends at <b>${last.label}</b>. The data declares no edge back to <b>${first.label}</b>, so this is not a closed loop.`;
@@ -446,7 +448,9 @@
   const sentence = s => /[.?!]$/.test(s) ? s : s + '.';
   function argumentEnd(t, last, loops) {
     const next = t.kind === 'argument' && tours.find(o => o.kind === 'argument' && o !== t && o.steps[0].source === last.id);
-    const end = t.steps.at(-1).weight < 0 ? `The path ends as pressure on <b>${sentence(last.label)}</b>`
+    const returned = t.kind === 'return' && t.steps.find(e => t.steps.slice(0, t.steps.indexOf(e)).some(p => p.source === e.target));
+    const end = returned ? `The path comes back to <b>${byId.get(returned.target).label}</b> and goes further, settling at <b>${sentence(last.label)}</b>`
+      : t.steps.at(-1).weight < 0 ? `The path ends as pressure on <b>${sentence(last.label)}</b>`
       : next ? `The path reaches <b>${sentence(last.label)}</b>` : `The path settles at <b>${sentence(last.label)}</b>`;
     const via = loops.length ? ` On the way it runs through ${new Intl.ListFormat('en').format(loops.map(c => `<b>${c.label}</b>`))}.` : '';
     return end + via + (next ? ` <span class="via">Continue: <span class="pill" data-next="${next.id}">${next.label}</span></span>` : '');

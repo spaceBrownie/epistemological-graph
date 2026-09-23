@@ -94,8 +94,8 @@
         ],
         "properties": {
           "kind": {
-            "description": "argument: authored path from an argument or pressure to where it settles. journey: longest simple path from a starting node to a terminal worldview state.",
-            "enum": ["argument", "journey"]
+            "description": "argument: authored path from an argument or pressure to where it settles. journey: longest simple path from a starting node to a terminal worldview state. return: authored walk that leaves a position under friction and comes back to it, so it revisits at least one concept.",
+            "enum": ["argument", "journey", "return"]
           },
           "edgeIds": {
             "type": "array",

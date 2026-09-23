@@ -1824,7 +1824,8 @@
       "type": "supports",
       "weight": 0.7,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "Suffering that seems pointless makes confident theism hard to hold. God stays plausible, but commitment gives way to uncertainty."
     },
     {
       "id": "e071",
@@ -1842,7 +1843,8 @@
       "type": "supports",
       "weight": 0.7,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If a loving God stays hidden from sincere seekers, confidence in that God weakens. Theism survives as a possibility rather than a conviction."
     },
     {
       "id": "e073",
@@ -1974,7 +1976,8 @@
       "type": "branches_to",
       "weight": 0.5,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "Comparison leads to Islam, which shares belief in one God who speaks through revelation. It is the closest alternative to test the Christian claims against."
     },
     {
       "id": "e086",
@@ -2012,7 +2015,8 @@
       "weight": 0.7,
       "label": "tawhid / revelation",
       "transitionClass": "backward",
-      "stageDelta": -2
+      "stageDelta": -2,
+      "explanation": "Islam's insistence on one personal God who reveals himself strengthens personal theism itself. Looking elsewhere can end up reinforcing the shared foundation."
     },
     {
       "id": "e090",
@@ -2335,7 +2339,8 @@
       "type": "transitions_to",
       "weight": 0.55,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "Once Christianity leads, the next step is to embrace it as a historic, lived faith. The hypothesis becomes a commitment."
     },
     {
       "id": "e123",
@@ -3456,6 +3461,53 @@
         "e152"
       ],
       "description": "The longest route in the map from Resurrection and cosmic restoration to Meaning constructed rather than discovered that never revisits a concept: 23 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "return_other_faiths",
+      "kind": "return",
+      "label": "Convinced, unsettled by suffering, tests other faiths, returns",
+      "edgeIds": [
+        "e113",
+        "e114",
+        "e117",
+        "e134",
+        "e070",
+        "e081",
+        "e082",
+        "e085",
+        "e089",
+        "e111",
+        "e106",
+        "e107",
+        "e122",
+        "e163"
+      ],
+      "description": "Someone already persuaded that Christianity is the leading hypothesis follows it into the meaning of the cross, where the problem of evil resurfaces. Unsettled, they step back to uncertain theism, reopen the question of revelation and test Islam. That strengthens their belief in one personal God, which raises the plausibility of the resurrection again. They return to Christianity and go further than before, into historic commitment that still carries its tensions."
+    },
+    {
+      "id": "return_hiddenness_history",
+      "kind": "return",
+      "label": "Convinced, unsettled by hiddenness, re-examines the history, returns",
+      "edgeIds": [
+        "e113",
+        "e114",
+        "e115",
+        "e137",
+        "e072",
+        "e075",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e122",
+        "e163"
+      ],
+      "description": "Someone persuaded of Christianity reflects on the incarnation, and the hiddenness of God becomes a real problem. They fall back to uncertain theism, and only as positive evidence accumulates do they return to personal theism. They reopen revelation, compare the traditions, and re-examine the history from Jesus through the crucifixion to the resurrection question. The resurrection holds, so they come back to Christianity and settle into historic commitment, tensions included."
     }
   ],
   "attractors": [
