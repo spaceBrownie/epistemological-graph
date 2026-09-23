@@ -74,6 +74,29 @@
         }
       }
     },
+    "tours": {
+      "description": "Authored argument paths: ordered edge IDs forming a directed walk over existing edges, from a starting argument or pressure to where it settles.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "edgeIds",
+          "description"
+        ],
+        "properties": {
+          "edgeIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "attractors": {
       "type": "array"
     },

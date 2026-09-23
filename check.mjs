@@ -36,7 +36,16 @@ for (const c of d.cycles) {
     console.warn(`warn: cycle ${c.id} is an incomplete trace (${first.source} -> ${last.target})`);
   }
 }
+for (const t of d.tours ?? []) {
+  const es = t.edgeIds.map(id => edgesById.get(id));
+  if (new Set(t.edgeIds).size !== t.edgeIds.length) bad.push(`tour ${t.id} repeats an edgeId`);
+  es.forEach((e, i) => {
+    if (!e) return bad.push(`tour ${t.id} edge ${t.edgeIds[i]}`);
+    const next = es[i + 1];
+    if (next && e.target !== next.source) bad.push(`tour ${t.id} edges ${e.id}>${next.id} do not form a directed walk`);
+  });
+}
 for (const f of d.stateEffects) for (const v of [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])]) if (v && !ids.has(v)) bad.push(`fx ${f.id} target ${v}`);
 for (const a of d.attractors) if (!ids.has(a.node_id)) bad.push(`attractor ${a.node_id}`);
-console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces`);
+console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces, ${d.tours?.length ?? 0} argument paths`);
 process.exit(bad.length ? 1 : 0);

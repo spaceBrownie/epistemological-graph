@@ -86,6 +86,8 @@
   #tourMenu button:hover, #tourMenu button:focus-visible { background: #202735; border-color: var(--line); }
   #tourMenu b { display: block; font: 600 14px/1.3 Georgia, serif; color: #eee7d8; }
   #tourMenu span { color: var(--muted); font-size: 12px; }
+  #tourMenu h3 { margin: 10px 10px 4px; color: var(--muted); font-size: 12px; font-weight: 600; }
+  #tourText .via { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
   #tour { position: absolute; z-index: 3; bottom: 10px; left: 50%; transform: translateX(-50%); width: min(560px, calc(100% - 16px)); padding: 12px 14px; background: var(--panel-glass); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 12px 40px #0008; }
   #tour[hidden] { display: none; }
   #tour h2 { margin: 0 32px 2px 0; color: #eee7d8; font: 600 15px/1.3 Georgia, serif; letter-spacing: 0; }
@@ -381,15 +383,21 @@
   }
   // ---------- tours: declared cycles/traces walked one edge at a time ----------
   // step 0 = overview, 1..N = one edge each, N + 1 = end card showing the whole tour again
-  const tours = D.cycles.map(c => {
+  // declared cycles/traces plus authored argument paths (D.tours), all walked the same way
+  const tours = [...(D.tours ?? []).map(t => ({ ...t, argument: true })), ...D.cycles].map(c => {
     const steps = c.edgeIds.map(id => edges.find(e => e.id === id)).filter(Boolean);
     return { ...c, steps, closed: steps.length > 1 && steps.at(-1).target === steps[0].source, nodeIds: new Set(steps.flatMap(e => [e.source, e.target])) };
   });
+  const loopsOf = e => D.cycles.filter(c => c.edgeIds.includes(e.id)); // which declared loops/traces an edge belongs to
   const stageSpan = t => { const ss = [...t.nodeIds].map(id => byId.get(id).stage).filter(v => v != null); return d3.min(ss) === d3.max(ss) ? `stage ${d3.min(ss)}` : `stages ${d3.min(ss)}–${d3.max(ss)}`; };
-  const kind = t => t.closed ? 'Loop' : 'Open trace';
-  d3.select('#tourMenu').selectAll('button').data(tours).join('button').attr('type', 'button')
-    .html(t => `<b>${t.label}</b><span>${kind(t)} · ${t.steps.length} steps · ${stageSpan(t)}</span>`)
-    .on('click', (ev, t) => { document.getElementById('tourMenu').hidePopover(); startTour(t.id); });
+  const kind = t => t.argument ? 'Argument path' : t.closed ? 'Loop' : 'Open trace';
+  for (const [title, list] of [['Argument paths', tours.filter(t => t.argument)], ['Loops and traces', tours.filter(t => !t.argument)]]) {
+    if (!list.length) continue;
+    const menu = d3.select('#tourMenu'); menu.append('h3').text(title);
+    for (const t of list) menu.append('button').attr('type', 'button')
+      .html(`<b>${t.label}</b><span>${kind(t)} · ${t.steps.length} steps · ${stageSpan(t)}</span>`)
+      .on('click', () => { document.getElementById('tourMenu').hidePopover(); startTour(t.id); });
+  }
   function startTour(id) {
     const t = tours.find(t => t.id === id); if (!t) return;
     clear(); tour = t; tourStep = 0; mode = 'tour';
@@ -416,14 +424,25 @@
     tourMarks.selectAll('g').classed('now', e => e === cur).classed('visited', (e, i) => i + 1 < tourStep || tourStep > N);
     d3.select('#tourSteps').selectAll('button').classed('visited', (e, i) => i + 1 < tourStep || tourStep > N).attr('aria-current', e => e === cur ? 'step' : null);
     const first = byId.get(t.steps[0].source), last = byId.get(t.steps.at(-1).target);
+    const loops = [...new Set(t.steps.flatMap(loopsOf))];
+    const via = e => t.argument && loopsOf(e).length ? `<span class="via">Inside: ${loopsOf(e).map(c => c.label).join('; ')}</span>` : '';
     const text = tourStep === 0 ? t.description
-      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b>${cur.label ? ` <q>${cur.label}</q>` : ` <q>${cur.type.replace(/_/g, ' ')}</q>`}`
+      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b>${cur.label ? ` <q>${cur.label}</q>` : ` <q>${cur.type.replace(/_/g, ' ')}</q>`}${via(cur)}`
+      : t.argument ? argumentEnd(t, last, loops)
       : t.closed ? `Back at <b>${first.label}</b>. The loop closes, so each pass strengthens where it started.`
       : `The trace ends at <b>${last.label}</b>. The data declares no edge back to <b>${first.label}</b>, so this is not a closed loop.`;
-    d3.select('#tourText').html(text);
+    d3.select('#tourText').html(text).selectAll('[data-next]').on('click', ev => startTour(ev.target.dataset.next));
     d3.select('#tourPrev').property('disabled', tourStep === 0);
     d3.select('#tourNext').text(tourStep === 0 ? 'Start tour' : tourStep < N ? 'Next step' : tourStep === N ? 'Finish' : 'Restart');
     if (frame) whole ? fitNodes([...t.nodeIds].map(id => byId.get(id))) : travel(byId.get(cur.source), byId.get(cur.target));
+  }
+  const sentence = s => /[.?!]$/.test(s) ? s : s + '.';
+  function argumentEnd(t, last, loops) {
+    const next = tours.find(o => o.argument && o !== t && o.steps[0].source === last.id);
+    const end = t.steps.at(-1).weight < 0 ? `The path ends as pressure on <b>${sentence(last.label)}</b>`
+      : next ? `The path reaches <b>${sentence(last.label)}</b>` : `The path settles at <b>${sentence(last.label)}</b>`;
+    const via = loops.length ? ` On the way it runs through ${new Intl.ListFormat('en').format(loops.map(c => `<b>${c.label}</b>`))}.` : '';
+    return end + via + (next ? ` <span class="via">Continue: <span class="pill" data-next="${next.id}">${next.label}</span></span>` : '');
   }
   function endTour() {
     if (!tour) return;

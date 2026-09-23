@@ -2968,6 +2968,106 @@
       "description": "Institutional failure or trauma can weaken trust, reduce willingness to revisit evidence, and stabilize a secular or agnostic state independently of purely analytic argument."
     }
   ],
+  "tours": [
+    {
+      "id": "tour_ascent_theism",
+      "label": "Ascent 1: from first questions to personal theism",
+      "edgeIds": [
+        "e015",
+        "e038",
+        "e050"
+      ],
+      "description": "The cosmological route: a question about what is ultimately real branches to the kalam argument, which makes transcendence plausible, which opens onto personal theism. Every theistic argument in the map funnels through this same gateway."
+    },
+    {
+      "id": "tour_ascent_resurrection",
+      "label": "Ascent 2: from personal theism to the resurrection question",
+      "edgeIds": [
+        "e080",
+        "e082",
+        "e083",
+        "e090",
+        "e092",
+        "e093"
+      ],
+      "description": "Personal theism opens the possibility of revelation, which leads into comparative religion and then, through Judaism and the historical Jesus, to the question of what explains the resurrection data."
+    },
+    {
+      "id": "tour_ascent_church",
+      "label": "Ascent 3: from the resurrection bottleneck to settled commitment",
+      "edgeIds": [
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e118",
+        "e119",
+        "e121",
+        "e163"
+      ],
+      "description": "If the resurrection is judged actual, it converges on the resurrection attractor and makes Christianity the leading hypothesis. Christ, scripture and church follow, and the path settles in Christian commitment that still carries unresolved tensions."
+    },
+    {
+      "id": "tour_stalled_theism",
+      "label": "Stalled theism: when theism does not open to revelation",
+      "edgeIds": [
+        "e018",
+        "e041",
+        "e050",
+        "e074",
+        "e076"
+      ],
+      "description": "From consciousness, the path reaches personal theism, then turns toward agnostic classical-theism instead of revelation, and from there drifts to agnostic naturalism."
+    },
+    {
+      "id": "tour_suffering_meaning",
+      "label": "Suffering to constructed meaning",
+      "edgeIds": [
+        "e061",
+        "e151",
+        "e152"
+      ],
+      "description": "The shortest collapse in the map: the problem of evil leads directly to agnostic naturalism, then secular humanism, and ends at meaning constructed rather than discovered, a node with no outgoing edges."
+    },
+    {
+      "id": "tour_personhood_love",
+      "label": "Personhood fork A: toward love",
+      "edgeIds": [
+        "e056",
+        "e130",
+        "e131"
+      ],
+      "description": "Starting from the argument from personhood, intrinsic dignity converges on the love attractor, which supports Christianity as the leading hypothesis."
+    },
+    {
+      "id": "tour_personhood_humanism",
+      "label": "Personhood fork B: toward humanism",
+      "edgeIds": [
+        "e056",
+        "e161",
+        "e152"
+      ],
+      "description": "The same first step as fork A, but intrinsic dignity supports secular humanism instead, which interprets meaning as constructed rather than discovered."
+    },
+    {
+      "id": "tour_tension_christian",
+      "label": "What Christian commitment still carries",
+      "edgeIds": [
+        "e168",
+        "e164"
+      ],
+      "description": "The problem of evil does not disappear on the Christian path. It becomes a residual tension that keeps pressure on Christian commitment."
+    },
+    {
+      "id": "tour_tension_naturalism",
+      "label": "What naturalism still carries",
+      "edgeIds": [
+        "e172",
+        "e173"
+      ],
+      "description": "The argument from consciousness does not disappear on the naturalist path. It becomes a residual tension that keeps pressure on agnostic naturalism."
+    }
+  ],
   "attractors": [
     {
       "node_id": "a_resurrection",
