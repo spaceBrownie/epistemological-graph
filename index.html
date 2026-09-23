@@ -32,18 +32,24 @@
   .sw { display: inline-block; width: 22px; height: 0; border-top: 3px solid; vertical-align: middle; margin-right: 6px; }
   .pill { display: inline-block; padding: 1px 6px; border-radius: 10px; background: #222938; margin: 1px 2px; cursor: pointer; font-size: 12px; }
   .pill:hover { background: #2f3a50; }
+  #poiResults { display: grid; gap: 3px; margin-top: 6px; }
+  .poi { width: 100%; text-align: left; font-size: 12px; padding: 5px 7px; }
   .neg { color: var(--defeater); } .pos { color: var(--forward); }
   #right p { margin: 6px 0; } #right .k { color: var(--muted); }
   svg { width: 100%; height: 100%; display: block; background: radial-gradient(circle at 30% 25%, #18202c 0, var(--bg) 48%); touch-action: none; }
   .lane { fill: #ffffff; fill-opacity: .025; stroke: var(--line); }
   .lane:nth-child(even) { fill-opacity: .05; }
-  .laneLabel, .stageLabel { fill: var(--muted); font-size: 12px; letter-spacing: .04em; }
-  .stageLabel { font: 600 15px Georgia, serif; fill: #ddd6c8; } .stageSub { fill: var(--muted); font-size: 11px; }
+  .laneLabel { fill: var(--muted); font-size: 12px; letter-spacing: .04em; }
+  .stageSub { fill: var(--muted); font-size: 11px; }
+  .axis text { font-size: 12px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+  .axis .stageAxis { font: 600 13px Georgia, serif; fill: #ddd6c8; }
+  .axis .laneAxis { fill: var(--muted); }
+  .axisBand { fill: #11161d; fill-opacity: .92; }
   .colLine { stroke: var(--line); stroke-dasharray: 2 6; }
   .rail { fill: none; stroke: var(--line); stroke-dasharray: 6 4; }
   .edge { fill: none; opacity: .18; pointer-events: stroke; }
-  .edge.global_modifier { opacity: .1; }
-  .edge.lit { opacity: 1; } .edge.dim { opacity: .025; } .edge.incoming { stroke: var(--backward); } .edge.outgoing { stroke: var(--unlock); }
+    .edge.lit { opacity: 1; } .edge.dim { opacity: .025; }
+  #root .edge.global_modifier:not(.lit) { opacity: 0; } /* rail edges span the whole map; show only in context */
   .edge.hidden { display: none; }
   .node { cursor: pointer; } .node.dim { opacity: .11; } .node.prerequisite rect { stroke: var(--backward); } .node.consequence rect { stroke: var(--unlock); } .node.hidden { display: none; }
   .node rect { stroke-width: 1.5; }
@@ -58,14 +64,55 @@
   .node:focus { outline: none; } .node:focus rect { stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 5px var(--hl)); }
   .node.match rect { stroke: var(--hl); }
   .node text { fill: var(--text); font-size: 11.5px; pointer-events: none; }
-  .node .role { fill: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; }
+  .node .role { fill: var(--muted); font-size: 10px; }
   .node .key { fill: var(--gateway); font-size: 12px; }
-  #root.overview .edge:not(.feedback), #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) { opacity: 0; pointer-events: none; }
+  #root.overview .edge:not(.feedback) { opacity: 0; pointer-events: none; }
+  #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) { opacity: .45; pointer-events: none; }
+  #root.overview .node text:not(.landmark) { display: none; }
+  /* overview: key nodes carry screen-size labels (collision-culled); clusters are zoom targets */
+  .node .landmark { display: none; fill: #eee7d8; font: 600 12px system-ui, sans-serif; text-anchor: middle; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+  #root.overview .node.labelled .landmark { display: inline; }
+  .cell { fill: transparent; pointer-events: none; cursor: zoom-in; }
+  #root.overview .cell { pointer-events: all; } #root.overview .cell:hover { fill: #ffffff10; stroke: var(--hl); stroke-width: 2; vector-effect: non-scaling-stroke; }
   #root.overview .edge.feedback { opacity: .25; }
+  #root.overview .edge.lit { opacity: 1; } #root.overview .node.tourStop { opacity: 1; }
+  .edge.lit { vector-effect: non-scaling-stroke; } /* lit paths stay legible when a whole tour is framed at overview zoom */
   #root.mid .node .role { display: none; } #root.mid .edge { opacity: .1; } #root.mid .edge.lit { opacity: 1; }
   #status { position: absolute; z-index: 2; bottom: 10px; left: 50%; max-width: min(680px, calc(100% - 24px)); transform: translateX(-50%); padding: 5px 9px; color: #c2c8d1; background: #0c1016d9; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; pointer-events: none; }
   #status:empty { display: none; }
-  @media (max-width: 820px) {
+  /* tours: numbered, walkable cycles/traces */
+  #tourMenu { inset: 56px auto auto 50%; transform: translateX(-50%); margin: 0; width: min(440px, calc(100% - 16px)); max-height: calc(100dvh - 72px); overflow: auto; padding: 8px; color: var(--text); background: var(--panel-glass); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 12px 40px #0008; }
+  #tourMenu button { display: block; width: 100%; text-align: left; padding: 9px 10px; margin: 0 0 4px; background: transparent; border-color: transparent; }
+  #tourMenu button:hover, #tourMenu button:focus-visible { background: #202735; border-color: var(--line); }
+  #tourMenu b { display: block; font: 600 14px/1.3 Georgia, serif; color: #eee7d8; }
+  #tourMenu span { color: var(--muted); font-size: 12px; }
+  #tourMenu summary { margin: 4px 0; padding: 8px 10px; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
+  #tourMenu summary span { font-weight: 400; }
+  #tourText .via { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+  #tour { position: absolute; z-index: 3; bottom: 10px; left: 50%; transform: translateX(-50%); width: min(560px, calc(100% - 16px)); padding: 12px 14px; background: var(--panel-glass); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 12px 40px #0008; }
+  #tour[hidden] { display: none; }
+  #tour h2 { margin: 0 32px 2px 0; color: #eee7d8; font: 600 15px/1.3 Georgia, serif; letter-spacing: 0; }
+  #tourKind { color: var(--muted); font-size: 12px; }
+  #tourSteps { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 8px; padding: 0; list-style: none; }
+  #tourSteps button { min-width: 28px; padding: 3px 0; border-radius: 12px; font-size: 12px; color: var(--muted); }
+  #tourSteps button.visited { color: var(--text); border-color: #59677e; }
+  #tourSteps button[aria-current=step] { color: #11161d; background: var(--hl); border-color: var(--hl); font-weight: 600; }
+  #tourText { margin: 0 0 10px; min-height: 2.8em; }
+  #tourText q { color: var(--muted); }
+  #tourText .why { display: block; margin-top: 6px; }
+  #right .why { margin: 2px 0 6px; color: #c2c8d1; font-size: 12px; }
+  .tourNav { display: flex; gap: 6px; justify-content: flex-end; }
+  #tourNext { background: #3a3420; border-color: var(--gateway); }
+  /* during a tour, collapse visually but never spatially: other edges vanish, other nodes become unlabeled terrain */
+  #viewport.touring:not(.showAll) #root .edge:not(.lit) { opacity: 0; pointer-events: none; }
+  #viewport.touring:not(.showAll) .node.dim { opacity: .22; } #viewport.touring:not(.showAll) .node.dim text { display: none; }
+  #root .edge.lit.tourAhead { opacity: .28; } .edge.tourNow { opacity: 1; stroke-width: 4.5; }
+  .node.tourAt rect { stroke: var(--hl); stroke-width: 3; }
+  .tourMark circle { fill: #11161d; stroke: #59677e; stroke-width: 1.5; } .tourMark text { fill: var(--muted); font: 600 12px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }
+  .tourMark.visited circle { stroke: var(--text); } .tourMark.visited text { fill: var(--text); }
+  .tourMark.now circle { fill: var(--hl); stroke: var(--hl); } .tourMark.now text { fill: #11161d; }
+  .tourMark { cursor: pointer; }
+  @media (max-width: 1000px) {
     #bar { flex-wrap: wrap; } #bar h1 { order: -1; width: 100%; margin: 0; text-align: center; } #bar input[type=search] { order: 2; width: 100%; }
     #bar .camera { margin-left: auto; } .optional { display: none; }
   }
@@ -81,25 +128,35 @@
     <div class="group camera" aria-label="Camera controls">
       <button id="home" title="Focus early stages">Home</button><button id="fitAll">Fit all</button><button id="fitSelection" class="optional">Fit selection</button>
     </div>
+    <button id="toursToggle" popovertarget="tourMenu" aria-controls="tourMenu">Tours</button>
     <button id="route" aria-pressed="false">Route</button>
+    <button id="allConnections" class="optional" aria-pressed="false" title="Temporarily show unrelated visible connections">Show all connections</button>
     <button id="inspectorToggle" aria-controls="right" aria-expanded="false">Inspector</button>
   </header>
   <main id="viewport">
   <aside id="left" aria-label="Map filters" aria-hidden="true" inert>
     <button class="close" data-close="left" aria-label="Close filters">×</button><h1>Map controls</h1>
-    <h2>Highlight cycle or trace</h2>
-    <label for="cycle">Cycle or trace</label><select id="cycle"><option value="">— none —</option></select>
-    <div id="cycleDesc" style="color:var(--muted);margin-top:4px"></div>
     <button id="clear">Clear highlights</button>
+    <h2>Points of interest</h2>
+    <label for="poi">Find a concept</label><input id="poi" type="search" aria-label="Find a concept" placeholder="Search points of interest…">
+    <div id="poiResults" aria-live="polite"></div>
     <h2>Edge classes</h2><div id="edgeFilters"></div>
     <h2>Stages</h2><div id="stageFilters"></div>
     <h2>Layers</h2><div id="layerFilters"></div>
     <h2>Node roles</h2>
     <div id="roleLegend"></div>
   </aside>
-  <svg id="canvas" role="application" aria-label="Interactive epistemological strategy map"><defs id="defs"></defs><g id="root"></g></svg>
+  <svg id="canvas" role="application" aria-label="Interactive epistemological strategy map"><defs id="defs"></defs><g id="root"></g><g class="axis" id="axes" aria-hidden="true"></g></svg>
   <aside id="right" aria-label="Concept inspector" aria-hidden="true" inert><button class="close" data-close="right" aria-label="Close inspector">×</button><h1>Inspector</h1><div id="inspector" style="color:var(--muted)">Select a concept.</div></aside>
   <div id="status" role="status" aria-live="polite"></div>
+  <div id="tourMenu" popover aria-label="Tours"></div>
+  <section id="tour" aria-label="Tour" hidden>
+    <span id="tourKind"></span><h2 id="tourTitle"></h2>
+    <button class="close" id="tourClose" aria-label="End tour" style="position:absolute;top:10px;right:10px;margin:0">×</button>
+    <ol id="tourSteps"></ol>
+    <p id="tourText" aria-live="polite"></p>
+    <div class="tourNav"><button id="tourPrev">Back</button><button id="tourNext">Start tour</button></div>
+  </section>
   </main>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -114,7 +171,7 @@
   const cssVar = k => getComputedStyle(document.documentElement).getPropertyValue('--' + k).trim();
 
   // ---------- layout: deterministic stage columns × layer lanes, 2-wide grid inside cells ----------
-  const NW = 168, NH = 40, GX = 12, GY = 12, COLW = 2 * NW + 3 * GX + 40, LEFT = 150, TOP = 70, RAILH = 90;
+  const NW = 168, NH = 50, GX = 12, GY = 12, COLW = 2 * NW + 3 * GX + 40, LEFT = 150, TOP = 70, RAILH = 90;
   const cells = d3.group(nodes.filter(n => n.stageScope !== 'global'), n => n.layer, n => n.stage);
   const laneH = new Map(), laneY = new Map();
   let y = TOP + RAILH;
@@ -170,26 +227,31 @@
   const bg = root.append('g');
   for (const L of layers) {
     bg.append('rect').attr('class', 'lane').attr('x', 0).attr('y', laneY.get(L)).attr('width', totalW).attr('height', laneH.get(L));
-    bg.append('text').attr('class', 'laneLabel').attr('x', 10).attr('y', laneY.get(L) + 14).text(L.replace(/_/g, ' '));
   }
   for (const s of stages) {
     bg.append('line').attr('class', 'colLine').attr('x1', colX(s.id)).attr('x2', colX(s.id)).attr('y1', TOP + RAILH).attr('y2', bottomRailY);
-    bg.append('text').attr('class', 'stageLabel').attr('x', colX(s.id) + 20).attr('y', TOP - 28).text(`${s.id} · ${s.name}`);
-    bg.append('text').attr('class', 'stageSub').attr('x', colX(s.id) + 20).attr('y', TOP - 12).text(s.description.slice(0, 60));
+    wrap(s.description, 58, 2).forEach((line, i) => bg.append('text').attr('class', 'stageSub').attr('x', colX(s.id) + 20).attr('y', TOP - 26 + i * 14).text(line));
   }
   for (const [yy, label] of [[TOP, 'Global pressures · human experience'], [bottomRailY, 'Global pressures · social / meta']]) {
     bg.append('rect').attr('class', 'rail').attr('x', LEFT).attr('y', yy).attr('width', totalW - LEFT).attr('height', RAILH - 10).attr('rx', 8);
     bg.append('text').attr('class', 'laneLabel').attr('x', LEFT + 10).attr('y', yy + 14).text(label);
   }
 
+  const clusters = [...cells].flatMap(([L, byStage]) => [...byStage].map(([st, list]) => ({ L, st, list })));
+  root.append('g').selectAll('rect').data(clusters).join('rect').attr('class', 'cell').attr('rx', 8)
+    .attr('x', c => colX(c.st) + 10).attr('y', c => laneY.get(c.L) + 4).attr('width', COLW - 20).attr('height', c => laneH.get(c.L) - 8)
+    .on('mouseenter', (ev, c) => status(`${c.L.replace(/_/g, ' ')} · ${stages[c.st].name}: ${c.list.length} concept${c.list.length > 1 ? 's' : ''}. Click to zoom in.`))
+    .on('mouseleave', () => status(standingStatus))
+    .on('click', (ev, c) => fitNodes(c.list));
   const edgeSel = root.append('g').selectAll('path').data(edges).join('path')
     .attr('class', e => 'edge ' + e.transitionClass).attr('d', path)
     .attr('stroke', e => cssVar(e.transitionClass)).attr('stroke-width', e => 0.8 + Math.abs(e.weight) * 3)
     .attr('stroke-dasharray', e => ({ reinterpretation: '8 5', feedback: '2 4', global_modifier: '1 4' })[e.transitionClass] ?? null)
     .attr('marker-end', e => `url(#arr-${e.transitionClass})`)
-    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}`))
+    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}${e.explanation ? ' — ' + e.explanation : ''}`))
     .on('mouseleave', () => status(standingStatus));
 
+  const tourMarks = root.append('g'); // tour step numbers sit above edges, below nodes
   const nodeSel = root.append('g').selectAll('g').data(nodes).join('g')
     .attr('class', n => `node ${n.progressionRole}${n.stageScope === 'global' ? ' global' : ''}${attractorIds.has(n.id) ? ' isAttractor' : ''}`)
     .attr('transform', n => `translate(${n.x},${n.y})`)
@@ -200,83 +262,213 @@
     .on('mouseenter', (ev, n) => { if (!mode && !selected) light(new Set([n.id]), touching(n.id)); })
     .on('mouseleave', () => { if (!mode && !selected) unlight(); });
   nodeSel.append('rect').attr('width', NW).attr('height', NH).attr('rx', n => n.progressionRole === 'state' ? NH / 2 : 5);
-  nodeSel.append('text').attr('x', 8).attr('y', 17).text(n => trunc(n.label, 27));
-  nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 32).text(n => n.progressionRole + (n.stageScope === 'global' ? ' · global' : '') + (attractorIds.has(n.id) ? ' · attractor' : ''));
-  nodeSel.filter(n => n.progressionRole === 'gateway').append('text').attr('class', 'key').attr('x', NW - 16).attr('y', 30).text('🔑');
+  nodeSel.each(function (n) { wrap(n.label, 25, 2).forEach((line, i) => d3.select(this).append('text').attr('x', 8).attr('y', 17 + i * 13).text(line)); });
+  // knowledge is the default role (50 of 92 nodes); only name the exceptions
+  nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 43).text(n => [n.progressionRole === 'knowledge' ? '' : n.progressionRole, n.stageScope === 'global' ? 'global' : '', attractorIds.has(n.id) && n.progressionRole !== 'attractor' ? 'attractor' : ''].filter(Boolean).join(' · '));
+  nodeSel.filter(n => n.progressionRole === 'gateway').append('text').attr('class', 'key').attr('x', NW - 18).attr('y', 44).text('🔑');
+  nodeSel.append('text').attr('class', 'landmark').text(n => trunc(n.label.replace(/^Attractor: /, ''), 34));
   nodeSel.filter(n => n.unlocks?.length).append('title').text(n => 'unlocks: ' + n.unlocks.join(', '));
 
   // pan / zoom
+  let tour = null, tourStep = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const zoom = d3.zoom().scaleExtent([0.08, 3]).on('zoom', ev => {
     const overview = ev.transform.k < .34;
+    drawAxes(ev.transform); placeLandmarks(ev.transform);
     root.attr('transform', ev.transform)
       .classed('overview', overview)
       .classed('mid', ev.transform.k >= .34 && ev.transform.k < .68);
+    tourMarks.selectAll('g').attr('transform', e => `translate(${e.mid[0]},${e.mid[1]}) scale(${1 / Math.max(ev.transform.k, .3)})`);
     nodeSel.attr('tabindex', n => overview && n.progressionRole !== 'gateway' && n.progressionRole !== 'attractor' && !attractorIds.has(n.id) ? -1 : 0);
   });
+  // pinned coordinate frame: stage names along the top, layer names down the left, clamped inside each lane
+  const axes = d3.select('#axes');
+  const topBand = axes.append('rect').attr('class', 'axisBand').attr('height', 30);
+  const stageAxis = axes.selectAll('text.stageAxis').data(stages).join('text').attr('class', 'stageAxis').attr('y', 20);
+  const laneAxis = axes.selectAll('text.laneAxis').data(layers).join('text').attr('class', 'laneAxis').attr('x', 10).text(L => L.replace(/_/g, ' '));
+  function drawAxes(t) {
+    topBand.attr('width', svg.node().clientWidth);
+    // a label sticks to the left edge until the next stage pushes it off
+    const x = s => Math.max(8, t.applyX(colX(s.id) + 20)), room = s => t.applyX(colX(s.id + 1) + 20) - x(s) - 16;
+    stageAxis.attr('x', x).text(s => {
+      const chars = Math.floor(room(s) / 7.5);
+      return chars >= 12 ? trunc(`${s.id} · ${s.name}`, chars) : chars >= 1 ? String(s.id) : '';
+    });
+    laneAxis.attr('y', L => Math.min(t.applyY(laneY.get(L) + laneH.get(L)) - 6, Math.max(48, t.applyY(laneY.get(L)) + 16)))
+      .attr('display', L => laneH.get(L) * t.k < 18 || t.applyY(laneY.get(L) + laneH.get(L)) < 48 ? 'none' : null);
+  }
+  // greedy label placement: tour stops, then attractors, then gateways; try above the node, then below, else skip
+  const isKey = n => n.progressionRole === 'gateway' || n.progressionRole === 'attractor' || attractorIds.has(n.id);
+  function placeLandmarks(t) {
+    const rank = n => (tour?.nodeIds.has(n.id) ? 4 : 0) + (attractorIds.has(n.id) || n.progressionRole === 'attractor' ? 2 : 0) + (n.progressionRole === 'gateway' ? 1 : 0);
+    const boxes = [], shown = new Map(); // node id -> 'above' | 'below'
+    if (t.k < .34) for (const n of nodeSel.filter(function (n) { return !this.classList.contains('hidden') && (tour ? tour.nodeIds.has(n.id) : isKey(n)); }).data().sort((a, b) => rank(b) - rank(a))) {
+      const w = trunc(n.label.replace(/^Attractor: /, ''), 34).length * 6.8 + 8, x = t.applyX(n.cx) - w / 2;
+      for (const [side, y] of [['above', t.applyY(n.y) - 24], ['below', t.applyY(n.y + NH) + 2]]) {
+        const b = [x, y, x + w, y + 20];
+        if (boxes.some(o => b[0] < o[2] && o[0] < b[2] && b[1] < o[3] && o[1] < b[3])) continue;
+        boxes.push(b); shown.set(n.id, side); break;
+      }
+    }
+    nodeSel.classed('labelled', n => shown.has(n.id)).select('text.landmark')
+      .attr('transform', n => shown.get(n.id) === 'below' ? `translate(${NW / 2},${NH}) scale(${1 / t.k}) translate(0,15)` : `translate(${NW / 2},0) scale(${1 / t.k}) translate(0,-7)`);
+  }
+  const relabel = () => placeLandmarks(d3.zoomTransform(svg.node()));
   svg.call(zoom);
   const move = transform => (reducedMotion ? svg : svg.transition().duration(280)).call(zoom.transform, transform);
-  function fitBounds(x, yy, w, h, maxScale = 1.1) {
-    const b = svg.node().getBoundingClientRect(), pad = 44;
-    const k = Math.min(maxScale, (b.width - pad * 2) / w, (b.height - pad * 2) / h);
-    move(d3.zoomIdentity.translate(b.width / 2 - (x + w / 2) * k, b.height / 2 - (yy + h / 2) * k).scale(k));
+  function boundsTransform(x, yy, w, h, maxScale = 1.1) {
+    const b = svg.node().getBoundingClientRect(), pad = 44, dock = document.getElementById('tour');
+    const top = pad + 30, bottom = dock.hidden ? pad : dock.offsetHeight + 24; // keep targets clear of the axis band and tour dock
+    const k = Math.min(maxScale, (b.width - pad * 2) / w, (b.height - top - bottom) / h);
+    return d3.zoomIdentity.translate(b.width / 2 - (x + w / 2) * k, top + (b.height - top - bottom) / 2 - (yy + h / 2) * k).scale(k);
+  }
+  function fitBounds(...args) { move(boundsTransform(...args)); }
+  function nodesTransform(list, maxScale = .9) {
+    const x = d3.min(list, n => n.x), yy = d3.min(list, n => n.y);
+    return boundsTransform(x, yy, d3.max(list, n => n.x + NW) - x, d3.max(list, n => n.y + NH) - yy, maxScale);
   }
   function focusNode(n, scale = .9) {
     const b = svg.node().getBoundingClientRect();
     move(d3.zoomIdentity.translate(b.width / 2 - n.cx * scale, b.height / 2 - n.cy * scale).scale(scale));
   }
-  function fitNodes(list, maxScale = .9) {
-    const x = d3.min(list, n => n.x), yy = d3.min(list, n => n.y);
-    fitBounds(x, yy, d3.max(list, n => n.x + NW) - x, d3.max(list, n => n.y + NH) - yy, maxScale);
+  function fitNodes(list, maxScale = .9) { move(nodesTransform(list, maxScale)); }
+  // one tour step: if both ends fit at a readable scale, frame them; otherwise start at the source and travel the edge to the destination
+  function travel(from, to) {
+    const both = nodesTransform([from, to]);
+    if (both.k >= .6) return move(both);
+    if (reducedMotion) return svg.call(zoom.transform, nodesTransform([to]));
+    svg.transition().duration(350).call(zoom.transform, nodesTransform([from]))
+      .transition().duration(1100).ease(d3.easeCubicInOut).call(zoom.transform, nodesTransform([to]));
   }
   function home() {
     const k = .82;
     move(d3.zoomIdentity.translate(20 - LEFT * k, 12).scale(k));
   }
-  function fitAll() { fitBounds(0, 0, totalW, totalH, 1); }
+  function fitAll() { fitBounds(0, 0, totalW, totalH, 1); status('Key concepts are labelled. Click any cluster to zoom in.'); }
   home();
 
   // ---------- highlight state ----------
-  let selected = null, mode = null, routeStart = null, standingStatus = ''; // mode: 'cycle' | 'path' | null
+  let selected = null, mode = null, routeStart = null, lastPath = null, standingStatus = '', showAllConnections = false; // mode: 'tour' | 'path' | null
   function touching(id) { return new Set(edges.filter(e => e.source === id || e.target === id).map(e => e.id)); }
   function light(nodeIds, edgeIds) {
-    nodeSel.classed('prerequisite consequence', false); edgeSel.classed('incoming outgoing', false);
+    nodeSel.classed('prerequisite consequence', false);
     nodeSel.classed('dim', n => !nodeIds.has(n.id) && !edgeTouches(n.id, edgeIds));
     edgeSel.classed('lit', e => edgeIds.has(e.id)).classed('dim', e => !edgeIds.has(e.id));
+    applyConnectionOverride();
   }
   function edgeTouches(id, edgeIds) { return edges.some(e => edgeIds.has(e.id) && (e.source === id || e.target === id)); }
   function unlight() {
     nodeSel.classed('dim prerequisite consequence', false);
-    edgeSel.classed('lit dim incoming outgoing', false);
+    edgeSel.classed('lit dim', false);
+    applyConnectionOverride();
+  }
+  function applyConnectionOverride() {
+    if (showAllConnections) nodeSel.classed('dim', false), edgeSel.classed('dim', false);
+  }
+  function setConnectionOverride(on) {
+    showAllConnections = on;
+    d3.select('#allConnections').attr('aria-pressed', on); d3.select('#viewport').classed('showAll', on);
+    if (on) applyConnectionOverride();
+    else if (selected) select(selected);
+    else if (mode === 'tour') renderTour(false);
+    else if (mode === 'path' && lastPath) showPath(...lastPath);
   }
   function select(n) {
-    selected = n; mode = null; d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text('');
+    endTour(); selected = n; mode = null; lastPath = null;
     nodeSel.classed('selected', m => m === n);
     const incoming = new Set(edges.filter(e => e.target === n.id).map(e => e.id));
     const outgoing = new Set(edges.filter(e => e.source === n.id).map(e => e.id));
     light(new Set([n.id]), new Set([...incoming, ...outgoing]));
-    edgeSel.classed('incoming', e => incoming.has(e.id)).classed('outgoing', e => outgoing.has(e.id));
     nodeSel.classed('prerequisite', m => edges.some(e => incoming.has(e.id) && e.source === m.id))
       .classed('consequence', m => edges.some(e => outgoing.has(e.id) && e.target === m.id));
     inspect(n); toggleDrawer('right', true);
   }
-  function showCycle(id) {
-    const c = D.cycles.find(c => c.id === id); if (!c) { mode = null; return unlight(); }
-    selected = null; nodeSel.classed('selected', false); mode = 'cycle';
-    const declared = c.edgeIds?.map(id => edges.find(e => e.id === id)).filter(Boolean);
-    const cycleEdges = declared?.length ? declared : edges.filter(e => c.nodes.includes(e.source) && c.nodes.includes(e.target));
-    const s = new Set(cycleEdges.flatMap(e => [e.source, e.target]));
-    light(s, new Set(cycleEdges.map(e => e.id)));
-    d3.select('#cycleDesc').text(c.description);
-    toggleDrawer('right', false); if (innerWidth <= 820) toggleDrawer('left', false);
-    fitNodes([...s].map(id => byId.get(id)));
+  // ---------- tours: declared cycles/traces walked one edge at a time ----------
+  // step 0 = overview, 1..N = one edge each, N + 1 = end card showing the whole tour again
+  // declared cycles/traces plus authored argument paths and journeys (D.tours), all walked the same way
+  const tours = [...(D.tours ?? []).map(t => ({ ...t, authored: true })), ...D.cycles].map(c => {
+    const steps = c.edgeIds.map(id => edges.find(e => e.id === id)).filter(Boolean);
+    return { ...c, steps, closed: steps.length > 1 && steps.at(-1).target === steps[0].source, nodeIds: new Set(steps.flatMap(e => [e.source, e.target])) };
+  });
+  const loopsOf = e => D.cycles.filter(c => c.edgeIds.includes(e.id)); // which declared loops/traces an edge belongs to
+  const stageSpan = t => { const ss = [...t.nodeIds].map(id => byId.get(id).stage).filter(v => v != null); return d3.min(ss) === d3.max(ss) ? `stage ${d3.min(ss)}` : `stages ${d3.min(ss)}–${d3.max(ss)}`; };
+  const kind = t => ({ argument: 'Argument path', journey: 'Personal journey', return: 'Return journey' })[t.kind] ?? (t.closed ? 'Loop' : 'Open trace');
+  const groups = [
+    ['Personal journeys', 'leaving and returning, and the longest routes', [...tours.filter(t => t.kind === 'return'), ...tours.filter(t => t.kind === 'journey')]],
+    ['Argument paths', 'where arguments settle', tours.filter(t => t.kind === 'argument')],
+    ['Loops and traces', 'declared in the data', tours.filter(t => !t.authored)]];
+  groups.filter(g => g[2].length).forEach(([title, sub, list], gi) => {
+    const group = d3.select('#tourMenu').append('details').property('open', gi === 0);
+    group.append('summary').html(`${title} <span class="k">· ${list.length} · ${sub}</span>`);
+    for (const t of list) group.append('button').attr('type', 'button')
+      .html(`<b>${t.label}</b><span>${kind(t)} · ${t.steps.length} steps · ${stageSpan(t)}</span>`)
+      .on('click', () => { document.getElementById('tourMenu').hidePopover(); startTour(t.id); });
+  });
+  function startTour(id) {
+    const t = tours.find(t => t.id === id); if (!t) return;
+    clear(); tour = t; tourStep = 0; mode = 'tour';
+    d3.select('#tourKind').text(`${kind(t)} · ${t.steps.length} steps`); d3.select('#tourTitle').text(t.label);
+    d3.select('#tourSteps').selectAll('li').data(t.steps).join('li').html('').append('button').attr('type', 'button')
+      .text((e, i) => i + 1).attr('aria-label', (e, i) => `Step ${i + 1}: ${byId.get(e.source).label} to ${byId.get(e.target).label}`)
+      .on('click', (ev, e) => goTour(t.steps.indexOf(e) + 1));
+    tourMarks.selectAll('g').data(t.steps).join(enter => { const g = enter.append('g').attr('class', 'tourMark'); g.append('circle').attr('r', 11); g.append('text'); return g; })
+      .each(e => { const el = edgeSel.filter(d => d === e).node(), p = el.getPointAtLength(el.getTotalLength() / 2); e.mid = [p.x, p.y]; })
+      .attr('transform', e => `translate(${e.mid[0]},${e.mid[1]}) scale(${1 / Math.max(d3.zoomTransform(svg.node()).k, .3)})`)
+      .on('click', (ev, e) => goTour(t.steps.indexOf(e) + 1))
+      .select('text').text((e, i) => i + 1);
+    document.getElementById('tour').hidden = false; d3.select('#viewport').classed('touring', true);
+    toggleDrawer('left', false); toggleDrawer('right', false);
+    renderTour(); document.getElementById('tourNext').focus();
   }
+  function goTour(i) { tourStep = i; renderTour(); }
+  function renderTour(frame = true) {
+    const t = tour, N = t.steps.length, cur = t.steps[tourStep - 1], whole = tourStep === 0 || tourStep > N;
+    light(t.nodeIds, new Set(t.steps.map(e => e.id)));
+    edgeSel.classed('tourNow', e => e === cur).classed('tourAhead', e => !whole && t.steps.indexOf(e) >= tourStep);
+    relabel();
+    nodeSel.classed('tourAt', n => cur ? n.id === cur.source || n.id === cur.target : false).classed('tourStop', n => t.nodeIds.has(n.id));
+    tourMarks.selectAll('g').classed('now', e => e === cur).classed('visited', (e, i) => i + 1 < tourStep || tourStep > N);
+    d3.select('#tourSteps').selectAll('button').classed('visited', (e, i) => i + 1 < tourStep || tourStep > N).attr('aria-current', e => e === cur ? 'step' : null);
+    const first = byId.get(t.steps[0].source), last = byId.get(t.steps.at(-1).target);
+    const loops = [...new Set(t.steps.flatMap(loopsOf))];
+    const seenBefore = e => t.steps.slice(0, t.steps.indexOf(e)).some(p => p.source === e.target || p.target === e.target);
+    const back = e => seenBefore(e) ? `<span class="via">Back at ${byId.get(e.target).label}, where this began, but further along.</span>` : '';
+    const via = e => t.authored && loopsOf(e).length ? `<span class="via">Inside: ${loopsOf(e).map(c => c.label).join('; ')}</span>` : '';
+    const text = tourStep === 0 ? t.description
+      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b> <q>${cur.label || cur.type.replace(/_/g, ' ')}</q>${cur.explanation ? `<span class="why">${cur.explanation}</span>` : ''}${back(cur)}${via(cur)}`
+      : t.authored ? argumentEnd(t, last, loops)
+      : t.closed ? `Back at <b>${first.label}</b>. The loop closes, so each pass strengthens where it started.`
+      : `The trace ends at <b>${last.label}</b>. The data declares no edge back to <b>${first.label}</b>, so this is not a closed loop.`;
+    document.getElementById('status').style.bottom = document.getElementById('tour').offsetHeight + 20 + 'px';
+    d3.select('#tourText').html(text).selectAll('[data-next]').on('click', ev => startTour(ev.target.dataset.next));
+    d3.select('#tourPrev').property('disabled', tourStep === 0);
+    d3.select('#tourNext').text(tourStep === 0 ? 'Start tour' : tourStep < N ? 'Next step' : tourStep === N ? 'Finish' : 'Restart');
+    if (frame) whole ? fitNodes([...t.nodeIds].map(id => byId.get(id))) : travel(byId.get(cur.source), byId.get(cur.target));
+  }
+  const sentence = s => /[.?!]$/.test(s) ? s : s + '.';
+  function argumentEnd(t, last, loops) {
+    const next = t.kind === 'argument' && tours.find(o => o.kind === 'argument' && o !== t && o.steps[0].source === last.id);
+    const returned = t.kind === 'return' && t.steps.find(e => t.steps.slice(0, t.steps.indexOf(e)).some(p => p.source === e.target));
+    const end = returned ? `The path comes back to <b>${byId.get(returned.target).label}</b> and goes further, settling at <b>${sentence(last.label)}</b>`
+      : t.steps.at(-1).weight < 0 ? `The path ends as pressure on <b>${sentence(last.label)}</b>`
+      : next ? `The path reaches <b>${sentence(last.label)}</b>` : `The path settles at <b>${sentence(last.label)}</b>`;
+    const via = loops.length ? ` On the way it runs through ${new Intl.ListFormat('en').format(loops.map(c => `<b>${c.label}</b>`))}.` : '';
+    return end + via + (next ? ` <span class="via">Continue: <span class="pill" data-next="${next.id}">${next.label}</span></span>` : '');
+  }
+  function endTour() {
+    if (!tour) return;
+    tour = null; mode = null; document.getElementById('tour').hidden = true; document.getElementById('status').style.bottom = ''; d3.select('#viewport').classed('touring', false);
+    tourMarks.selectAll('g').remove(); edgeSel.classed('tourNow tourAhead', false); nodeSel.classed('tourAt tourStop', false); relabel();
+  }
+  d3.select('#tourNext').on('click', () => goTour(tourStep > tour.steps.length ? 1 : tourStep + 1));
+  d3.select('#tourPrev').on('click', () => goTour(Math.max(0, tourStep - 1)));
+  d3.select('#tourClose').on('click', () => { clear(); document.getElementById('toursToggle').focus(); });
   function showPath(a, b) { // BFS over visible edges
     const vis = edges.filter(e => visibleEdge(e)), prev = new Map([[a.id, null]]), q = [a.id];
     while (q.length && !prev.has(b.id)) { const u = q.shift(); for (const e of vis) if (e.source === u && !prev.has(e.target)) { prev.set(e.target, e); q.push(e.target); } }
     if (!prev.has(b.id)) return status(`No directed path from ${a.label} to ${b.label} over visible edges.`);
     const ids = new Set(), ns = new Set([b.id]); for (let e = prev.get(b.id); e; e = prev.get(e.source)) { ids.add(e.id); ns.add(e.source); }
-    mode = 'path'; light(ns, ids); fitNodes([...ns].map(id => byId.get(id))); status(`Path: ${[...ns].reverse().map(i => byId.get(i).label).join(' → ')}`, true);
+    endTour(); selected = null; nodeSel.classed('selected', false); mode = 'path'; lastPath = [a, b]; light(ns, ids); fitNodes([...ns].map(id => byId.get(id))); status(`Path: ${[...ns].reverse().map(i => byId.get(i).label).join(' → ')}`, true);
   }
   function activateNode(n, shortcut) {
     if ((routeStart && d3.select('#route').attr('aria-pressed') === 'true') || (shortcut && selected)) {
@@ -285,6 +477,7 @@
     if (d3.select('#route').attr('aria-pressed') === 'true') {
       routeStart = n; select(n); status(`Route start: ${n.label}. Choose a destination.`, true); return;
     }
+    if (tour) { nodeSel.classed('selected', m => m === n); inspect(n); toggleDrawer('right', true); return; }
     select(n);
   }
   function routeMode(on) {
@@ -292,10 +485,11 @@
     if (!on) routeStart = null;
   }
   function clear() {
-    selected = null; mode = null; routeStart = null; standingStatus = ''; routeMode(false); nodeSel.classed('selected', false); unlight();
-    d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text(''); status('');
+    endTour(); selected = null; mode = null; routeStart = null; lastPath = null; standingStatus = ''; showAllConnections = false; d3.select('#allConnections').attr('aria-pressed', false); d3.select('#viewport').classed('showAll', false); routeMode(false); nodeSel.classed('selected', false); unlight();
+    status('');
   }
   d3.select('#clear').on('click', clear);
+  d3.select('#allConnections').on('click', function () { setConnectionOverride(this.getAttribute('aria-pressed') !== 'true'); });
   d3.select('#route').on('click', function () { const on = this.getAttribute('aria-pressed') !== 'true'; routeMode(on); status(on ? 'Choose a route starting concept.' : 'Route mode cancelled.'); });
 
   // ---------- filters ----------
@@ -309,11 +503,22 @@
   checks('#layerFilters', 'layer', layers, v => v.replace(/_/g, ' '));
   const visibleNode = n => on.layer.has(n.layer) && on.stage.has(n.stageScope === 'global' ? 'global' : n.stage);
   const visibleEdge = e => on.edge.has(e.transitionClass) && visibleNode(byId.get(e.source)) && visibleNode(byId.get(e.target));
-  function applyFilters() { nodeSel.classed('hidden', n => !visibleNode(n)); edgeSel.classed('hidden', e => !visibleEdge(e)); }
+  function applyFilters() { nodeSel.classed('hidden', n => !visibleNode(n)); edgeSel.classed('hidden', e => !visibleEdge(e)); relabel(); }
 
   d3.select('#roleLegend').html(roles.map(r => `<div class="f"><span class="sw" style="border-color:${{ knowledge: '#4a5670', state: '#6aa4d8', gateway: cssVar('gateway'), pressure: '#d07a6a', attractor: '#c9b2ff' }[r]}"></span>${r}${r === 'gateway' ? ' 🔑' : ''}</div>`).join(''));
-  d3.select('#cycle').selectAll('option.c').data(D.cycles).join('option').attr('class', 'c').attr('value', c => c.id).text(c => c.label);
-  d3.select('#cycle').on('change', ev => showCycle(ev.target.value));
+
+  // ---------- keyboard-friendly points of interest ----------
+  function renderPoints(query = '') {
+    const q = query.trim().toLowerCase();
+    const matches = nodes.filter(n => !q || `${n.label} ${n.id} ${n.layer}`.toLowerCase().includes(q));
+    d3.select('#poiResults').selectAll('button').data(matches, n => n.id).join('button')
+      .attr('class', 'poi').attr('type', 'button')
+      .attr('aria-label', n => `Focus ${n.label}`)
+      .text(n => `${n.label} · ${n.stageScope === 'global' ? 'global' : `stage ${n.stage}`}`)
+      .on('click', (ev, n) => { select(n); focusNode(n); status(`Selected ${n.label}.`, true); });
+  }
+  renderPoints();
+  d3.select('#poi').on('input', ev => renderPoints(ev.target.value));
 
   // ---------- search ----------
   d3.select('#search').on('input', ev => {
@@ -329,7 +534,7 @@
   // ---------- inspector ----------
   function inspect(n) {
     const link = id => `<span class="pill" data-id="${id}">${byId.get(id)?.label ?? id}</span>`;
-    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="${e.weight < 0 ? 'neg' : 'pos'}">${e.weight > 0 ? '+' : ''}${e.weight.toFixed(2)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}</div>`;
+    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="${e.weight < 0 ? 'neg' : 'pos'}">${e.weight > 0 ? '+' : ''}${e.weight.toFixed(2)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}${e.explanation ? `<p class="why">${e.explanation}</p>` : ''}</div>`;
     const inc = edges.filter(e => e.target === n.id), out = edges.filter(e => e.source === n.id);
     const fx = D.stateEffects.filter(f => f.triggerNode === n.id || [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])].includes(n.id));
     const attr = D.attractors.find(a => a.node_id === n.id);
@@ -343,9 +548,9 @@
       <h2>Incoming pressure (${inc.length}) · net ${d3.sum(inc, e => e.weight).toFixed(2)}</h2>${inc.map(e => edgeRow(e, e.source)).join('') || '<p class="k">none</p>'}
       <h2>Outgoing pressure (${out.length})</h2>${out.map(e => edgeRow(e, e.target)).join('') || '<p class="k">none</p>'}
       ${fx.length ? `<h2>State effects</h2>${fx.map(f => `<p><b>${f.effectType}</b> <span class="k">when ${link(f.triggerNode)} is ${f.whenStatus.join('/')}</span><br>${f.description}<br><span class="k">${JSON.stringify(f.target)} ${f.weightDelta ?? f.confidenceDelta ?? f.pressureDelta ?? f.multiplier ?? ''}</span></p>`).join('')}` : ''}
-      <h2>In cycles / traces</h2><p>${D.cycles.filter(c => c.nodes.includes(n.id)).map(c => `<span class="pill" data-cycle="${c.id}">${c.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
+      <h2>Tours through here</h2><p>${tours.filter(t => t.nodeIds.has(n.id)).map(t => `<span class="pill" data-tour="${t.id}">${t.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
     d3.select('#inspector').selectAll('.pill[data-id]').on('click', ev => { const m = byId.get(ev.target.dataset.id); select(m); focusNode(m); });
-    d3.select('#inspector').selectAll('.pill[data-cycle]').on('click', ev => { d3.select('#cycle').property('value', ev.target.dataset.cycle); showCycle(ev.target.dataset.cycle); });
+    d3.select('#inspector').selectAll('.pill[data-tour]').on('click', ev => startTour(ev.target.dataset.tour));
   }
 
   // ---------- command bar + keyboard ----------
@@ -359,7 +564,7 @@
   d3.select('#home').on('click', home); d3.select('#fitAll').on('click', fitAll);
   d3.select('#fitSelection').on('click', () => selected ? focusNode(selected) : status('Select a concept first.'));
   let cameraResizeTimer;
-  addEventListener('resize', () => { clearTimeout(cameraResizeTimer); cameraResizeTimer = setTimeout(() => selected ? focusNode(selected) : home(), 120); });
+  addEventListener('resize', () => { clearTimeout(cameraResizeTimer); cameraResizeTimer = setTimeout(() => tour ? renderTour() : selected ? focusNode(selected) : home(), 120); });
 
   function keyNode(ev, n) {
     if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); activateNode(n, ev.shiftKey); return; }
@@ -378,6 +583,16 @@
 
   const deep = byId.get(new URLSearchParams(location.search).get('node'));
   if (deep) { select(deep); focusNode(deep); }
+  const deepTour = new URLSearchParams(location.search).get('tour'); if (deepTour) startTour(deepTour);
+  function wrap(s, max, lines) { // word-boundary wrap; ellipsis only when the last line overflows
+    const out = [''];
+    for (const w of s.split(' ')) {
+      const cur = out[out.length - 1];
+      if (!cur || (cur + ' ' + w).length <= max) out[out.length - 1] = cur ? cur + ' ' + w : w;
+      else out.push(w);
+    }
+    return out.length > lines ? [...out.slice(0, lines - 1), trunc(out.slice(lines - 1).join(' '), max)] : out.map(l => trunc(l, max));
+  }
   function trunc(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
   function status(t, persist = false) { if (persist) standingStatus = t; document.getElementById('status').textContent = t; }
 })();
