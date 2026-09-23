@@ -37,13 +37,17 @@
   svg { width: 100%; height: 100%; display: block; background: radial-gradient(circle at 30% 25%, #18202c 0, var(--bg) 48%); touch-action: none; }
   .lane { fill: #ffffff; fill-opacity: .025; stroke: var(--line); }
   .lane:nth-child(even) { fill-opacity: .05; }
-  .laneLabel, .stageLabel { fill: var(--muted); font-size: 12px; letter-spacing: .04em; }
-  .stageLabel { font: 600 15px Georgia, serif; fill: #ddd6c8; } .stageSub { fill: var(--muted); font-size: 11px; }
+  .laneLabel { fill: var(--muted); font-size: 12px; letter-spacing: .04em; }
+  .stageSub { fill: var(--muted); font-size: 11px; }
+  .axis text { font-size: 12px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+  .axis .stageAxis { font: 600 13px Georgia, serif; fill: #ddd6c8; }
+  .axis .laneAxis { fill: var(--muted); }
+  .axisBand { fill: #11161d; fill-opacity: .92; }
   .colLine { stroke: var(--line); stroke-dasharray: 2 6; }
   .rail { fill: none; stroke: var(--line); stroke-dasharray: 6 4; }
   .edge { fill: none; opacity: .18; pointer-events: stroke; }
-  .edge.global_modifier { opacity: .1; }
-  .edge.lit { opacity: 1; } .edge.dim { opacity: .025; } .edge.incoming { stroke: var(--backward); } .edge.outgoing { stroke: var(--unlock); }
+    .edge.lit { opacity: 1; } .edge.dim { opacity: .025; }
+  #root .edge.global_modifier:not(.lit) { opacity: 0; } /* rail edges span the whole map; show only in context */
   .edge.hidden { display: none; }
   .node { cursor: pointer; } .node.dim { opacity: .11; } .node.prerequisite rect { stroke: var(--backward); } .node.consequence rect { stroke: var(--unlock); } .node.hidden { display: none; }
   .node rect { stroke-width: 1.5; }
@@ -58,9 +62,11 @@
   .node:focus { outline: none; } .node:focus rect { stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 5px var(--hl)); }
   .node.match rect { stroke: var(--hl); }
   .node text { fill: var(--text); font-size: 11.5px; pointer-events: none; }
-  .node .role { fill: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; }
+  .node .role { fill: var(--muted); font-size: 10px; }
   .node .key { fill: var(--gateway); font-size: 12px; }
-  #root.overview .edge:not(.feedback), #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) { opacity: 0; pointer-events: none; }
+  #root.overview .edge:not(.feedback) { opacity: 0; pointer-events: none; }
+  #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) { opacity: .45; pointer-events: none; }
+  #root.overview .node:not(.gateway):not(.attractor):not(.isAttractor) text { display: none; }
   #root.overview .edge.feedback { opacity: .25; }
   #root.mid .node .role { display: none; } #root.mid .edge { opacity: .1; } #root.mid .edge.lit { opacity: 1; }
   #status { position: absolute; z-index: 2; bottom: 10px; left: 50%; max-width: min(680px, calc(100% - 24px)); transform: translateX(-50%); padding: 5px 9px; color: #c2c8d1; background: #0c1016d9; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; pointer-events: none; }
@@ -97,7 +103,7 @@
     <h2>Node roles</h2>
     <div id="roleLegend"></div>
   </aside>
-  <svg id="canvas" role="application" aria-label="Interactive epistemological strategy map"><defs id="defs"></defs><g id="root"></g></svg>
+  <svg id="canvas" role="application" aria-label="Interactive epistemological strategy map"><defs id="defs"></defs><g id="root"></g><g class="axis" id="axes" aria-hidden="true"></g></svg>
   <aside id="right" aria-label="Concept inspector" aria-hidden="true" inert><button class="close" data-close="right" aria-label="Close inspector">×</button><h1>Inspector</h1><div id="inspector" style="color:var(--muted)">Select a concept.</div></aside>
   <div id="status" role="status" aria-live="polite"></div>
   </main>
@@ -114,7 +120,7 @@
   const cssVar = k => getComputedStyle(document.documentElement).getPropertyValue('--' + k).trim();
 
   // ---------- layout: deterministic stage columns × layer lanes, 2-wide grid inside cells ----------
-  const NW = 168, NH = 40, GX = 12, GY = 12, COLW = 2 * NW + 3 * GX + 40, LEFT = 150, TOP = 70, RAILH = 90;
+  const NW = 168, NH = 50, GX = 12, GY = 12, COLW = 2 * NW + 3 * GX + 40, LEFT = 150, TOP = 70, RAILH = 90;
   const cells = d3.group(nodes.filter(n => n.stageScope !== 'global'), n => n.layer, n => n.stage);
   const laneH = new Map(), laneY = new Map();
   let y = TOP + RAILH;
@@ -170,12 +176,10 @@
   const bg = root.append('g');
   for (const L of layers) {
     bg.append('rect').attr('class', 'lane').attr('x', 0).attr('y', laneY.get(L)).attr('width', totalW).attr('height', laneH.get(L));
-    bg.append('text').attr('class', 'laneLabel').attr('x', 10).attr('y', laneY.get(L) + 14).text(L.replace(/_/g, ' '));
   }
   for (const s of stages) {
     bg.append('line').attr('class', 'colLine').attr('x1', colX(s.id)).attr('x2', colX(s.id)).attr('y1', TOP + RAILH).attr('y2', bottomRailY);
-    bg.append('text').attr('class', 'stageLabel').attr('x', colX(s.id) + 20).attr('y', TOP - 28).text(`${s.id} · ${s.name}`);
-    bg.append('text').attr('class', 'stageSub').attr('x', colX(s.id) + 20).attr('y', TOP - 12).text(s.description.slice(0, 60));
+    wrap(s.description, 58, 2).forEach((line, i) => bg.append('text').attr('class', 'stageSub').attr('x', colX(s.id) + 20).attr('y', TOP - 26 + i * 14).text(line));
   }
   for (const [yy, label] of [[TOP, 'Global pressures · human experience'], [bottomRailY, 'Global pressures · social / meta']]) {
     bg.append('rect').attr('class', 'rail').attr('x', LEFT).attr('y', yy).attr('width', totalW - LEFT).attr('height', RAILH - 10).attr('rx', 8);
@@ -200,20 +204,38 @@
     .on('mouseenter', (ev, n) => { if (!mode && !selected) light(new Set([n.id]), touching(n.id)); })
     .on('mouseleave', () => { if (!mode && !selected) unlight(); });
   nodeSel.append('rect').attr('width', NW).attr('height', NH).attr('rx', n => n.progressionRole === 'state' ? NH / 2 : 5);
-  nodeSel.append('text').attr('x', 8).attr('y', 17).text(n => trunc(n.label, 27));
-  nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 32).text(n => n.progressionRole + (n.stageScope === 'global' ? ' · global' : '') + (attractorIds.has(n.id) ? ' · attractor' : ''));
-  nodeSel.filter(n => n.progressionRole === 'gateway').append('text').attr('class', 'key').attr('x', NW - 16).attr('y', 30).text('🔑');
+  nodeSel.each(function (n) { wrap(n.label, 25, 2).forEach((line, i) => d3.select(this).append('text').attr('x', 8).attr('y', 17 + i * 13).text(line)); });
+  // knowledge is the default role (50 of 92 nodes); only name the exceptions
+  nodeSel.append('text').attr('class', 'role').attr('x', 8).attr('y', 43).text(n => [n.progressionRole === 'knowledge' ? '' : n.progressionRole, n.stageScope === 'global' ? 'global' : '', attractorIds.has(n.id) && n.progressionRole !== 'attractor' ? 'attractor' : ''].filter(Boolean).join(' · '));
+  nodeSel.filter(n => n.progressionRole === 'gateway').append('text').attr('class', 'key').attr('x', NW - 18).attr('y', 44).text('🔑');
   nodeSel.filter(n => n.unlocks?.length).append('title').text(n => 'unlocks: ' + n.unlocks.join(', '));
 
   // pan / zoom
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const zoom = d3.zoom().scaleExtent([0.08, 3]).on('zoom', ev => {
     const overview = ev.transform.k < .34;
+    drawAxes(ev.transform);
     root.attr('transform', ev.transform)
       .classed('overview', overview)
       .classed('mid', ev.transform.k >= .34 && ev.transform.k < .68);
     nodeSel.attr('tabindex', n => overview && n.progressionRole !== 'gateway' && n.progressionRole !== 'attractor' && !attractorIds.has(n.id) ? -1 : 0);
   });
+  // pinned coordinate frame: stage names along the top, layer names down the left, clamped inside each lane
+  const axes = d3.select('#axes');
+  const topBand = axes.append('rect').attr('class', 'axisBand').attr('height', 30);
+  const stageAxis = axes.selectAll('text.stageAxis').data(stages).join('text').attr('class', 'stageAxis').attr('y', 20);
+  const laneAxis = axes.selectAll('text.laneAxis').data(layers).join('text').attr('class', 'laneAxis').attr('x', 10).text(L => L.replace(/_/g, ' '));
+  function drawAxes(t) {
+    topBand.attr('width', svg.node().clientWidth);
+    // a label sticks to the left edge until the next stage pushes it off
+    const x = s => Math.max(8, t.applyX(colX(s.id) + 20)), room = s => t.applyX(colX(s.id + 1) + 20) - x(s) - 16;
+    stageAxis.attr('x', x).text(s => {
+      const chars = Math.floor(room(s) / 7.5);
+      return chars >= 12 ? trunc(`${s.id} · ${s.name}`, chars) : chars >= 1 ? String(s.id) : '';
+    });
+    laneAxis.attr('y', L => Math.min(t.applyY(laneY.get(L) + laneH.get(L)) - 6, Math.max(48, t.applyY(laneY.get(L)) + 16)))
+      .attr('display', L => laneH.get(L) * t.k < 18 || t.applyY(laneY.get(L) + laneH.get(L)) < 48 ? 'none' : null);
+  }
   svg.call(zoom);
   const move = transform => (reducedMotion ? svg : svg.transition().duration(280)).call(zoom.transform, transform);
   function fitBounds(x, yy, w, h, maxScale = 1.1) {
@@ -240,14 +262,14 @@
   let selected = null, mode = null, routeStart = null, standingStatus = ''; // mode: 'cycle' | 'path' | null
   function touching(id) { return new Set(edges.filter(e => e.source === id || e.target === id).map(e => e.id)); }
   function light(nodeIds, edgeIds) {
-    nodeSel.classed('prerequisite consequence', false); edgeSel.classed('incoming outgoing', false);
+    nodeSel.classed('prerequisite consequence', false);
     nodeSel.classed('dim', n => !nodeIds.has(n.id) && !edgeTouches(n.id, edgeIds));
     edgeSel.classed('lit', e => edgeIds.has(e.id)).classed('dim', e => !edgeIds.has(e.id));
   }
   function edgeTouches(id, edgeIds) { return edges.some(e => edgeIds.has(e.id) && (e.source === id || e.target === id)); }
   function unlight() {
     nodeSel.classed('dim prerequisite consequence', false);
-    edgeSel.classed('lit dim incoming outgoing', false);
+    edgeSel.classed('lit dim', false);
   }
   function select(n) {
     selected = n; mode = null; d3.select('#cycle').property('value', ''); d3.select('#cycleDesc').text('');
@@ -255,7 +277,6 @@
     const incoming = new Set(edges.filter(e => e.target === n.id).map(e => e.id));
     const outgoing = new Set(edges.filter(e => e.source === n.id).map(e => e.id));
     light(new Set([n.id]), new Set([...incoming, ...outgoing]));
-    edgeSel.classed('incoming', e => incoming.has(e.id)).classed('outgoing', e => outgoing.has(e.id));
     nodeSel.classed('prerequisite', m => edges.some(e => incoming.has(e.id) && e.source === m.id))
       .classed('consequence', m => edges.some(e => outgoing.has(e.id) && e.target === m.id));
     inspect(n); toggleDrawer('right', true);
@@ -378,6 +399,15 @@
 
   const deep = byId.get(new URLSearchParams(location.search).get('node'));
   if (deep) { select(deep); focusNode(deep); }
+  function wrap(s, max, lines) { // word-boundary wrap; ellipsis only when the last line overflows
+    const out = [''];
+    for (const w of s.split(' ')) {
+      const cur = out[out.length - 1];
+      if (!cur || (cur + ' ' + w).length <= max) out[out.length - 1] = cur ? cur + ' ' + w : w;
+      else out.push(w);
+    }
+    return out.length > lines ? [...out.slice(0, lines - 1), trunc(out.slice(lines - 1).join(' '), max)] : out.map(l => trunc(l, max));
+  }
   function trunc(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
   function status(t, persist = false) { if (persist) standingStatus = t; document.getElementById('status').textContent = t; }
 })();
