@@ -44,7 +44,13 @@
           "weight",
           "transitionClass",
           "stageDelta"
-        ]
+        ],
+        "properties": {
+          "explanation": {
+            "description": "One or two plain-language sentences on why the source leads to the target. Required for every edge walked by a cycle or tour; reused by tours and the inspector.",
+            "type": "string"
+          }
+        }
       }
     },
     "stateEffects": {

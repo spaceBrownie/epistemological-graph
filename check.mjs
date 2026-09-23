@@ -47,6 +47,11 @@ for (const t of d.tours ?? []) {
     if (next && e.target !== next.source) bad.push(`tour ${t.id} edges ${e.id}>${next.id} do not form a directed walk`);
   });
 }
+for (const id of new Set([...d.cycles, ...(d.tours ?? [])].flatMap(t => t.edgeIds))) {
+  const x = edgesById.get(id)?.explanation;
+  if (!x) bad.push(`edge ${id} is walked by a tour but has no explanation`);
+  else if ((x.match(/[.?!](\s|$)/g) ?? []).length > 2) bad.push(`edge ${id} explanation is longer than two sentences`);
+}
 for (const f of d.stateEffects) for (const v of [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])]) if (v && !ids.has(v)) bad.push(`fx ${f.id} target ${v}`);
 for (const a of d.attractors) if (!ids.has(a.node_id)) bad.push(`attractor ${a.node_id}`);
 console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces, ${(d.tours ?? []).filter(t => t.kind === 'argument').length} argument paths, ${(d.tours ?? []).filter(t => t.kind === 'journey').length} journeys`);

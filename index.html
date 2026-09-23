@@ -99,6 +99,8 @@
   #tourSteps button[aria-current=step] { color: #11161d; background: var(--hl); border-color: var(--hl); font-weight: 600; }
   #tourText { margin: 0 0 10px; min-height: 2.8em; }
   #tourText q { color: var(--muted); }
+  #tourText .why { display: block; margin-top: 6px; }
+  #right .why { margin: 2px 0 6px; color: #c2c8d1; font-size: 12px; }
   .tourNav { display: flex; gap: 6px; justify-content: flex-end; }
   #tourNext { background: #3a3420; border-color: var(--gateway); }
   /* during a tour, collapse visually but never spatially: other edges vanish, other nodes become unlabeled terrain */
@@ -246,7 +248,7 @@
     .attr('stroke', e => cssVar(e.transitionClass)).attr('stroke-width', e => 0.8 + Math.abs(e.weight) * 3)
     .attr('stroke-dasharray', e => ({ reinterpretation: '8 5', feedback: '2 4', global_modifier: '1 4' })[e.transitionClass] ?? null)
     .attr('marker-end', e => `url(#arr-${e.transitionClass})`)
-    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}`))
+    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}${e.explanation ? ' — ' + e.explanation : ''}`))
     .on('mouseleave', () => status(standingStatus));
 
   const tourMarks = root.append('g'); // tour step numbers sit above edges, below nodes
@@ -431,7 +433,7 @@
     const loops = [...new Set(t.steps.flatMap(loopsOf))];
     const via = e => t.authored && loopsOf(e).length ? `<span class="via">Inside: ${loopsOf(e).map(c => c.label).join('; ')}</span>` : '';
     const text = tourStep === 0 ? t.description
-      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b>${cur.label ? ` <q>${cur.label}</q>` : ` <q>${cur.type.replace(/_/g, ' ')}</q>`}${via(cur)}`
+      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b> <q>${cur.label || cur.type.replace(/_/g, ' ')}</q>${cur.explanation ? `<span class="why">${cur.explanation}</span>` : ''}${via(cur)}`
       : t.authored ? argumentEnd(t, last, loops)
       : t.closed ? `Back at <b>${first.label}</b>. The loop closes, so each pass strengthens where it started.`
       : `The trace ends at <b>${last.label}</b>. The data declares no edge back to <b>${first.label}</b>, so this is not a closed loop.`;
@@ -528,7 +530,7 @@
   // ---------- inspector ----------
   function inspect(n) {
     const link = id => `<span class="pill" data-id="${id}">${byId.get(id)?.label ?? id}</span>`;
-    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="${e.weight < 0 ? 'neg' : 'pos'}">${e.weight > 0 ? '+' : ''}${e.weight.toFixed(2)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}</div>`;
+    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="${e.weight < 0 ? 'neg' : 'pos'}">${e.weight > 0 ? '+' : ''}${e.weight.toFixed(2)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}${e.explanation ? `<p class="why">${e.explanation}</p>` : ''}</div>`;
     const inc = edges.filter(e => e.target === n.id), out = edges.filter(e => e.source === n.id);
     const fx = D.stateEffects.filter(f => f.triggerNode === n.id || [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])].includes(n.id));
     const attr = D.attractors.find(a => a.node_id === n.id);
