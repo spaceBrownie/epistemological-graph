@@ -9,8 +9,8 @@
     "allows_cycles": true,
     "weight_semantics": {
       "range": [
-        -1.0,
-        1.0
+        -1,
+        1
       ],
       "description": "Positive weights indicate evidential/supportive pressure toward the target node; negative weights indicate defeater/counter-pressure. Magnitude represents rough relative influence, not empirical probability."
     },
@@ -74,7 +74,7 @@
       "type": "origin",
       "layer": "human_experience",
       "description": "The epistemic agent whose worldview is being updated by argument, evidence, experience, history, and social context.",
-      "centrality_hint": 1.0,
+      "centrality_hint": 1,
       "stage": 0,
       "stageScope": "local",
       "progressionRole": "knowledge"
@@ -1095,7 +1095,7 @@
       "type": "attractor",
       "layer": "meta",
       "description": "Meta-attractor favoring the worldview that best integrates metaphysics, history, morality, experience, and explanatory cost.",
-      "attractor_strength": 1.0,
+      "attractor_strength": 1,
       "stage": null,
       "stageScope": "global",
       "progressionRole": "attractor"
@@ -2971,6 +2971,7 @@
   "tours": [
     {
       "id": "tour_ascent_theism",
+      "kind": "argument",
       "label": "Ascent 1: from first questions to personal theism",
       "edgeIds": [
         "e015",
@@ -2981,6 +2982,7 @@
     },
     {
       "id": "tour_ascent_resurrection",
+      "kind": "argument",
       "label": "Ascent 2: from personal theism to the resurrection question",
       "edgeIds": [
         "e080",
@@ -2994,6 +2996,7 @@
     },
     {
       "id": "tour_ascent_church",
+      "kind": "argument",
       "label": "Ascent 3: from the resurrection bottleneck to settled commitment",
       "edgeIds": [
         "e100",
@@ -3009,6 +3012,7 @@
     },
     {
       "id": "tour_stalled_theism",
+      "kind": "argument",
       "label": "Stalled theism: when theism does not open to revelation",
       "edgeIds": [
         "e018",
@@ -3021,6 +3025,7 @@
     },
     {
       "id": "tour_suffering_meaning",
+      "kind": "argument",
       "label": "Suffering to constructed meaning",
       "edgeIds": [
         "e061",
@@ -3031,6 +3036,7 @@
     },
     {
       "id": "tour_personhood_love",
+      "kind": "argument",
       "label": "Personhood fork A: toward love",
       "edgeIds": [
         "e056",
@@ -3041,6 +3047,7 @@
     },
     {
       "id": "tour_personhood_humanism",
+      "kind": "argument",
       "label": "Personhood fork B: toward humanism",
       "edgeIds": [
         "e056",
@@ -3051,6 +3058,7 @@
     },
     {
       "id": "tour_tension_christian",
+      "kind": "argument",
       "label": "What Christian commitment still carries",
       "edgeIds": [
         "e168",
@@ -3060,12 +3068,329 @@
     },
     {
       "id": "tour_tension_naturalism",
+      "kind": "argument",
       "label": "What naturalism still carries",
       "edgeIds": [
         "e172",
         "e173"
       ],
       "description": "The argument from consciousness does not disappear on the naturalist path. It becomes a residual tension that keeps pressure on agnostic naturalism."
+    },
+    {
+      "id": "journey_human_agent_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From a person inside reality to committed faith, with tensions",
+      "edgeIds": [
+        "e002",
+        "e018",
+        "e047",
+        "e052",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Human person inside reality to Christian commitment with unresolved tensions that never revisits a concept: 19 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_human_agent_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From a person inside reality to constructed meaning",
+      "edgeIds": [
+        "e002",
+        "e018",
+        "e047",
+        "e052",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e117",
+        "e134",
+        "e154",
+        "e158",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Human person inside reality to Meaning constructed rather than discovered that never revisits a concept: 22 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_arg_beauty_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From beauty to committed faith, with tensions",
+      "edgeIds": [
+        "e044",
+        "e050",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Aesthetic argument to Christian commitment with unresolved tensions that never revisits a concept: 17 steps. Along the way it passes Transcendence plausible, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_arg_beauty_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From beauty to constructed meaning",
+      "edgeIds": [
+        "e044",
+        "e050",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e117",
+        "e134",
+        "e154",
+        "e158",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Aesthetic argument to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Transcendence plausible, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_arg_personhood_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From personhood to committed faith, with tensions",
+      "edgeIds": [
+        "e049",
+        "e052",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Argument from personhood to Christian commitment with unresolved tensions that never revisits a concept: 17 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_arg_personhood_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From personhood to constructed meaning",
+      "edgeIds": [
+        "e056",
+        "e130",
+        "e131",
+        "e113",
+        "e114",
+        "e117",
+        "e134",
+        "e077",
+        "e079",
+        "e048",
+        "e052",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e099",
+        "e108",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Argument from personhood to Meaning constructed rather than discovered that never revisits a concept: 22 steps. Along the way it passes Attractor: Love, Christianity leading hypothesis, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, and What best explains the resurrection data?. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_p_pluralism_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From religious diversity to committed faith, with tensions",
+      "edgeIds": [
+        "e073",
+        "e075",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Religious diversity to Christian commitment with unresolved tensions that never revisits a concept: 16 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_p_pluralism_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From religious diversity to constructed meaning",
+      "edgeIds": [
+        "e073",
+        "e075",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e117",
+        "e134",
+        "e154",
+        "e158",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Religious diversity to Meaning constructed rather than discovered that never revisits a concept: 19 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_h_empty_tomb_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From the empty tomb to committed faith, with tensions",
+      "edgeIds": [
+        "e094",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Empty tomb tradition to Christian commitment with unresolved tensions that never revisits a concept: 9 steps. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_h_empty_tomb_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From the empty tomb to constructed meaning",
+      "edgeIds": [
+        "e094",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e117",
+        "e134",
+        "e077",
+        "e079",
+        "e048",
+        "e052",
+        "e074",
+        "e076",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Empty tomb tradition to Meaning constructed rather than discovered that never revisits a concept: 16 steps. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Personal theism. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_c_restoration_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From resurrection hope to committed faith, with tensions",
+      "edgeIds": [
+        "e135",
+        "e077",
+        "e079",
+        "e048",
+        "e052",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Resurrection and cosmic restoration to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_c_restoration_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From resurrection hope to constructed meaning",
+      "edgeIds": [
+        "e135",
+        "e077",
+        "e079",
+        "e048",
+        "e052",
+        "e074",
+        "e081",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e137",
+        "e155",
+        "e158",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Resurrection and cosmic restoration to Meaning constructed rather than discovered that never revisits a concept: 23 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
     }
   ],
   "attractors": [

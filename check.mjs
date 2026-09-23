@@ -39,6 +39,8 @@ for (const c of d.cycles) {
 for (const t of d.tours ?? []) {
   const es = t.edgeIds.map(id => edgesById.get(id));
   if (new Set(t.edgeIds).size !== t.edgeIds.length) bad.push(`tour ${t.id} repeats an edgeId`);
+  if (!['argument', 'journey'].includes(t.kind)) bad.push(`tour ${t.id} has unknown kind ${t.kind}`);
+  if (t.kind === 'journey' && new Set(es.flatMap(e => e ? [e.source, e.target] : [])).size !== es.length + 1) bad.push(`journey ${t.id} revisits a concept`);
   es.forEach((e, i) => {
     if (!e) return bad.push(`tour ${t.id} edge ${t.edgeIds[i]}`);
     const next = es[i + 1];
@@ -47,5 +49,5 @@ for (const t of d.tours ?? []) {
 }
 for (const f of d.stateEffects) for (const v of [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])]) if (v && !ids.has(v)) bad.push(`fx ${f.id} target ${v}`);
 for (const a of d.attractors) if (!ids.has(a.node_id)) bad.push(`attractor ${a.node_id}`);
-console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces, ${d.tours?.length ?? 0} argument paths`);
+console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces, ${(d.tours ?? []).filter(t => t.kind === 'argument').length} argument paths, ${(d.tours ?? []).filter(t => t.kind === 'journey').length} journeys`);
 process.exit(bad.length ? 1 : 0);
