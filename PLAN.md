@@ -3,7 +3,7 @@
 Entry point: `visualization_agent_handoff.md`. Canonical data: `epistemological_civ_tree_final.json`.
 
 ## Model summary
-- 92 nodes, 184 edges, 9 stages (0–8), 11 layers, 12 global (stage-less) nodes, 6 declared cycle/trace motifs (2 closed, 4 incomplete), 7 state effects.
+- 105 nodes, 257 edges, 6 persuasion profiles, 34 tours (9 argument, 22 journey, 3 return), 9 stages (0–8), 11 layers, 12 global (stage-less) nodes, 6 declared cycle/trace motifs (2 closed, 4 incomplete), 7 state effects.
 - `progressionRole` ∈ knowledge/state/gateway/pressure/attractor. `attractors[]` list also promotes `a_resurrection` (a gateway).
 - `transitionClass` and sign of `weight` are independent: defeaters can point forward, feedback/reinterpretation are positive backward edges.
 - Lateral (stageDelta 0) edges are ~1/3 of edges.
@@ -58,8 +58,25 @@ Acceptance criteria for the next slice:
 - New controls are keyboard reachable, visibly focused, and usable at narrow widths.
 - `node check.mjs`, inline-script parsing, `git diff --check`, and browser console checks pass.
 
+## Issue #2 contract: exits, splits, persuasion profiles
+Work plan: `~/.claude/plans/pull-the-latest-issues-twinkly-flamingo.md`. The data agent and the UI agent both build against this shape.
+
+- Node `terminal: true` marks an intentional sink. `check.mjs` fails on any node with zero out-edges that isn't marked terminal.
+- New edges are numbered from `e185`, and each carries an `explanation` of one or two sentences.
+- Top-level `profiles[]`: `{ id, label, description, multipliers: { byEdge: {edgeId: m}, byNode: {sourceNodeId: m}, byNodeType: {sourceNodeType: m}, byEdgeType: {edgeType: m} } }`. `m` is in [0, 3]. The `default` profile has empty multipliers.
+- Effective weight: `clamp(w * (byEdge[e.id] ?? byNode[e.source] ?? byNodeType[type(e.source)] ?? byEdgeType[e.type] ?? 1), -1, 1)`. The most specific match wins.
+- `tours[].profile` (optional) is the profile id. A tour carrying a profile is that profile's "most persuasive route" journey. Tours without a profile show for every profile.
+- `node tours.mjs` regenerates `kind: "journey"` tours in place. Authored `argument` and `return` tours are never touched.
+
+## Issue #2 outcome
+- **Exits:** agnostic naturalism, secular humanism, constructed meaning, naturalistic morality, the residual tensions and the closed posture all have exits now. There are paths from naturalism back to theism that avoid `s_agnostic_theism` (relabelled "Tentative theism").
+- **New positions:** atheism, deism, classical theism, settled Judaism and Islam, and reopened inquiry.
+- **New arguments and pressures:** fine-tuning, ontological, religious experience, reformed epistemology, argument from reason, evolutionary debunking, and the evidential problem of evil (split from the logical one).
+- **Profiles:** default, evidentialist, existential, moral realist, empiricist and rationalist. The UI's "Weigh as" picker reweights edges: stronger edges glow, weaker ones are dashed. `tours.mjs` computes each profile's most persuasive route to each end state.
+- **Known shape:** every route that ends in Christian commitment goes through the resurrection question, so the evidentialist, empiricist and rationalist routes to that end state coincide. Step markers can still overlap on dense end cards (deferred).
+
 ## Milestone 2 (later)
 Runtime status model (locked/available/…), applying `stateEffects`, prerequisite-driven unlocking, simulation mode.
 
 ## Check
-`node check.mjs` and `node ui-check.mjs` pass. The data check reports 92 nodes, 184 edges, 2 closed cycles, and 4 incomplete traces. It validates edge endpoints, prerequisites, unlocks, ordered cycle/trace edges, stateEffect targets, and attractor references; incomplete traces are reported as warnings rather than misrepresented as closed cycles.
+`node tours.mjs && node check.mjs` and `node ui-check.mjs` pass. The data check reports 105 nodes, 257 edges, 2 closed cycles, and 4 incomplete traces. It fails on any node with no outgoing edges that isn't marked `terminal` (only `a_coherence` is), on edges after `e184` with no explanation, and on invalid profile multipliers. It warns when a node's in-degree is more than 4× its out-degree (currently only `s_agnostic_naturalism`, at 24 in / 4 out). It validates edge endpoints, prerequisites, unlocks, ordered cycle/trace edges, stateEffect targets, and attractor references; incomplete traces are reported as warnings rather than misrepresented as closed cycles.
