@@ -25,6 +25,17 @@
   label.f { display: block; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   input[type=search], select { width: 100%; background: #0c1016; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 7px; }
   #bar input[type=search] { width: clamp(150px, 24vw, 310px); }
+  #bar .weigh { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+  #bar .weigh[hidden] { display: none; }
+  #bar #profile { width: auto; max-width: 13em; padding: 5px 6px; }
+  #profile.reweighted { border-color: var(--gateway); color: #eee7d8; } /* the whole map is being read through someone else's weights */
+  #profileHelp { position: absolute; z-index: 2; bottom: 10px; left: 10px; max-width: 300px; margin: 0; padding: 4px 10px; color: #eee7d8; background: #2b2a1ee6; border: 1px solid var(--gateway); border-radius: 4px; font-size: 12px; pointer-events: none; }
+  #profileHelp[hidden] { display: none; } #profileHelp .short { display: none; }
+  @media (max-width: 1200px) { #viewport.touring #profileHelp { display: none; } } /* the dock takes the bottom; each step states its own reweighting */
+  @media (max-width: 600px) { #profileHelp { bottom: auto; top: 36px; left: auto; right: 8px; } #profileHelp .long { display: none; } #profileHelp .short { display: inline; } }
+  #right b.w { white-space: nowrap; }
+  .base { color: var(--muted); font-weight: 400; font-size: 11px; }
+  .terminal { padding: 5px 8px; border-left: 3px solid var(--gateway); background: #2b2a1e; }
   button { background: #202735; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 6px 9px; cursor: pointer; }
   button:hover, button[aria-pressed=true] { background: #313b4e; border-color: #59677e; }
   button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
@@ -78,6 +89,10 @@
   #root.overview .edge.lit { opacity: 1; } #root.overview .node.tourStop { opacity: 1; }
   .edge.lit { vector-effect: non-scaling-stroke; } /* lit paths stay legible when a whole tour is framed at overview zoom */
   #root.mid .node .role { display: none; } #root.mid .edge { opacity: .1; } #root.mid .edge.lit { opacity: 1; }
+  /* reweighted by the active profile: glow = this audience finds the move stronger, faded = weaker; class colour and dash kept so a strengthened defeater still reads as a defeater */
+  #root .edge.up { opacity: .9; filter: drop-shadow(0 0 2px var(--hl)) drop-shadow(0 0 1px var(--hl)); } #root:not(.overview) .edge.down:not(.lit) { opacity: .07; }
+  #root.overview .edge.up, #root.overview .edge.down { opacity: .85; pointer-events: stroke; marker-end: none; vector-effect: non-scaling-stroke; } #root.overview .edge.down:not(.lit) { opacity: .3; } /* non-scaling strokes would blow up their arrowheads */
+  #root .edge.up.dim, #root .edge.down.dim { opacity: .025; }
   #status { position: absolute; z-index: 2; bottom: 10px; left: 50%; max-width: min(680px, calc(100% - 24px)); transform: translateX(-50%); padding: 5px 9px; color: #c2c8d1; background: #0c1016d9; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; pointer-events: none; }
   #status:empty { display: none; }
   /* tours: numbered, walkable cycles/traces */
@@ -94,6 +109,8 @@
   #tour h2 { margin: 0 32px 2px 0; color: #eee7d8; font: 600 15px/1.3 Georgia, serif; letter-spacing: 0; }
   #tourKind { color: var(--muted); font-size: 12px; }
   #tourSteps { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 8px; padding: 0; list-style: none; }
+  #tourSteps li.far { display: none; } #tourSteps li.gap::before { content: '…'; margin-right: 4px; color: var(--muted); }
+  .tourMark.far { display: none; }
   #tourSteps button { min-width: 28px; padding: 3px 0; border-radius: 12px; font-size: 12px; color: var(--muted); }
   #tourSteps button.visited { color: var(--text); border-color: #59677e; }
   #tourSteps button[aria-current=step] { color: #11161d; background: var(--hl); border-color: var(--hl); font-weight: 600; }
@@ -115,6 +132,7 @@
   @media (max-width: 1000px) {
     #bar { flex-wrap: wrap; } #bar h1 { order: -1; width: 100%; margin: 0; text-align: center; } #bar input[type=search] { order: 2; width: 100%; }
     #bar .camera { margin-left: auto; } .optional { display: none; }
+    #bar #profile { max-width: 9.5em; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
 </style>
@@ -128,6 +146,7 @@
     <div class="group camera" aria-label="Camera controls">
       <button id="home" title="Focus early stages">Home</button><button id="fitAll">Fit all</button><button id="fitSelection" class="optional">Fit selection</button>
     </div>
+    <label class="weigh" hidden><span class="lbl">Weigh as</span> <select id="profile" aria-describedby="profileHelp"></select></label>
     <button id="toursToggle" popovertarget="tourMenu" aria-controls="tourMenu">Tours</button>
     <button id="route" aria-pressed="false">Route</button>
     <button id="allConnections" class="optional" aria-pressed="false" title="Temporarily show unrelated visible connections">Show all connections</button>
@@ -148,6 +167,7 @@
   </aside>
   <svg id="canvas" role="application" aria-label="Interactive epistemological strategy map"><defs id="defs"></defs><g id="root"></g><g class="axis" id="axes" aria-hidden="true"></g></svg>
   <aside id="right" aria-label="Concept inspector" aria-hidden="true" inert><button class="close" data-close="right" aria-label="Close inspector">×</button><h1>Inspector</h1><div id="inspector" style="color:var(--muted)">Select a concept.</div></aside>
+  <p id="profileHelp" hidden></p>
   <div id="status" role="status" aria-live="polite"></div>
   <div id="tourMenu" popover aria-label="Tours"></div>
   <section id="tour" aria-label="Tour" hidden>
@@ -168,6 +188,15 @@
   const attractorIds = new Set(D.attractors.map(a => a.node_id));
   const edgeClasses = [...new Set(edges.map(e => e.transitionClass))];
   const roles = [...new Set(nodes.map(n => n.progressionRole))];
+  // persuasion profiles: one audience's multipliers over the authored weights (contract in PLAN.md)
+  const profiles = D.profiles ?? [], params = new URLSearchParams(location.search);
+  let profile = profiles.find(p => p.id === params.get('profile')) ?? profiles.find(p => p.id === 'default') ?? profiles[0] ?? null;
+  function effectiveWeight(e) {
+    const m = profile?.multipliers ?? {};
+    return Math.max(-1, Math.min(1, e.weight * (m.byEdge?.[e.id] ?? m.byNode?.[e.source] ?? m.byNodeType?.[byId.get(e.source).type] ?? m.byEdgeType?.[e.type] ?? 1)));
+  }
+  const signed = w => (w > 0 ? '+' : '') + w.toFixed(2);
+  const weightText = e => { const w = effectiveWeight(e); return w === e.weight ? signed(w) : `${signed(w)} <span class="base">base ${signed(e.weight)}</span>`; };
   const cssVar = k => getComputedStyle(document.documentElement).getPropertyValue('--' + k).trim();
 
   // ---------- layout: deterministic stage columns × layer lanes, 2-wide grid inside cells ----------
@@ -245,10 +274,10 @@
     .on('click', (ev, c) => fitNodes(c.list));
   const edgeSel = root.append('g').selectAll('path').data(edges).join('path')
     .attr('class', e => 'edge ' + e.transitionClass).attr('d', path)
-    .attr('stroke', e => cssVar(e.transitionClass)).attr('stroke-width', e => 0.8 + Math.abs(e.weight) * 3)
+    .attr('stroke', e => cssVar(e.transitionClass)).attr('stroke-width', e => 0.8 + Math.abs(effectiveWeight(e)) * 3)
     .attr('stroke-dasharray', e => ({ reinterpretation: '8 5', feedback: '2 4', global_modifier: '1 4' })[e.transitionClass] ?? null)
     .attr('marker-end', e => `url(#arr-${e.transitionClass})`)
-    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${e.weight.toFixed(2)}${e.label ? ' · ' + e.label : ''}${e.explanation ? ' — ' + e.explanation : ''}`))
+    .on('mouseenter', (ev, e) => status(`${byId.get(e.source).label} → ${byId.get(e.target).label} · ${e.transitionClass} · ${e.type} · w ${effectiveWeight(e).toFixed(2)}${effectiveWeight(e) !== e.weight ? ` (base ${e.weight.toFixed(2)})` : ''}${e.label ? ' · ' + e.label : ''}${e.explanation ? ' — ' + e.explanation : ''}`))
     .on('mouseleave', () => status(standingStatus));
 
   const tourMarks = root.append('g'); // tour step numbers sit above edges, below nodes
@@ -294,14 +323,21 @@
       const chars = Math.floor(room(s) / 7.5);
       return chars >= 12 ? trunc(`${s.id} · ${s.name}`, chars) : chars >= 1 ? String(s.id) : '';
     });
-    laneAxis.attr('y', L => Math.min(t.applyY(laneY.get(L) + laneH.get(L)) - 6, Math.max(48, t.applyY(laneY.get(L)) + 16)))
-      .attr('display', L => laneH.get(L) * t.k < 18 || t.applyY(laneY.get(L) + laneH.get(L)) < 48 ? 'none' : null);
+    laneAxis.attr('y', L => laneLabelY(L, t)).attr('display', L => laneLabelShown(L, t) ? null : 'none');
+  }
+  const laneLabelY = (L, t) => Math.min(t.applyY(laneY.get(L) + laneH.get(L)) - 6, Math.max(48, t.applyY(laneY.get(L)) + 16));
+  const laneLabelShown = (L, t) => !(laneH.get(L) * t.k < 18 || t.applyY(laneY.get(L) + laneH.get(L)) < 48);
+  function obstacles(t) { // screen boxes labels must not cover: axis band, lane labels, visible node rects
+    const b = [[0, 0, svg.node().clientWidth, 30]];
+    for (const L of layers) if (laneLabelShown(L, t)) b.push([0, laneLabelY(L, t) - 14, 16 + L.length * 7, laneLabelY(L, t) + 4]);
+    nodeSel.each(function (n) { if (!this.classList.contains('hidden')) b.push([t.applyX(n.x), t.applyY(n.y), t.applyX(n.x + NW), t.applyY(n.y + NH)]); });
+    return b;
   }
   // greedy label placement: tour stops, then attractors, then gateways; try above the node, then below, else skip
   const isKey = n => n.progressionRole === 'gateway' || n.progressionRole === 'attractor' || attractorIds.has(n.id);
   function placeLandmarks(t) {
     const rank = n => (tour?.nodeIds.has(n.id) ? 4 : 0) + (attractorIds.has(n.id) || n.progressionRole === 'attractor' ? 2 : 0) + (n.progressionRole === 'gateway' ? 1 : 0);
-    const boxes = [], shown = new Map(); // node id -> 'above' | 'below'
+    const shown = new Map(), boxes = t.k < .34 ? obstacles(t) : []; // node id -> 'above' | 'below'
     if (t.k < .34) for (const n of nodeSel.filter(function (n) { return !this.classList.contains('hidden') && (tour ? tour.nodeIds.has(n.id) : isKey(n)); }).data().sort((a, b) => rank(b) - rank(a))) {
       const w = trunc(n.label.replace(/^Attractor: /, ''), 34).length * 6.8 + 8, x = t.applyX(n.cx) - w / 2;
       for (const [side, y] of [['above', t.applyY(n.y) - 24], ['below', t.applyY(n.y + NH) + 2]]) {
@@ -315,7 +351,7 @@
   }
   const relabel = () => placeLandmarks(d3.zoomTransform(svg.node()));
   svg.call(zoom);
-  const move = transform => (reducedMotion ? svg : svg.transition().duration(280)).call(zoom.transform, transform);
+  const move = transform => (svg.interrupt(), reducedMotion ? svg : svg.transition().duration(280)).call(zoom.transform, transform);
   function boundsTransform(x, yy, w, h, maxScale = 1.1) {
     const b = svg.node().getBoundingClientRect(), pad = 44, dock = document.getElementById('tour');
     const top = pad + 30, bottom = dock.hidden ? pad : dock.offsetHeight + 24; // keep targets clear of the axis band and tour dock
@@ -334,8 +370,9 @@
   function fitNodes(list, maxScale = .9) { move(nodesTransform(list, maxScale)); }
   // one tour step: if both ends fit at a readable scale, frame them; otherwise start at the source and travel the edge to the destination
   function travel(from, to) {
+    svg.interrupt(); // a quick Next must not leave the camera on the previous step's frame
     const both = nodesTransform([from, to]);
-    if (both.k >= .6) return move(both);
+    if (both.k >= .45) return move(both);
     if (reducedMotion) return svg.call(zoom.transform, nodesTransform([to]));
     svg.transition().duration(350).call(zoom.transform, nodesTransform([from]))
       .transition().duration(1100).ease(d3.easeCubicInOut).call(zoom.transform, nodesTransform([to]));
@@ -392,22 +429,37 @@
   });
   const loopsOf = e => D.cycles.filter(c => c.edgeIds.includes(e.id)); // which declared loops/traces an edge belongs to
   const stageSpan = t => { const ss = [...t.nodeIds].map(id => byId.get(id).stage).filter(v => v != null); return d3.min(ss) === d3.max(ss) ? `stage ${d3.min(ss)}` : `stages ${d3.min(ss)}–${d3.max(ss)}`; };
-  const kind = t => ({ argument: 'Argument path', journey: 'Personal journey', return: 'Return journey' })[t.kind] ?? (t.closed ? 'Loop' : 'Open trace');
-  const groups = [
-    ['Personal journeys', 'leaving and returning, and the longest routes', [...tours.filter(t => t.kind === 'return'), ...tours.filter(t => t.kind === 'journey')]],
-    ['Argument paths', 'where arguments settle', tours.filter(t => t.kind === 'argument')],
-    ['Loops and traces', 'declared in the data', tours.filter(t => !t.authored)]];
-  groups.filter(g => g[2].length).forEach(([title, sub, list], gi) => {
-    const group = d3.select('#tourMenu').append('details').property('open', gi === 0);
-    group.append('summary').html(`${title} <span class="k">· ${list.length} · ${sub}</span>`);
-    for (const t of list) group.append('button').attr('type', 'button')
-      .html(`<b>${t.label}</b><span>${kind(t)} · ${t.steps.length} steps · ${stageSpan(t)}</span>`)
-      .on('click', () => { document.getElementById('tourMenu').hidePopover(); startTour(t.id); });
-  });
+  const kind = t => t.profile ? 'Most persuasive route' : ({ argument: 'Argument path', journey: 'Longest route', return: 'Return journey' })[t.kind] ?? (t.closed ? 'Loop' : 'Open trace');
+  const shownTours = () => tours.filter(t => !t.profile || t.profile === profile?.id); // profile journeys only for their own audience
+  function renderTourMenu() {
+    const list = shownTours(), mine = list.filter(t => t.profile);
+    const groups = [
+      [`Most persuasive routes for ${profile?.label}`, 'the strongest chain of moves for this audience', mine],
+      ['Return journeys', 'leaving a position and coming back further along', list.filter(t => t.kind === 'return')],
+      ['Longest routes', 'the longest chain of supportive moves from each start', list.filter(t => t.kind === 'journey' && !t.profile)],
+      ['Argument paths', 'where arguments settle', list.filter(t => t.kind === 'argument' && !t.profile)],
+      ['Loops and traces', 'declared in the data', list.filter(t => !t.authored)]];
+    d3.select('#tourMenu').html('');
+    const others = profiles.filter(p => p !== profile && tours.some(t => t.profile === p.id));
+    if (!mine.length && others.length) {
+      const hint = d3.select('#tourMenu').append('details');
+      hint.append('summary').html(`Most persuasive routes <span class="k">· choose a Weigh as audience</span>`);
+      for (const p of others) hint.append('button').attr('type', 'button').html(`<b>Weigh as ${p.label}</b><span>${p.description}</span>`).on('click', () => setProfile(p.id));
+    }
+    groups.filter(g => g[2].length).forEach(([title, sub, list], gi) => {
+      const group = d3.select('#tourMenu').append('details').property('open', gi === 0);
+      group.append('summary').html(`${title} <span class="k">· ${list.length} · ${sub}</span>`);
+      for (const t of list) group.append('button').attr('type', 'button')
+        .html(`<b>${t.label}</b><span>${kind(t)} · ${t.steps.length} steps · ${stageSpan(t)}</span>`)
+        .on('click', () => { document.getElementById('tourMenu').hidePopover(); startTour(t.id); });
+    });
+  }
+  renderTourMenu();
   function startTour(id) {
     const t = tours.find(t => t.id === id); if (!t) return;
+    if (t.profile && t.profile !== profile?.id) setProfile(t.profile); // a deep-linked profile journey brings its audience with it
     clear(); tour = t; tourStep = 0; mode = 'tour';
-    d3.select('#tourKind').text(`${kind(t)} · ${t.steps.length} steps`); d3.select('#tourTitle').text(t.label);
+    d3.select('#tourTitle').text(t.label);
     d3.select('#tourSteps').selectAll('li').data(t.steps).join('li').html('').append('button').attr('type', 'button')
       .text((e, i) => i + 1).attr('aria-label', (e, i) => `Step ${i + 1}: ${byId.get(e.source).label} to ${byId.get(e.target).label}`)
       .on('click', (ev, e) => goTour(t.steps.indexOf(e) + 1));
@@ -427,6 +479,12 @@
     edgeSel.classed('tourNow', e => e === cur).classed('tourAhead', e => !whole && t.steps.indexOf(e) >= tourStep);
     relabel();
     nodeSel.classed('tourAt', n => cur ? n.id === cur.source || n.id === cur.target : false).classed('tourStop', n => t.nodeIds.has(n.id));
+    // long tours: chips show the ends plus a window around the current step; map markers only ±3 steps
+    const c = Math.min(Math.max(tourStep, 1), N), near = i => Math.abs(i + 1 - c) <= 2 || i === 0 || i === N - 1;
+    d3.select('#tourSteps').selectAll('li').classed('far', (e, i) => N > 9 && !whole && !near(i)).classed('gap', (e, i) => N > 9 && !whole && near(i) && i > 0 && !near(i - 1));
+    tourMarks.selectAll('g').classed('far', (e, i) => !whole && Math.abs(i + 1 - tourStep) > 3);
+    const stageOf = e => { const n = byId.get(e.target); return n.stageScope === 'global' ? 'global pressure' : stages[n.stage]?.name; };
+    d3.select('#tourKind').text(cur ? `${kind(t)} · Step ${tourStep} of ${N} · ${stageOf(cur)}` : `${kind(t)} · ${N} steps`);
     tourMarks.selectAll('g').classed('now', e => e === cur).classed('visited', (e, i) => i + 1 < tourStep || tourStep > N);
     d3.select('#tourSteps').selectAll('button').classed('visited', (e, i) => i + 1 < tourStep || tourStep > N).attr('aria-current', e => e === cur ? 'step' : null);
     const first = byId.get(t.steps[0].source), last = byId.get(t.steps.at(-1).target);
@@ -435,7 +493,7 @@
     const back = e => seenBefore(e) ? `<span class="via">Back at ${byId.get(e.target).label}, where this began, but further along.</span>` : '';
     const via = e => t.authored && loopsOf(e).length ? `<span class="via">Inside: ${loopsOf(e).map(c => c.label).join('; ')}</span>` : '';
     const text = tourStep === 0 ? t.description
-      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b> <q>${cur.label || cur.type.replace(/_/g, ' ')}</q>${cur.explanation ? `<span class="why">${cur.explanation}</span>` : ''}${back(cur)}${via(cur)}`
+      : cur ? `<b>${byId.get(cur.source).label}</b> → <b>${byId.get(cur.target).label}</b> <q>${cur.label || cur.type.replace(/_/g, ' ')}</q>${cur.explanation ? `<span class="why">${cur.explanation}</span>` : ''}${reweighted() && effectiveWeight(cur) !== cur.weight ? `<span class="via">For ${profile.label}: <b class="w">${weightText(cur)}</b></span>` : ''}${back(cur)}${via(cur)}`
       : t.authored ? argumentEnd(t, last, loops)
       : t.closed ? `Back at <b>${first.label}</b>. The loop closes, so each pass strengthens where it started.`
       : `The trace ends at <b>${last.label}</b>. The data declares no edge back to <b>${first.label}</b>, so this is not a closed loop.`;
@@ -532,25 +590,60 @@
   });
 
   // ---------- inspector ----------
+  let inspected = null;
   function inspect(n) {
+    inspected = n;
     const link = id => `<span class="pill" data-id="${id}">${byId.get(id)?.label ?? id}</span>`;
-    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="${e.weight < 0 ? 'neg' : 'pos'}">${e.weight > 0 ? '+' : ''}${e.weight.toFixed(2)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}${e.explanation ? `<p class="why">${e.explanation}</p>` : ''}</div>`;
+    const edgeRow = (e, other) => `<div>${link(other)} <span class="k">${e.transitionClass} · ${e.type}</span> <b class="w ${e.weight < 0 ? 'neg' : 'pos'}">${weightText(e)}</b>${e.label ? ` <span class="k">— ${e.label}</span>` : ''}${e.explanation ? `<p class="why">${e.explanation}</p>` : ''}</div>`;
     const inc = edges.filter(e => e.target === n.id), out = edges.filter(e => e.source === n.id);
     const fx = D.stateEffects.filter(f => f.triggerNode === n.id || [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])].includes(n.id));
     const attr = D.attractors.find(a => a.node_id === n.id);
+    const weighed = reweighted() ? ` · weighed as ${profile.label}` : '';
     d3.select('#inspector').style('color', null).html(`
       <h1>${n.label}</h1>
       <p class="k">${n.id} · ${n.type} · ${n.layer} · ${n.stageScope === 'global' ? 'global' : 'stage ' + n.stage} · <b>${n.progressionRole}</b>${n.attractor_strength != null ? ` · strength ${n.attractor_strength}` : ''}</p>
+      ${n.terminal ? '<p class="terminal"><b>Intentional end point</b><br><span class="k">No moves lead on from here, by design.</span></p>' : ''}
       <p>${n.description}</p>
       ${attr ? `<p><b>Attractor</b> · ${attr.domain}<br><span class="k">${attr.role}</span>${attr.terminal_if_rejected_for_historic_christianity ? '<br><span class="neg">terminal for historic Christianity if rejected</span>' : ''}</p>` : ''}
       ${n.prerequisites ? `<h2>Prerequisites</h2>${Object.entries(n.prerequisites).map(([k, v]) => `<p><span class="k">${k}:</span> ${v.map(link).join(' ')}</p>`).join('')}` : ''}
       ${n.unlocks?.length ? `<h2>Unlocks</h2><p>${n.unlocks.map(link).join(' ')}</p>` : ''}
-      <h2>Incoming pressure (${inc.length}) · net ${d3.sum(inc, e => e.weight).toFixed(2)}</h2>${inc.map(e => edgeRow(e, e.source)).join('') || '<p class="k">none</p>'}
-      <h2>Outgoing pressure (${out.length})</h2>${out.map(e => edgeRow(e, e.target)).join('') || '<p class="k">none</p>'}
+      <h2>Incoming pressure (${inc.length}) · net ${netText(inc)}${weighed}</h2>${inc.map(e => edgeRow(e, e.source)).join('') || '<p class="k">none</p>'}
+      <h2>Outgoing pressure (${out.length})${weighed}</h2>${out.map(e => edgeRow(e, e.target)).join('') || '<p class="k">none</p>'}
       ${fx.length ? `<h2>State effects</h2>${fx.map(f => `<p><b>${f.effectType}</b> <span class="k">when ${link(f.triggerNode)} is ${f.whenStatus.join('/')}</span><br>${f.description}<br><span class="k">${JSON.stringify(f.target)} ${f.weightDelta ?? f.confidenceDelta ?? f.pressureDelta ?? f.multiplier ?? ''}</span></p>`).join('')}` : ''}
-      <h2>Tours through here</h2><p>${tours.filter(t => t.nodeIds.has(n.id)).map(t => `<span class="pill" data-tour="${t.id}">${t.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
+      <h2>Tours through here</h2><p>${shownTours().filter(t => t.nodeIds.has(n.id)).map(t => `<span class="pill" data-tour="${t.id}">${t.label}</span>`).join(' ') || '<span class="k">none</span>'}</p>`);
     d3.select('#inspector').selectAll('.pill[data-id]').on('click', ev => { const m = byId.get(ev.target.dataset.id); select(m); focusNode(m); });
     d3.select('#inspector').selectAll('.pill[data-tour]').on('click', ev => startTour(ev.target.dataset.tour));
+  }
+
+  function netText(inc) {
+    const net = d3.sum(inc, effectiveWeight), base = d3.sum(inc, e => e.weight);
+    return net.toFixed(2) === base.toFixed(2) ? net.toFixed(2) : `${net.toFixed(2)} <span class="base">base ${base.toFixed(2)}</span>`;
+  }
+
+  // ---------- persuasion profile ----------
+  function setProfile(id) {
+    const next = profiles.find(p => p.id === id); if (!next || next === profile) return;
+    const url = new URL(location), ending = tour?.profile;
+    if (ending) { clear(); url.searchParams.delete('tour'); } // that route was the strongest for the previous audience only
+    profile = next; applyProfile();
+    id === 'default' ? url.searchParams.delete('profile') : url.searchParams.set('profile', id); history.replaceState(null, '', url);
+    renderTourMenu(); if (inspected) inspect(inspected); if (tour) renderTour(false);
+  }
+  function reweighted() { return profile && profile.id !== 'default'; }
+  function applyProfile() {
+    const on = reweighted(), changed = edges.filter(e => effectiveWeight(e) !== e.weight);
+    edgeSel.attr('stroke-width', e => 0.8 + Math.abs(effectiveWeight(e)) * 3)
+      .classed('up', e => on && Math.abs(effectiveWeight(e)) > Math.abs(e.weight)).classed('down', e => on && Math.abs(effectiveWeight(e)) < Math.abs(e.weight));
+    d3.select('#profile').property('value', profile.id).classed('reweighted', on).attr('title', profile.description);
+    d3.select('#profileHelp').property('hidden', !on)
+      .html(on ? `<span class="long">Weighing as ${profile.label} · ${changed.length} moves reweighted · glow = stronger for this audience, faded = weaker</span><span class="short">${profile.label} · ${changed.length} reweighted</span>` : '');
+    const msg = on ? `${profile.label}: ${profile.description}` : `Weighing with the authored weights.`;
+    status(msg); setTimeout(() => { if (document.getElementById('status').textContent === msg) status(standingStatus); }, 4000);
+  }
+  if (profiles.length) {
+    d3.select('#bar .weigh').attr('hidden', null);
+    d3.select('#profile').on('change', ev => setProfile(ev.target.value)).selectAll('option').data(profiles).join('option').attr('value', p => p.id).text(p => p.label);
+    if (reweighted()) applyProfile();
   }
 
   // ---------- command bar + keyboard ----------

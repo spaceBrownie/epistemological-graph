@@ -53,7 +53,24 @@ for (const id of new Set([...d.cycles, ...(d.tours ?? [])].flatMap(t => t.edgeId
   if (!x) bad.push(`edge ${id} is walked by a tour but has no explanation`);
   else if ((x.match(/[.?!](\s|$)/g) ?? []).length > 2) bad.push(`edge ${id} explanation is longer than two sentences`);
 }
+const outDeg = new Map(), inDeg = new Map();
+for (const e of d.edges) { outDeg.set(e.source, (outDeg.get(e.source) ?? 0) + 1); inDeg.set(e.target, (inDeg.get(e.target) ?? 0) + 1); }
+for (const n of d.nodes) {
+  const o = outDeg.get(n.id) ?? 0, i = inDeg.get(n.id) ?? 0;
+  if (!o && !n.terminal) bad.push(`${n.id} has no outgoing edges and is not marked terminal`);
+  if (!n.terminal && i >= 4 && i > 4 * o) console.warn(`warn: ${n.id} has in-degree ${i} and out-degree ${o}`);
+}
+// ponytail: baseline cutoff, e001-e184 predate the explanation rule; drop the number check once every edge is explained.
+for (const e of d.edges) if (+e.id.slice(1) > 184 && !e.explanation) bad.push(`edge ${e.id} has no explanation`);
+const profileIds = new Set((d.profiles ?? []).map(p => p.id));
+const multiplierKeys = { byEdge: edgesById, byNode: ids, byNodeType: new Set(d.graph.node_types), byEdgeType: new Set(d.graph.edge_types) };
+for (const p of d.profiles ?? []) for (const [k, known] of Object.entries(multiplierKeys)) for (const [key, m] of Object.entries(p.multipliers?.[k] ?? {})) {
+  if (!known.has(key)) bad.push(`profile ${p.id} ${k} key ${key} is unknown`);
+  if (typeof m !== 'number' || m < 0 || m > 3) bad.push(`profile ${p.id} ${k}.${key} multiplier ${m} is outside [0, 3]`);
+}
+for (const p of d.profiles ?? []) for (const k of Object.keys(p.multipliers ?? {})) if (!(k in multiplierKeys)) bad.push(`profile ${p.id} has unknown multiplier group ${k}`);
+for (const t of d.tours ?? []) if (t.profile != null && !profileIds.has(t.profile)) bad.push(`tour ${t.id} names unknown profile ${t.profile}`);
 for (const f of d.stateEffects) for (const v of [f.target.node, f.target.source, f.target.target, ...(f.target.nodes ?? [])]) if (v && !ids.has(v)) bad.push(`fx ${f.id} target ${v}`);
 for (const a of d.attractors) if (!ids.has(a.node_id)) bad.push(`attractor ${a.node_id}`);
-console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces, ${(d.tours ?? []).filter(t => t.kind === 'argument').length} argument paths, ${(d.tours ?? []).filter(t => t.kind === 'journey').length} journeys, ${(d.tours ?? []).filter(t => t.kind === 'return').length} returns`);
+console.log(bad.length ? bad.join('\n') : `ok: ${d.nodes.length} nodes, ${d.edges.length} edges, ${closedCycles} closed cycles, ${incompleteTraces} incomplete traces, ${(d.tours ?? []).filter(t => t.kind === 'argument').length} argument paths, ${(d.tours ?? []).filter(t => t.kind === 'journey').length} journeys, ${(d.tours ?? []).filter(t => t.kind === 'return').length} returns, ${profileIds.size} profiles`);
 process.exit(bad.length ? 1 : 0);

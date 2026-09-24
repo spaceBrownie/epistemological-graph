@@ -321,10 +321,10 @@
     },
     {
       "id": "p_evil",
-      "label": "Problem of evil",
+      "label": "Logical problem of evil",
       "type": "pressure",
       "layer": "naturalism",
-      "description": "Apparently gratuitous suffering pressures against an omnipotent, omniscient, perfectly good God.",
+      "description": "Evil is argued to be logically incompatible with a God who is all-powerful, all-knowing and wholly good.",
       "stage": 1,
       "stageScope": "local",
       "progressionRole": "pressure"
@@ -519,7 +519,7 @@
     },
     {
       "id": "s_agnostic_theism",
-      "label": "Agnostic classical-theism territory",
+      "label": "Tentative theism",
       "type": "state",
       "layer": "epistemology",
       "description": "Theism remains plausible but evil, hiddenness, and uncertainty prevent confident commitment.",
@@ -1098,7 +1098,8 @@
       "attractor_strength": 1,
       "stage": null,
       "stageScope": "global",
-      "progressionRole": "attractor"
+      "progressionRole": "attractor",
+      "terminal": true
     },
     {
       "id": "t_christian_evil",
@@ -1179,6 +1180,149 @@
       "stage": 2,
       "stageScope": "local",
       "progressionRole": "knowledge"
+    },
+    {
+      "id": "s_atheism",
+      "label": "Atheism",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "The positive judgment that no God exists, as distinct from suspending judgment.",
+      "centrality_hint": 0.6,
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_classical_theism",
+      "label": "Classical theism",
+      "type": "worldview",
+      "layer": "metaphysics",
+      "description": "God as the simple, necessary ground of being, reached mainly through metaphysical argument, as in Aquinas, Maimonides and Avicenna.",
+      "centrality_hint": 0.5,
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_deism",
+      "label": "Deism",
+      "type": "worldview",
+      "layer": "metaphysics",
+      "description": "A rational creator made the world but does not intervene in it or reveal itself.",
+      "centrality_hint": 0.4,
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_reopened_inquiry",
+      "label": "Reopened inquiry",
+      "type": "meta_state",
+      "layer": "deconstruction",
+      "description": "After closure, the agent becomes willing to engage counterarguments and alternative hypotheses again.",
+      "centrality_hint": 0.4,
+      "stage": 2,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_settled_judaism",
+      "label": "Settled Judaism",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "Judaism embraced as a complete covenantal way of life under Torah, not as a step toward another tradition.",
+      "centrality_hint": 0.5,
+      "stage": 4,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "s_settled_islam",
+      "label": "Settled Islam",
+      "type": "worldview",
+      "layer": "worldview_end_states",
+      "description": "Islam embraced as complete submission to one God through the Qur'an and the Prophet.",
+      "centrality_hint": 0.5,
+      "stage": 4,
+      "stageScope": "local",
+      "progressionRole": "state"
+    },
+    {
+      "id": "arg_fine_tuning",
+      "label": "Fine-tuning argument",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "The narrow life-permitting range of physical constants is taken as evidence of design rather than chance.",
+      "centrality_hint": 0.4,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_ontological",
+      "label": "Ontological argument",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "If a maximally great being is possible, it exists necessarily.",
+      "centrality_hint": 0.3,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_religious_experience",
+      "label": "Argument from religious experience",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Experiences of divine presence count as evidence, the way ordinary perception does, unless there is reason to doubt them.",
+      "centrality_hint": 0.4,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_reformed_epistemology",
+      "label": "Reformed epistemology",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "Belief in God can be properly basic, rational without resting on argument, like belief in other minds.",
+      "centrality_hint": 0.3,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "arg_reason",
+      "label": "Argument from reason",
+      "type": "argument",
+      "layer": "metaphysics",
+      "description": "If thought is fully produced by non-rational causes, it is hard to see how it can be trusted to track truth.",
+      "centrality_hint": 0.3,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "knowledge"
+    },
+    {
+      "id": "p_evolutionary_debunking",
+      "label": "Evolutionary debunking",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "If moral and religious beliefs were selected for usefulness rather than truth, their seeming truth may need no further explanation.",
+      "centrality_hint": 0.4,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
+    },
+    {
+      "id": "p_evidential_evil",
+      "label": "Evidential problem of evil",
+      "type": "pressure",
+      "layer": "naturalism",
+      "description": "The amount and distribution of suffering is much more expected without God than with one, even if the two are logically compatible.",
+      "centrality_hint": 0.5,
+      "stage": 1,
+      "stageScope": "local",
+      "progressionRole": "pressure"
     }
   ],
   "edges": [
@@ -1189,7 +1333,8 @@
       "type": "raises_question",
       "weight": 0.6,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "A person who notices they are inside a reality they did not make soon asks what that reality ultimately is. Metaphysics begins with that question."
     },
     {
       "id": "e002",
@@ -1208,7 +1353,8 @@
       "type": "raises_question",
       "weight": 0.6,
       "transitionClass": "forward",
-      "stageDelta": 5
+      "stageDelta": 5,
+      "explanation": "Some worldviews rest on claims about events in the past. Asking what actually happened turns the search toward history."
     },
     {
       "id": "e004",
@@ -1226,7 +1372,8 @@
       "type": "branches_to",
       "weight": 0.6,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "Everyone meets love and attachment before they meet arguments. That experience colors how every later question is weighed."
     },
     {
       "id": "e006",
@@ -1244,7 +1391,8 @@
       "type": "branches_to",
       "weight": 0.6,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "Most people feel the pull of obligation and the sting of guilt. That experience is part of what any worldview has to account for."
     },
     {
       "id": "e008",
@@ -1253,7 +1401,8 @@
       "type": "branches_to",
       "weight": 0.6,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "Every life meets suffering and death. That experience presses on every later question about God and meaning."
     },
     {
       "id": "e009",
@@ -1298,7 +1447,8 @@
       "type": "transitions_to",
       "weight": 0.8,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "Before any worldview has earned priority, the honest starting place is not knowing. The person begins in radical uncertainty."
     },
     {
       "id": "e014",
@@ -1307,7 +1457,8 @@
       "type": "branches_to",
       "weight": 0.65,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "Asking what is ultimately real leads to why anything contingent exists at all. That opens the argument from contingency and sufficient reason."
     },
     {
       "id": "e015",
@@ -1372,7 +1523,8 @@
       "type": "branches_to",
       "weight": 0.7,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "Asking what happened leads to the most disputed figure in religious history. Jesus of Nazareth becomes a question for historians, not only for believers."
     },
     {
       "id": "e022",
@@ -1399,7 +1551,8 @@
       "type": "converges_on",
       "weight": 0.8,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "Love can feel like the deepest thing in reality rather than a by-product of it. That experience draws the person toward the love attractor."
     },
     {
       "id": "e025",
@@ -1435,7 +1588,8 @@
       "type": "supports",
       "weight": 0.8,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "The experience of obligation seems to present moral facts, not just feelings. Taken at face value, it supports objective value."
     },
     {
       "id": "e029",
@@ -1478,9 +1632,10 @@
       "source": "exp_suffering",
       "target": "p_evil",
       "type": "supports",
-      "weight": 0.9,
+      "weight": 0.7,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "Suffering raises the question of how a wholly good and all-powerful God could allow it. That is the root of the problem of evil."
     },
     {
       "id": "e034",
@@ -1489,7 +1644,8 @@
       "type": "supports",
       "weight": 0.75,
       "transitionClass": "global_modifier",
-      "stageDelta": null
+      "stageDelta": null,
+      "explanation": "Suffering is not confined to humans; animals suffered for millions of years before us. That sharpens the problem, since free-will answers do not obviously reach it."
     },
     {
       "id": "e035",
@@ -1516,7 +1672,8 @@
       "type": "supports",
       "weight": 0.75,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If everything contingent needs a reason for existing, the chain of reasons must end in something outside the contingent world. That makes a transcendent reality plausible."
     },
     {
       "id": "e038",
@@ -1573,7 +1730,8 @@
       "type": "supports",
       "weight": 0.5,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If persons have a unity and worth that matter alone does not seem to explain, reality may include more than matter. That lends modest support to transcendence."
     },
     {
       "id": "e044",
@@ -1650,7 +1808,8 @@
       "type": "transitions_to",
       "weight": 0.4,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "A transcendent reality need not be a person. It can be understood as an impersonal or nondual absolute, as in Vedanta and some mystical traditions."
     },
     {
       "id": "e052",
@@ -1669,7 +1828,8 @@
       "type": "supports",
       "weight": 0.35,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If moral facts are real and binding, they need a ground that can make demands on persons. A personal God is one candidate, though realists also defend moral facts as basic."
     },
     {
       "id": "e054",
@@ -1678,7 +1838,8 @@
       "type": "supports",
       "weight": 0.35,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "Once persons are seen to matter in themselves, the question is what could make that true. A personal God who knows and values each person is one natural answer, though humanists hold that dignity can be basic."
     },
     {
       "id": "e055",
@@ -1706,7 +1867,8 @@
       "type": "transitions_to",
       "weight": 0.65,
       "transitionClass": "forward",
-      "stageDelta": 2
+      "stageDelta": 2,
+      "explanation": "When no worldview has priority, naturalism stands out for its simplicity and its record in science. It becomes a strong contender."
     },
     {
       "id": "e058",
@@ -1740,10 +1902,10 @@
       "source": "p_evil",
       "target": "s_agnostic_naturalism",
       "type": "supports",
-      "weight": 0.85,
+      "weight": 0.5,
       "transitionClass": "forward",
       "stageDelta": 1,
-      "explanation": "Suffering that seems pointless weighs heavily against a God who is all-powerful and wholly good. For many, this is the most direct route to naturalism."
+      "explanation": "If evil cannot logically coexist with a God who is all-powerful and wholly good, theism is simply false. Those who find the argument sound move directly toward naturalism."
     },
     {
       "id": "e062",
@@ -1752,7 +1914,8 @@
       "type": "supports",
       "weight": 0.9,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "Animal suffering over deep time seems to serve no purpose that involves animals themselves. Many find it among the strongest reasons to favor naturalism."
     },
     {
       "id": "e063",
@@ -1761,7 +1924,8 @@
       "type": "supports",
       "weight": 0.8,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If a loving God wanted relationship, it is puzzling that so many sincere seekers find no sign of one. That silence is expected if there is no God, so it supports naturalism."
     },
     {
       "id": "e064",
@@ -1770,7 +1934,8 @@
       "type": "supports",
       "weight": 0.65,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If revelation were real, one might expect more agreement about what was revealed. The sheer variety of faiths looks more like human invention, which supports naturalism."
     },
     {
       "id": "e065",
@@ -1822,10 +1987,10 @@
       "source": "p_evil",
       "target": "s_agnostic_theism",
       "type": "supports",
-      "weight": 0.7,
+      "weight": 0.5,
       "transitionClass": "forward",
       "stageDelta": 1,
-      "explanation": "Suffering that seems pointless makes confident theism hard to hold. God stays plausible, but commitment gives way to uncertainty."
+      "explanation": "Many accept that free-will defenses show God and evil are logically compatible, yet the defense leaves an uneasy residue. God stays plausible, but commitment gives way to uncertainty."
     },
     {
       "id": "e071",
@@ -1957,7 +2122,7 @@
       "weight": 0.5,
       "transitionClass": "lateral",
       "stageDelta": 0,
-      "explanation": "Comparison leads to Judaism, the covenantal monotheism from which Christianity grew. Understanding it is the natural first step toward the Christian claims."
+      "explanation": "Comparison leads to Judaism, the covenantal monotheism from which Christianity also grew. It can be embraced on its own terms or read as the first step toward the Christian claims."
     },
     {
       "id": "e084",
@@ -1986,7 +2151,8 @@
       "type": "branches_to",
       "weight": 0.5,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "Comparison leads to the Hindu traditions, with their range of views on the divine. Some are theistic and some describe an impersonal absolute."
     },
     {
       "id": "e087",
@@ -2005,7 +2171,8 @@
       "weight": 0.65,
       "label": "especially nondual / Vedantic trajectories",
       "transitionClass": "backward",
-      "stageDelta": -2
+      "stageDelta": -2,
+      "explanation": "Nondual and Vedantic Hindu thought identifies ultimate reality with Brahman beyond personal attributes. Following that path supports an impersonal absolute."
     },
     {
       "id": "e089",
@@ -2377,7 +2544,8 @@
       "type": "supports",
       "weight": 0.55,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "The hope that death and suffering will be undone is central to historic Christianity. Embracing that hope draws the person into the full historic faith."
     },
     {
       "id": "e127",
@@ -2451,13 +2619,13 @@
     {
       "id": "e134",
       "source": "c_cross",
-      "target": "p_evil",
+      "target": "p_evidential_evil",
       "type": "reframes",
       "weight": 0.35,
-      "label": "God enters suffering; does not eliminate evidential problem",
+      "label": "God enters suffering; does not show each evil serves a greater good",
       "transitionClass": "reinterpretation",
       "stageDelta": -6,
-      "explanation": "The cross places God inside suffering rather than above it. That changes how evil is faced, but it does not remove the evidential problem."
+      "explanation": "The cross places God inside suffering rather than above it. That changes how suffering is faced, but it does not show that each evil serves a greater good."
     },
     {
       "id": "e135",
@@ -2476,7 +2644,8 @@
       "type": "reframes",
       "weight": 0.25,
       "transitionClass": "reinterpretation",
-      "stageDelta": -6
+      "stageDelta": -6,
+      "explanation": "The hope of restoration extends to all creation, not only to humans. It places animal suffering inside a story of healing, though it does not explain why that suffering was allowed."
     },
     {
       "id": "e137",
@@ -2635,17 +2804,18 @@
       "type": "interprets",
       "weight": 0.75,
       "transitionClass": "lateral",
-      "stageDelta": 0
+      "stageDelta": 0,
+      "explanation": "Secular humanism has to say where morality comes from without God. It turns to naturalistic accounts that ground, reconstruct or deflate moral claims."
     },
     {
       "id": "e154",
       "source": "p_evil",
       "target": "a_naturalism",
       "type": "converges_on",
-      "weight": 0.85,
+      "weight": 0.5,
       "transitionClass": "forward",
       "stageDelta": 1,
-      "explanation": "Suffering that needs no divine reason is simplest to explain if there is no God. The problem of evil feeds the naturalistic-simplicity attractor."
+      "explanation": "If a good God and evil cannot both exist, theism is refuted outright and naturalism is left as the default. The pull is only as strong as the incompatibility premise, which free-will defenses contest."
     },
     {
       "id": "e155",
@@ -2664,7 +2834,8 @@
       "type": "converges_on",
       "weight": 0.9,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "Millions of years of animal pain before any human existed fit a blind natural process better than a good design. That feeds the naturalistic-simplicity attractor."
     },
     {
       "id": "e157",
@@ -2852,7 +3023,8 @@
       "type": "supports",
       "weight": 0.7,
       "transitionClass": "forward",
-      "stageDelta": 1
+      "stageDelta": 1,
+      "explanation": "If moral facts are real, persons seem to have intrinsic worth. Naturalism must explain that worth, which leaves a residual tension."
     },
     {
       "id": "e177",
@@ -2930,6 +3102,754 @@
       "label": "candidate for global explanatory fit",
       "transitionClass": "lateral",
       "stageDelta": null
+    },
+    {
+      "id": "e185",
+      "source": "s_agnostic_naturalism",
+      "target": "s_atheism",
+      "type": "transitions_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if the case against God seems decisive",
+      "explanation": "An agnostic naturalist who judges the case for God outweighed, not just unproven, moves from suspending judgment to denial. Atheism is a positive claim, so it carries its own burden of argument."
+    },
+    {
+      "id": "e186",
+      "source": "s_atheism",
+      "target": "s_agnostic_naturalism",
+      "type": "transitions_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if confidence in denial softens",
+      "explanation": "An atheist who grants that the arguments against God fall short of proof steps back to suspending judgment. Naturalism stays favored, but the verdict becomes open."
+    },
+    {
+      "id": "e187",
+      "source": "p_evidential_evil",
+      "target": "s_atheism",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If the scale of suffering is much more likely without God than with one, it counts as evidence that there is no God. That supports atheism, not just doubt."
+    },
+    {
+      "id": "e188",
+      "source": "arg_contingency",
+      "target": "s_classical_theism",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If contingent things need a sufficient reason, the chain ends in something that exists necessarily. Classical theism identifies that necessary being with God as the ground of being."
+    },
+    {
+      "id": "e189",
+      "source": "s_transcendence",
+      "target": "s_classical_theism",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Once a transcendent reality is plausible, one natural way to understand it is as being itself, simple and unconditioned. That is the God of classical theism."
+    },
+    {
+      "id": "e190",
+      "source": "s_classical_theism",
+      "target": "s_personal_theism",
+      "type": "transitions_to",
+      "weight": 0.55,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if the ground of being is also personal",
+      "explanation": "Classical theists already ascribe intellect and will to the ground of being, analogically. Emphasizing a God who knows, loves and acts in history brings the view into personal theism."
+    },
+    {
+      "id": "e191",
+      "source": "s_personal_theism",
+      "target": "s_classical_theism",
+      "type": "transitions_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Asking what a personal God must be to be truly ultimate leads to simplicity, necessity and self-existence. Personal theism deepens into the classical account of God as being itself."
+    },
+    {
+      "id": "e192",
+      "source": "s_classical_theism",
+      "target": "s_agnostic_theism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if the metaphysical arguments feel inconclusive",
+      "explanation": "If the arguments for a necessary ground seem valid but their premises uncertain, confidence gives way. God remains plausible, but commitment becomes tentative."
+    },
+    {
+      "id": "e193",
+      "source": "s_agnostic_theism",
+      "target": "s_classical_theism",
+      "type": "transitions_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if the metaphysical arguments firm up",
+      "explanation": "If the contingency or ontological argument comes to seem sound, uncertain theism can settle on God as the necessary ground of being. The route runs through metaphysics rather than history or experience."
+    },
+    {
+      "id": "e194",
+      "source": "s_mindlike_ground",
+      "target": "s_deism",
+      "type": "supports",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "A mind-like ground can be accepted without any belief that it intervenes or reveals itself. Deism holds that the world has a rational source that leaves it to run."
+    },
+    {
+      "id": "e195",
+      "source": "s_classical_theism",
+      "target": "s_deism",
+      "type": "transitions_to",
+      "weight": 0.3,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if no revelation seems credible",
+      "explanation": "If the ground of being is accepted but claims of revelation and miracle seem unconvincing, God becomes the author of the world rather than an actor in it. That is deism."
+    },
+    {
+      "id": "e196",
+      "source": "s_agnostic_theism",
+      "target": "s_deism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Uncertain theism can resolve by keeping a creator while dropping a God who acts in history. Deism asks less of the evidence than personal theism does."
+    },
+    {
+      "id": "e197",
+      "source": "p_hiddenness",
+      "target": "s_deism",
+      "type": "supports",
+      "weight": 0.5,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If God seems silent, a creator who does not intervene explains that silence well. Hiddenness is a problem for a loving, present God but not for a distant one."
+    },
+    {
+      "id": "e198",
+      "source": "s_deism",
+      "target": "s_personal_theism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if revelation or experience lands",
+      "explanation": "If a credible revelation or a personal religious experience lands, the distant creator starts to look like one who speaks and acts. Deism opens into personal theism."
+    },
+    {
+      "id": "e199",
+      "source": "s_deism",
+      "target": "s_agnostic_naturalism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "A creator who never acts leaves no trace the world cannot explain on its own. On grounds of simplicity, some deists drop the creator and settle into naturalism."
+    },
+    {
+      "id": "e200",
+      "source": "r_judaism",
+      "target": "s_settled_judaism",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Judaism can be embraced as a complete way of life under the covenant, with Torah and the God of Israel. It is a settled position in its own right, not only a step toward Christianity."
+    },
+    {
+      "id": "e201",
+      "source": "s_settled_judaism",
+      "target": "h_resurrection_question",
+      "type": "raises_question",
+      "weight": 0.35,
+      "transitionClass": "forward",
+      "stageDelta": 2,
+      "explanation": "Jewish commitment still meets the Christian claim that a Jewish teacher rose from the dead. Weighing that claim puts the historical question of the resurrection in view."
+    },
+    {
+      "id": "e202",
+      "source": "s_settled_judaism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": null,
+      "label": "candidate for global explanatory fit",
+      "explanation": "Settled Judaism offers its own account of God, law, history and suffering. It competes with the other settled positions for the best overall fit."
+    },
+    {
+      "id": "e203",
+      "source": "r_islam",
+      "target": "s_settled_islam",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Islam can be embraced as complete submission to one God through the Qur'an and the Prophet. It is a settled position of strict monotheism, not a waystation."
+    },
+    {
+      "id": "e204",
+      "source": "s_settled_islam",
+      "target": "h_crucifixion",
+      "type": "raises_question",
+      "weight": 0.4,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "The Qur'an (4:157) is traditionally read as denying that Jesus was crucified, while most historians treat the crucifixion as near certain. A settled Muslim weighs that reading against the historical record, and some interpreters read the verse more narrowly."
+    },
+    {
+      "id": "e205",
+      "source": "s_settled_islam",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": null,
+      "label": "candidate for global explanatory fit",
+      "explanation": "Settled Islam offers its own account of God, revelation, law and judgment. It competes with the other settled positions for the best overall fit."
+    },
+    {
+      "id": "e206",
+      "source": "r_buddhism",
+      "target": "s_impersonal_absolute",
+      "type": "reframes",
+      "weight": 0.4,
+      "transitionClass": "backward",
+      "stageDelta": -2,
+      "explanation": "Some Buddhist traditions point to an unconditioned reality such as nirvana or Buddha-nature, without a creator or permanent self. That reframes the ultimate as impersonal, though Madhyamaka denies any absolute ground."
+    },
+    {
+      "id": "e207",
+      "source": "s_agnostic_naturalism",
+      "target": "s_agnostic_theism",
+      "type": "transitions_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if defeaters weaken or tensions accumulate",
+      "explanation": "If the case from evil and hiddenness loses force, or the tensions around consciousness and value keep building, naturalism no longer looks clearly best. The person reopens theism while still unsure."
+    },
+    {
+      "id": "e208",
+      "source": "t_naturalism_consciousness",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "If consciousness keeps resisting physical explanation, some conclude mind is fundamental, as panpsychism, idealism or a cosmic mind. Only the last makes a mind-like ground of reality a live option."
+    },
+    {
+      "id": "e209",
+      "source": "t_naturalism_existence",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "If brute existence and the universe's intelligibility still lack explanation, a rational ground becomes attractive. Naturalists reply that explanation must stop at some brute fact, and theism has one too."
+    },
+    {
+      "id": "e210",
+      "source": "t_naturalism_normativity",
+      "target": "m_objective_value",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "backward",
+      "stageDelta": -1,
+      "explanation": "If reasons and the norms of good thinking will not reduce to physical facts, then some normative facts are real. That reopens moral realism."
+    },
+    {
+      "id": "e211",
+      "source": "t_naturalism_value",
+      "target": "m_intrinsic_personhood",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "backward",
+      "stageDelta": -1,
+      "explanation": "If persons seem to have a worth that no evolutionary story fully explains, the naturalist is led to treat that worth as intrinsic. Intrinsic dignity then asks for a ground."
+    },
+    {
+      "id": "e212",
+      "source": "m_constructed_meaning",
+      "target": "m_intrinsic_personhood",
+      "type": "reframes",
+      "weight": 0.35,
+      "transitionClass": "backward",
+      "stageDelta": -1,
+      "label": "what grounds meaning?",
+      "explanation": "Constructed meaning works in practice, but some lives and choices seem to matter whatever anyone decides. Pressing that question leads toward the intrinsic worth of persons."
+    },
+    {
+      "id": "e213",
+      "source": "m_constructed_meaning",
+      "target": "a_love",
+      "type": "reframes",
+      "weight": 0.3,
+      "transitionClass": "forward",
+      "stageDelta": 5,
+      "label": "what grounds meaning?",
+      "explanation": "Much of the meaning people build centers on love, which often feels received rather than invented. That points meaning toward love as something found in reality, not only made."
+    },
+    {
+      "id": "e214",
+      "source": "m_naturalistic_morality",
+      "target": "m_objective_value",
+      "type": "reframes",
+      "weight": 0.35,
+      "transitionClass": "backward",
+      "stageDelta": -1,
+      "explanation": "Naturalistic moral realists hold that moral facts are real. Taking that realism seriously raises the broader question of objective value and what grounds it."
+    },
+    {
+      "id": "e215",
+      "source": "m_naturalistic_morality",
+      "target": "t_naturalism_normativity",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "If moral facts are identified with natural facts, it remains unclear how natural facts can bind or give reasons. That keeps the tension around normativity alive."
+    },
+    {
+      "id": "e216",
+      "source": "s_naturalism_competitive",
+      "target": "s_agnostic_naturalism",
+      "type": "transitions_to",
+      "weight": 0.55,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "If naturalism stays highly competitive after honest inquiry, many settle there while keeping the deepest questions open. That is agnostic naturalism."
+    },
+    {
+      "id": "e217",
+      "source": "s_naturalism_competitive",
+      "target": "s_atheism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Some judge that naturalism is not only competitive but clearly the better explanation. They conclude that there is no God."
+    },
+    {
+      "id": "e218",
+      "source": "s_impersonal_absolute",
+      "target": "s_personal_theism",
+      "type": "transitions_to",
+      "weight": 0.3,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "if the absolute seems to know and love",
+      "explanation": "If ultimate reality seems to include awareness, will and love, the impersonal picture looks incomplete. The absolute starts to look personal."
+    },
+    {
+      "id": "e219",
+      "source": "s_impersonal_absolute",
+      "target": "s_classical_theism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "An impersonal absolute and the classical God share much: both are simple, necessary and beyond ordinary categories. Treating that absolute as the source of the world moves the view toward classical theism."
+    },
+    {
+      "id": "e220",
+      "source": "s_agnostic_theism",
+      "target": "s_impersonal_absolute",
+      "type": "transitions_to",
+      "weight": 0.3,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Uncertain theism can resolve by keeping a transcendent reality while letting go of a personal God. Vedantic and some mystical traditions describe the absolute that way."
+    },
+    {
+      "id": "e221",
+      "source": "s_closed_posture",
+      "target": "s_reopened_inquiry",
+      "type": "transitions_to",
+      "weight": 0.3,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "label": "after the harm is addressed",
+      "explanation": "Closure is often a defense against real harm. When that harm is named and addressed, the person can afford to engage the questions again."
+    },
+    {
+      "id": "e222",
+      "source": "exp_forgiveness",
+      "target": "s_reopened_inquiry",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "global_modifier",
+      "stageDelta": null,
+      "explanation": "Forgiving, or being forgiven, can lower the defenses that closure put up. Reconciliation makes it safe to reopen questions that had been shut."
+    },
+    {
+      "id": "e223",
+      "source": "s_reopened_inquiry",
+      "target": "s_radical_uncertainty",
+      "type": "transitions_to",
+      "weight": 0.5,
+      "transitionClass": "backward",
+      "stageDelta": -2,
+      "explanation": "Reopened inquiry often starts from not knowing. The person returns to open uncertainty rather than straight to a new position."
+    },
+    {
+      "id": "e224",
+      "source": "s_reopened_inquiry",
+      "target": "s_agnostic_theism",
+      "type": "transitions_to",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Some who reopen the questions find that God is again a live possibility. They take up theism tentatively, without the old certainties."
+    },
+    {
+      "id": "e225",
+      "source": "p_textual_tension",
+      "target": "c_scripture",
+      "type": "weakens",
+      "weight": -0.4,
+      "transitionClass": "defeater",
+      "stageDelta": 6,
+      "explanation": "Apparent contradictions and hard passages make it harder to read scripture as one unified witness to Christ. They press against the Christian rereading of scripture."
+    },
+    {
+      "id": "e226",
+      "source": "p_textual_tension",
+      "target": "s_christian_with_tension",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "forward",
+      "stageDelta": 7,
+      "explanation": "Many believers keep their commitment while living with unresolved textual problems. Those problems become part of what Christian commitment carries."
+    },
+    {
+      "id": "e227",
+      "source": "q_reality",
+      "target": "arg_fine_tuning",
+      "type": "branches_to",
+      "weight": 0.6,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Asking what is ultimately real includes asking why the physical constants permit life at all. That opens the fine-tuning argument."
+    },
+    {
+      "id": "e228",
+      "source": "arg_fine_tuning",
+      "target": "s_mindlike_ground",
+      "type": "supports",
+      "weight": 0.5,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If life-permitting constants are far more likely given a designing mind than given chance, fine-tuning is evidence for a mind-like ground. Multiverse and observer-selection replies contest how much it shows."
+    },
+    {
+      "id": "e229",
+      "source": "arg_fine_tuning",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If the laws and constants need an explanation beyond themselves, that explanation lies outside the physical universe. Transcendence becomes plausible."
+    },
+    {
+      "id": "e230",
+      "source": "q_reality",
+      "target": "arg_ontological",
+      "type": "branches_to",
+      "weight": 0.4,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Asking what is ultimately real leads to whether a greatest possible being could fail to exist. That is the question of the ontological argument."
+    },
+    {
+      "id": "e231",
+      "source": "arg_ontological",
+      "target": "s_classical_theism",
+      "type": "supports",
+      "weight": 0.4,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If a maximally great being is even possible, modal versions of the argument conclude that it exists necessarily. Many find the possibility premise the weak point, so the pull is modest."
+    },
+    {
+      "id": "e232",
+      "source": "exp_religious",
+      "target": "arg_religious_experience",
+      "type": "supports",
+      "weight": 0.7,
+      "transitionClass": "global_modifier",
+      "stageDelta": null,
+      "explanation": "Experiences of divine presence are reported across cultures and eras. Treating them as evidence turns experience into an argument."
+    },
+    {
+      "id": "e233",
+      "source": "q_knowledge",
+      "target": "arg_religious_experience",
+      "type": "branches_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Asking what can be known includes whether experience can be trusted when it seems to show God. By the principle of credulity, things are presumed to be as they appear unless there is reason to doubt."
+    },
+    {
+      "id": "e234",
+      "source": "arg_religious_experience",
+      "target": "s_transcendence",
+      "type": "supports",
+      "weight": 0.5,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If religious experiences are trusted unless defeated, as ordinary perception is, their frequency supports a transcendent reality. Critics point to their diversity and to natural explanations."
+    },
+    {
+      "id": "e235",
+      "source": "arg_religious_experience",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "Many religious experiences feel like meeting someone, not something. If they are veridical, ultimate reality is personal."
+    },
+    {
+      "id": "e236",
+      "source": "q_knowledge",
+      "target": "arg_reformed_epistemology",
+      "type": "branches_to",
+      "weight": 0.45,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Asking what can be known includes which beliefs need argument at all. Some beliefs, like belief in other minds, seem rational without proof."
+    },
+    {
+      "id": "e237",
+      "source": "arg_reformed_epistemology",
+      "target": "s_personal_theism",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "Reformed epistemology holds that belief in God can be properly basic, like trust in memory or other minds. A believer can then be rational without winning every argument."
+    },
+    {
+      "id": "e238",
+      "source": "arg_reformed_epistemology",
+      "target": "p_argument_fatigue",
+      "type": "undercuts",
+      "weight": -0.4,
+      "transitionClass": "defeater",
+      "stageDelta": null,
+      "explanation": "If belief in God does not rest on winning debates, endless argument loses its power to wear faith down. That undercuts argument fatigue."
+    },
+    {
+      "id": "e239",
+      "source": "q_knowledge",
+      "target": "arg_reason",
+      "type": "branches_to",
+      "weight": 0.5,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "Asking what can be known includes whether our reasoning can be trusted. That opens the argument from reason."
+    },
+    {
+      "id": "e240",
+      "source": "arg_reason",
+      "target": "t_naturalism_normativity",
+      "type": "supports",
+      "weight": 0.55,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If beliefs are fully caused by non-rational processes, it is hard to see how they are held for good reasons. That sharpens the tension around normativity within naturalism."
+    },
+    {
+      "id": "e241",
+      "source": "arg_reason",
+      "target": "a_naturalism",
+      "type": "weakens",
+      "weight": -0.4,
+      "transitionClass": "defeater",
+      "stageDelta": 1,
+      "explanation": "If naturalism undercuts trust in the reasoning used to argue for it, its simplicity comes at a cost. Naturalists reply that natural selection favors reliable cognition."
+    },
+    {
+      "id": "e242",
+      "source": "p_evolution",
+      "target": "p_evolutionary_debunking",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "If our faculties were shaped for survival, it is fair to ask whether they track truth about morality and religion. That is the evolutionary debunking argument."
+    },
+    {
+      "id": "e243",
+      "source": "p_evolutionary_debunking",
+      "target": "m_objective_value",
+      "type": "weakens",
+      "weight": -0.45,
+      "transitionClass": "defeater",
+      "stageDelta": 0,
+      "explanation": "If moral intuitions were selected for usefulness, their seeming truth may be explained without moral facts. Realists reply that the same argument would undercut many other beliefs."
+    },
+    {
+      "id": "e244",
+      "source": "p_evolutionary_debunking",
+      "target": "arg_religious_experience",
+      "type": "weakens",
+      "weight": -0.4,
+      "transitionClass": "defeater",
+      "stageDelta": 0,
+      "explanation": "If a tendency to detect agents and purposes was adaptive, religious experience may be explained without God. Believers answer that explaining how a belief arises does not show it false."
+    },
+    {
+      "id": "e245",
+      "source": "p_evolutionary_debunking",
+      "target": "m_naturalistic_morality",
+      "type": "supports",
+      "weight": 0.45,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "If evolution explains our moral sense without moral facts, morality looks like an adaptation rather than a discovery. That mainly supports anti-realist or constructivist naturalism, since the same dilemma presses naturalist realists."
+    },
+    {
+      "id": "e246",
+      "source": "exp_suffering",
+      "target": "p_evidential_evil",
+      "type": "supports",
+      "weight": 0.9,
+      "transitionClass": "global_modifier",
+      "stageDelta": null,
+      "explanation": "Suffering on the scale and in the forms we see raises a question of probability. It can count as evidence against God even if God and evil are logically compatible."
+    },
+    {
+      "id": "e247",
+      "source": "p_evidential_evil",
+      "target": "s_agnostic_naturalism",
+      "type": "supports",
+      "weight": 0.8,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "Suffering that appears to serve no greater good is more expected if there is no God. Many who find that weighty but not decisive lean naturalist while staying unsure."
+    },
+    {
+      "id": "e248",
+      "source": "p_evidential_evil",
+      "target": "s_personal_theism",
+      "type": "weakens",
+      "weight": -0.65,
+      "transitionClass": "defeater",
+      "stageDelta": 1,
+      "explanation": "If God would prevent pointless suffering, and some suffering seems pointless, a good and powerful God becomes less probable. Skeptical theists reply that we are poorly placed to judge which evils are pointless."
+    },
+    {
+      "id": "e249",
+      "source": "s_christian_with_tension",
+      "target": "s_agnostic_theism",
+      "type": "transitions_to",
+      "weight": 0.3,
+      "transitionClass": "backward",
+      "stageDelta": -6,
+      "label": "if the tensions outweigh the case",
+      "explanation": "If evil, hiddenness and textual problems come to outweigh the positive case, commitment loosens. The person steps back to an uncertain theism."
+    },
+    {
+      "id": "e250",
+      "source": "s_atheism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.7,
+      "transitionClass": "lateral",
+      "stageDelta": null,
+      "label": "candidate for global explanatory fit",
+      "explanation": "Atheism offers a complete account of the world without God. It competes with the other settled positions for the best overall fit."
+    },
+    {
+      "id": "e251",
+      "source": "s_personal_theism",
+      "target": "p_evidential_evil",
+      "type": "raises_question",
+      "weight": 0.5,
+      "transitionClass": "backward",
+      "stageDelta": -1,
+      "explanation": "Believing in a God who is all-powerful and wholly good is what makes suffering a problem at all. The more seriously someone holds personal theism, the sharper the evidential problem becomes."
+    },
+    {
+      "id": "e252",
+      "source": "m_objective_value",
+      "target": "m_intrinsic_personhood",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "lateral",
+      "stageDelta": 0,
+      "explanation": "If moral facts are real, among the most secure of them is that persons must not be used as mere things. Moral realism makes the intrinsic dignity of persons hard to deny."
+    },
+    {
+      "id": "e253",
+      "source": "s_historic_christianity",
+      "target": "r_judaism",
+      "type": "raises_question",
+      "weight": 0.35,
+      "transitionClass": "lateral",
+      "stageDelta": -4,
+      "explanation": "Jewish tradition holds that the messianic age has not arrived and that God is not incarnate. A Christian has to answer why Israel's own interpreters did not see Jesus as the promised messiah."
+    },
+    {
+      "id": "e254",
+      "source": "s_historic_christianity",
+      "target": "r_islam",
+      "type": "raises_question",
+      "weight": 0.3,
+      "transitionClass": "lateral",
+      "stageDelta": -4,
+      "explanation": "Islam presents itself as restoring a strict monotheism that the doctrine of the Trinity obscured. A Christian has to show that the Trinity is monotheism rather than a departure from it."
+    },
+    {
+      "id": "e255",
+      "source": "s_classical_theism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.65,
+      "transitionClass": "lateral",
+      "stageDelta": null,
+      "label": "candidate for global explanatory fit",
+      "explanation": "Classical theism explains why anything exists at all by grounding it in a necessary being. It competes with the other settled positions for the best overall fit."
+    },
+    {
+      "id": "e256",
+      "source": "s_deism",
+      "target": "a_coherence",
+      "type": "competes_with",
+      "weight": 0.55,
+      "transitionClass": "lateral",
+      "stageDelta": null,
+      "label": "candidate for global explanatory fit",
+      "explanation": "Deism explains the order of the world with a creator while asking nothing of miracle or revelation. It competes with the other settled positions for the best overall fit."
+    },
+    {
+      "id": "e257",
+      "source": "p_evidential_evil",
+      "target": "s_agnostic_theism",
+      "type": "supports",
+      "weight": 0.6,
+      "transitionClass": "forward",
+      "stageDelta": 1,
+      "explanation": "Suffering that seems pointless lowers confidence in God without settling the question. Many stay open to God but can no longer commit."
     }
   ],
   "cycles": [
@@ -3091,7 +4011,7 @@
         "e074",
         "e076"
       ],
-      "description": "From consciousness, the path reaches personal theism, then turns toward agnostic classical-theism instead of revelation, and from there drifts to agnostic naturalism."
+      "description": "From consciousness, the path reaches personal theism, then turns toward tentative theism instead of revelation, and from there drifts to agnostic naturalism."
     },
     {
       "id": "tour_suffering_meaning",
@@ -3102,7 +4022,7 @@
         "e151",
         "e152"
       ],
-      "description": "The shortest collapse in the map: the problem of evil leads directly to agnostic naturalism, then secular humanism, and ends at meaning constructed rather than discovered, a node with no outgoing edges."
+      "description": "The shortest collapse in the map: the logical problem of evil leads directly to agnostic naturalism, then secular humanism, and ends at meaning constructed rather than discovered. From there the only ways on are questions about what grounds meaning."
     },
     {
       "id": "tour_personhood_love",
@@ -3155,7 +4075,8 @@
         "e018",
         "e047",
         "e052",
-        "e074",
+        "e251",
+        "e257",
         "e081",
         "e082",
         "e084",
@@ -3171,7 +4092,7 @@
         "e123",
         "e163"
       ],
-      "description": "The longest route in the map from Human person inside reality to Christian commitment with unresolved tensions that never revisits a concept: 19 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+      "description": "The longest route in the map from Human person inside reality to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
     },
     {
       "id": "journey_human_agent_m_constructed_meaning",
@@ -3182,8 +4103,7 @@
         "e018",
         "e047",
         "e052",
-        "e074",
-        "e081",
+        "e080",
         "e082",
         "e084",
         "e091",
@@ -3194,14 +4114,13 @@
         "e107",
         "e113",
         "e114",
-        "e117",
-        "e134",
-        "e154",
-        "e158",
+        "e115",
+        "e137",
+        "e063",
         "e151",
         "e152"
       ],
-      "description": "The longest route in the map from Human person inside reality to Meaning constructed rather than discovered that never revisits a concept: 22 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+      "description": "The longest route in the map from Human person inside reality to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
     },
     {
       "id": "journey_arg_beauty_s_christian_with_tension",
@@ -3209,8 +4128,11 @@
       "label": "From beauty to committed faith, with tensions",
       "edgeIds": [
         "e044",
-        "e050",
-        "e074",
+        "e189",
+        "e190",
+        "e251",
+        "e247",
+        "e207",
         "e081",
         "e082",
         "e084",
@@ -3226,7 +4148,7 @@
         "e123",
         "e163"
       ],
-      "description": "The longest route in the map from Aesthetic argument to Christian commitment with unresolved tensions that never revisits a concept: 17 steps. Along the way it passes Transcendence plausible, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+      "description": "The longest route in the map from Aesthetic argument to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Transcendence plausible, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
     },
     {
       "id": "journey_arg_beauty_m_constructed_meaning",
@@ -3234,215 +4156,9 @@
       "label": "From beauty to constructed meaning",
       "edgeIds": [
         "e044",
-        "e050",
-        "e074",
-        "e081",
-        "e082",
-        "e084",
-        "e091",
-        "e092",
-        "e093",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e117",
-        "e134",
-        "e154",
-        "e158",
-        "e151",
-        "e152"
-      ],
-      "description": "The longest route in the map from Aesthetic argument to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Transcendence plausible, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_arg_personhood_s_christian_with_tension",
-      "kind": "journey",
-      "label": "From personhood to committed faith, with tensions",
-      "edgeIds": [
-        "e049",
-        "e052",
-        "e074",
-        "e081",
-        "e082",
-        "e084",
-        "e091",
-        "e092",
-        "e093",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e115",
-        "e123",
-        "e163"
-      ],
-      "description": "The longest route in the map from Argument from personhood to Christian commitment with unresolved tensions that never revisits a concept: 17 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_arg_personhood_m_constructed_meaning",
-      "kind": "journey",
-      "label": "From personhood to constructed meaning",
-      "edgeIds": [
-        "e056",
-        "e130",
-        "e131",
-        "e113",
-        "e114",
-        "e117",
-        "e134",
-        "e077",
-        "e079",
-        "e048",
-        "e052",
-        "e074",
-        "e081",
-        "e082",
-        "e084",
-        "e091",
-        "e092",
-        "e093",
-        "e099",
-        "e108",
-        "e151",
-        "e152"
-      ],
-      "description": "The longest route in the map from Argument from personhood to Meaning constructed rather than discovered that never revisits a concept: 22 steps. Along the way it passes Attractor: Love, Christianity leading hypothesis, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, and What best explains the resurrection data?. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_p_pluralism_s_christian_with_tension",
-      "kind": "journey",
-      "label": "From religious diversity to committed faith, with tensions",
-      "edgeIds": [
-        "e073",
-        "e075",
+        "e189",
+        "e190",
         "e080",
-        "e082",
-        "e084",
-        "e091",
-        "e092",
-        "e093",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e115",
-        "e123",
-        "e163"
-      ],
-      "description": "The longest route in the map from Religious diversity to Christian commitment with unresolved tensions that never revisits a concept: 16 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_p_pluralism_m_constructed_meaning",
-      "kind": "journey",
-      "label": "From religious diversity to constructed meaning",
-      "edgeIds": [
-        "e073",
-        "e075",
-        "e080",
-        "e082",
-        "e084",
-        "e091",
-        "e092",
-        "e093",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e117",
-        "e134",
-        "e154",
-        "e158",
-        "e151",
-        "e152"
-      ],
-      "description": "The longest route in the map from Religious diversity to Meaning constructed rather than discovered that never revisits a concept: 19 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_h_empty_tomb_s_christian_with_tension",
-      "kind": "journey",
-      "label": "From the empty tomb to committed faith, with tensions",
-      "edgeIds": [
-        "e094",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e115",
-        "e123",
-        "e163"
-      ],
-      "description": "The longest route in the map from Empty tomb tradition to Christian commitment with unresolved tensions that never revisits a concept: 9 steps. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_h_empty_tomb_m_constructed_meaning",
-      "kind": "journey",
-      "label": "From the empty tomb to constructed meaning",
-      "edgeIds": [
-        "e094",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e117",
-        "e134",
-        "e077",
-        "e079",
-        "e048",
-        "e052",
-        "e074",
-        "e076",
-        "e151",
-        "e152"
-      ],
-      "description": "The longest route in the map from Empty tomb tradition to Meaning constructed rather than discovered that never revisits a concept: 16 steps. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Personal theism. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_c_restoration_s_christian_with_tension",
-      "kind": "journey",
-      "label": "From resurrection hope to committed faith, with tensions",
-      "edgeIds": [
-        "e135",
-        "e077",
-        "e079",
-        "e048",
-        "e052",
-        "e074",
-        "e081",
-        "e082",
-        "e084",
-        "e091",
-        "e092",
-        "e093",
-        "e100",
-        "e106",
-        "e107",
-        "e113",
-        "e114",
-        "e115",
-        "e123",
-        "e163"
-      ],
-      "description": "The longest route in the map from Resurrection and cosmic restoration to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
-    },
-    {
-      "id": "journey_c_restoration_m_constructed_meaning",
-      "kind": "journey",
-      "label": "From resurrection hope to constructed meaning",
-      "edgeIds": [
-        "e135",
-        "e077",
-        "e079",
-        "e048",
-        "e052",
-        "e074",
-        "e081",
         "e082",
         "e084",
         "e091",
@@ -3460,7 +4176,385 @@
         "e151",
         "e152"
       ],
-      "description": "The longest route in the map from Resurrection and cosmic restoration to Meaning constructed rather than discovered that never revisits a concept: 23 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+      "description": "The longest route in the map from Aesthetic argument to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Transcendence plausible, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_arg_personhood_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From personhood to committed faith, with tensions",
+      "edgeIds": [
+        "e056",
+        "e161",
+        "e153",
+        "e215",
+        "e210",
+        "e053",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Argument from personhood to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_arg_personhood_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From personhood to constructed meaning",
+      "edgeIds": [
+        "e049",
+        "e052",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163",
+        "e249",
+        "e076",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Argument from personhood to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_p_pluralism_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From religious diversity to committed faith, with tensions",
+      "edgeIds": [
+        "e064",
+        "e151",
+        "e153",
+        "e214",
+        "e252",
+        "e054",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Religious diversity to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_p_pluralism_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From religious diversity to constructed meaning",
+      "edgeIds": [
+        "e073",
+        "e193",
+        "e190",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e137",
+        "e155",
+        "e158",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Religious diversity to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_h_empty_tomb_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From the empty tomb to committed faith, with tensions",
+      "edgeIds": [
+        "e094",
+        "e100",
+        "e106",
+        "e110",
+        "e251",
+        "e247",
+        "e151",
+        "e153",
+        "e215",
+        "e210",
+        "e079",
+        "e176",
+        "e211",
+        "e130",
+        "e131",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Empty tomb tradition to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, Personal theism, Attractor: Love, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_h_empty_tomb_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From the empty tomb to constructed meaning",
+      "edgeIds": [
+        "e094",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163",
+        "e249",
+        "e081",
+        "e082",
+        "e086",
+        "e088",
+        "e219",
+        "e190",
+        "e251",
+        "e247",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Empty tomb tradition to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, Revelation becomes a live possibility, Comparative religious investigation, and Personal theism. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_c_restoration_s_christian_with_tension",
+      "kind": "journey",
+      "label": "From resurrection hope to committed faith, with tensions",
+      "edgeIds": [
+        "e136",
+        "e156",
+        "e158",
+        "e207",
+        "e193",
+        "e190",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e123",
+        "e163"
+      ],
+      "description": "The longest route in the map from Resurrection and cosmic restoration to Christian commitment with unresolved tensions that never revisits a concept: 20 steps. Along the way it passes Attractor: Naturalistic simplicity, Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_c_restoration_m_constructed_meaning",
+      "kind": "journey",
+      "label": "From resurrection hope to constructed meaning",
+      "edgeIds": [
+        "e126",
+        "e254",
+        "e089",
+        "e080",
+        "e082",
+        "e084",
+        "e091",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e113",
+        "e114",
+        "e115",
+        "e137",
+        "e155",
+        "e158",
+        "e151",
+        "e152"
+      ],
+      "description": "The longest route in the map from Resurrection and cosmic restoration to Meaning constructed rather than discovered that never revisits a concept: 20 steps. Along the way it passes Personal theism, Revelation becomes a live possibility, Comparative religious investigation, What best explains the resurrection data?, Attractor: Resurrection, Christianity leading hypothesis, and Attractor: Naturalistic simplicity. Long routes double back through the core, the way a lived journey does."
+    },
+    {
+      "id": "journey_evidentialist_human_agent_s_christian_with_tension",
+      "kind": "journey",
+      "profile": "evidentialist",
+      "label": "Evidentialist: from a person inside reality to committed faith, with tensions",
+      "edgeIds": [
+        "e003",
+        "e021",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e122",
+        "e163"
+      ],
+      "description": "The most persuasive route for the evidentialist profile from Human person inside reality to Christian commitment with unresolved tensions: 9 steps, keeping as much of each argument's pull as this person feels it. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis."
+    },
+    {
+      "id": "journey_evidentialist_human_agent_m_constructed_meaning",
+      "kind": "journey",
+      "profile": "evidentialist",
+      "label": "Evidentialist: from a person inside reality to constructed meaning",
+      "edgeIds": [
+        "e008",
+        "e246",
+        "e247",
+        "e151",
+        "e152"
+      ],
+      "description": "The most persuasive route for the evidentialist profile from Human person inside reality to Meaning constructed rather than discovered: 5 steps, keeping as much of each argument's pull as this person feels it."
+    },
+    {
+      "id": "journey_existential_human_agent_s_christian_with_tension",
+      "kind": "journey",
+      "profile": "existential",
+      "label": "Existential: from a person inside reality to committed faith, with tensions",
+      "edgeIds": [
+        "e005",
+        "e024",
+        "e131",
+        "e122",
+        "e163"
+      ],
+      "description": "The most persuasive route for the existential profile from Human person inside reality to Christian commitment with unresolved tensions: 5 steps, keeping as much of each argument's pull as this person feels it. Along the way it passes Attractor: Love, and Christianity leading hypothesis."
+    },
+    {
+      "id": "journey_existential_human_agent_m_constructed_meaning",
+      "kind": "journey",
+      "profile": "existential",
+      "label": "Existential: from a person inside reality to constructed meaning",
+      "edgeIds": [
+        "e008",
+        "e246",
+        "e247",
+        "e151",
+        "e152"
+      ],
+      "description": "The most persuasive route for the existential profile from Human person inside reality to Meaning constructed rather than discovered: 5 steps, keeping as much of each argument's pull as this person feels it."
+    },
+    {
+      "id": "journey_moral_realist_human_agent_s_christian_with_tension",
+      "kind": "journey",
+      "profile": "moral_realist",
+      "label": "Moral realist: from a person inside reality to committed faith, with tensions",
+      "edgeIds": [
+        "e007",
+        "e028",
+        "e252",
+        "e130",
+        "e131",
+        "e122",
+        "e163"
+      ],
+      "description": "The most persuasive route for the moral realist profile from Human person inside reality to Christian commitment with unresolved tensions: 7 steps, keeping as much of each argument's pull as this person feels it. Along the way it passes Attractor: Love, and Christianity leading hypothesis."
+    },
+    {
+      "id": "journey_moral_realist_human_agent_m_constructed_meaning",
+      "kind": "journey",
+      "profile": "moral_realist",
+      "label": "Moral realist: from a person inside reality to constructed meaning",
+      "edgeIds": [
+        "e007",
+        "e028",
+        "e252",
+        "e161",
+        "e152"
+      ],
+      "description": "The most persuasive route for the moral realist profile from Human person inside reality to Meaning constructed rather than discovered: 5 steps, keeping as much of each argument's pull as this person feels it."
+    },
+    {
+      "id": "journey_empiricist_human_agent_s_christian_with_tension",
+      "kind": "journey",
+      "profile": "empiricist",
+      "label": "Empiricist: from a person inside reality to committed faith, with tensions",
+      "edgeIds": [
+        "e003",
+        "e021",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e122",
+        "e163"
+      ],
+      "description": "The most persuasive route for the empiricist profile from Human person inside reality to Christian commitment with unresolved tensions: 9 steps, keeping as much of each argument's pull as this person feels it. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis."
+    },
+    {
+      "id": "journey_empiricist_human_agent_m_constructed_meaning",
+      "kind": "journey",
+      "profile": "empiricist",
+      "label": "Empiricist: from a person inside reality to constructed meaning",
+      "edgeIds": [
+        "e008",
+        "e246",
+        "e247",
+        "e151",
+        "e152"
+      ],
+      "description": "The most persuasive route for the empiricist profile from Human person inside reality to Meaning constructed rather than discovered: 5 steps, keeping as much of each argument's pull as this person feels it."
+    },
+    {
+      "id": "journey_rationalist_human_agent_s_christian_with_tension",
+      "kind": "journey",
+      "profile": "rationalist",
+      "label": "Rationalist: from a person inside reality to committed faith, with tensions",
+      "edgeIds": [
+        "e003",
+        "e021",
+        "e092",
+        "e093",
+        "e100",
+        "e106",
+        "e107",
+        "e122",
+        "e163"
+      ],
+      "description": "The most persuasive route for the rationalist profile from Human person inside reality to Christian commitment with unresolved tensions: 9 steps, keeping as much of each argument's pull as this person feels it. Along the way it passes What best explains the resurrection data?, Attractor: Resurrection, and Christianity leading hypothesis."
+    },
+    {
+      "id": "journey_rationalist_human_agent_m_constructed_meaning",
+      "kind": "journey",
+      "profile": "rationalist",
+      "label": "Rationalist: from a person inside reality to constructed meaning",
+      "edgeIds": [
+        "e013",
+        "e057",
+        "e216",
+        "e151",
+        "e152"
+      ],
+      "description": "The most persuasive route for the rationalist profile from Human person inside reality to Meaning constructed rather than discovered: 5 steps, keeping as much of each argument's pull as this person feels it."
     },
     {
       "id": "return_other_faiths",
@@ -3471,7 +4565,7 @@
         "e114",
         "e117",
         "e134",
-        "e070",
+        "e257",
         "e081",
         "e082",
         "e085",
@@ -3508,6 +4602,173 @@
         "e163"
       ],
       "description": "Someone persuaded of Christianity reflects on the incarnation, and the hiddenness of God becomes a real problem. They fall back to uncertain theism, and only as positive evidence accumulates do they return to personal theism. They reopen revelation, compare the traditions, and re-examine the history from Jesus through the crucifixion to the resurrection question. The resurrection holds, so they come back to Christianity and settle into historic commitment, tensions included."
+    },
+    {
+      "id": "return_through_naturalism",
+      "kind": "return",
+      "label": "Convinced, unsettled by suffering, lives as a humanist, returns",
+      "edgeIds": [
+        "e251",
+        "e247",
+        "e151",
+        "e152",
+        "e212",
+        "e054",
+        "e080",
+        "e082",
+        "e083",
+        "e200"
+      ],
+      "description": "Someone who believes in a personal God finds that belief is what makes suffering so hard to explain. The evidential problem moves them to agnostic naturalism, and they live as a secular humanist who builds their own meaning. In time the question of why persons matter at all leads them to intrinsic dignity, and from there back to a personal God. This time they test the claims of revelation and settle in Judaism, a tradition that makes room for arguing with God about suffering, as Job does."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "default",
+      "label": "Default",
+      "description": "The global weights, with every argument felt at the strength the map gives it.",
+      "multipliers": {
+        "byEdge": {},
+        "byNode": {},
+        "byNodeType": {},
+        "byEdgeType": {}
+      }
+    },
+    {
+      "id": "evidentialist",
+      "label": "Evidentialist",
+      "description": "Moved by public evidence and historical argument, and wary of private experience and purely a priori proofs.",
+      "multipliers": {
+        "byEdge": {},
+        "byNode": {
+          "arg_fine_tuning": 1.2,
+          "arg_ontological": 0.6,
+          "arg_reformed_epistemology": 0.5,
+          "arg_religious_experience": 0.6,
+          "p_evidential_evil": 1.2,
+          "p_miracle_prior": 1.1
+        },
+        "byNodeType": {
+          "evidence": 1.4,
+          "historical_claim": 1.4,
+          "historical_event": 1.3,
+          "experience": 0.6
+        },
+        "byEdgeType": {
+          "historically_supports": 1.3,
+          "historically_challenges": 1.3
+        }
+      }
+    },
+    {
+      "id": "existential",
+      "label": "Existential",
+      "description": "Moved by lived experience of love, suffering, beauty and meaning more than by formal argument or historical reconstruction.",
+      "multipliers": {
+        "byEdge": {},
+        "byNode": {
+          "exp_suffering": 1.4,
+          "exp_love": 1.5,
+          "exp_forgiveness": 1.4,
+          "arg_beauty": 1.4,
+          "arg_desire": 1.4,
+          "arg_religious_experience": 1.3,
+          "p_evidential_evil": 1.2,
+          "p_trauma": 1.3,
+          "m_constructed_meaning": 1.3
+        },
+        "byNodeType": {
+          "experience": 1.3,
+          "argument": 0.7,
+          "attractor": 1.2,
+          "evidence": 0.8,
+          "historical_claim": 0.8,
+          "historical_event": 0.8
+        },
+        "byEdgeType": {}
+      }
+    },
+    {
+      "id": "moral_realist",
+      "label": "Moral realist",
+      "description": "Treats moral knowledge as among the most secure things we know, so moral arguments carry weight and debunking arguments do not.",
+      "multipliers": {
+        "byEdge": {
+          "e077": 1.5,
+          "e152": 0.6
+        },
+        "byNode": {
+          "arg_moral": 1.5,
+          "exp_moral": 1.4,
+          "m_objective_value": 1.5,
+          "m_intrinsic_personhood": 1.6,
+          "m_value_fundamental": 1.4,
+          "m_naturalistic_morality": 1.2,
+          "t_naturalism_normativity": 1.3,
+          "t_naturalism_value": 1.3,
+          "p_evolutionary_debunking": 0.4,
+          "p_moral_conflict": 1.3
+        },
+        "byNodeType": {},
+        "byEdgeType": {}
+      }
+    },
+    {
+      "id": "empiricist",
+      "label": "Empiricist",
+      "description": "Trusts science and observation, and discounts a priori metaphysics and arguments that outrun experience.",
+      "multipliers": {
+        "byEdge": {
+          "e100": 0.6,
+          "e099": 1.2
+        },
+        "byNode": {
+          "p_science": 1.5,
+          "p_evolution": 1.4,
+          "p_brain_mind": 1.4,
+          "p_miracle_prior": 1.3,
+          "p_evolutionary_debunking": 1.4,
+          "arg_fine_tuning": 1.1,
+          "arg_kalam": 0.9,
+          "arg_contingency": 0.7,
+          "arg_reason": 0.6,
+          "arg_transcendental": 0.4,
+          "arg_ontological": 0.3,
+          "arg_reformed_epistemology": 0.4,
+          "arg_religious_experience": 0.6,
+          "exp_religious": 0.6,
+          "p_evil": 0.6,
+          "p_evidential_evil": 1.3,
+          "a_love": 0.6
+        },
+        "byNodeType": {
+          "evidence": 1.2,
+          "historical_claim": 1.1,
+          "experience": 0.7
+        },
+        "byEdgeType": {}
+      }
+    },
+    {
+      "id": "rationalist",
+      "label": "Rationalist",
+      "description": "Moved by a priori and metaphysical argument, and less by historical reconstruction.",
+      "multipliers": {
+        "byEdge": {},
+        "byNode": {
+          "arg_contingency": 1.4,
+          "arg_ontological": 1.4,
+          "arg_kalam": 1.2,
+          "arg_reason": 1.3,
+          "arg_transcendental": 1.3,
+          "p_evil": 1.2
+        },
+        "byNodeType": {
+          "historical_claim": 0.8,
+          "experience": 0.6
+        },
+        "byEdgeType": {}
+      }
     }
   ],
   "attractors": [

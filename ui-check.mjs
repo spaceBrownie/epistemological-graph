@@ -6,11 +6,12 @@ const data = JSON.parse(readFileSync(new URL('./epistemological_civ_tree_final.j
 const script = html.match(/<script>\s*\(async function \(\) \{([\s\S]*?)<\/script>/)?.[1];
 
 assert.ok(script, 'inline controller script is present');
-for (const id of ['home', 'fitAll', 'route', 'allConnections', 'filtersToggle', 'inspectorToggle', 'poi', 'poiResults', 'toursToggle', 'tourMenu', 'tour', 'tourNext', 'tourPrev']) {
+for (const id of ['home', 'fitAll', 'route', 'allConnections', 'filtersToggle', 'inspectorToggle', 'poi', 'poiResults', 'toursToggle', 'tourMenu', 'profile', 'tour', 'tourNext', 'tourPrev']) {
   assert.match(html, new RegExp(`id="${id}"`), `${id} control is present`);
 }
 assert.match(script, /function home\(\)/, 'camera has a home state');
 assert.match(script, /function fitBounds\(/, 'camera can fit a target');
+assert.match(script, /function effectiveWeight\(/, 'profiles reweight edges through one function');
 assert.match(script, /function showPath\(a, b\)/, 'route state is implemented');
 assert.match(script, /function toggleDrawer\(id, open\)/, 'drawer accessibility state is implemented');
 assert.match(script, /function startTour\(id\)/, 'tours can be started');
