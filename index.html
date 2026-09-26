@@ -547,7 +547,7 @@
   function openGuide() { guideStep = 0; renderGuide(); guide.showModal(); document.getElementById('guideNext').focus(); }
   function finishGuide() { guide.close(); }
   d3.select('#guideToggle').on('click', openGuide);
-  d3.select('#guideClose, #guideSkip, #guideExplore').on('click', finishGuide);
+  d3.selectAll('#guideClose, #guideSkip, #guideExplore').on('click', finishGuide);
   d3.select('#guideBack').on('click', () => { guideStep = Math.max(0, guideStep - 1); renderGuide(); });
   d3.select('#guideNext').on('click', () => { guideStep = Math.min(guideSlides.length - 1, guideStep + 1); renderGuide(); });
   d3.select('#guideTour').on('click', () => {
