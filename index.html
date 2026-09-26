@@ -24,7 +24,8 @@
   h1 { font: 600 18px/1.2 Georgia, serif; margin: 0 0 8px; } h2 { font-size: 12px; letter-spacing: .02em; color: var(--muted); margin: 14px 0 6px; }
   label.f { display: block; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   input[type=search], select { width: 100%; background: #0c1016; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 7px; }
-  #bar input[type=search] { width: clamp(150px, 24vw, 310px); }
+  #bar input[type=search] { flex: 0 1 310px; min-width: 120px; width: auto; } /* the search gives way first so buttons keep one height */
+  #bar button { flex-shrink: 0; white-space: nowrap; }
   #bar .weigh { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; white-space: nowrap; }
   #bar .weigh[hidden] { display: none; }
   #bar #profile { width: auto; max-width: 13em; padding: 5px 6px; }
@@ -160,8 +161,9 @@
   .tourMark.visited circle { stroke: var(--text); } .tourMark.visited text { fill: var(--text); }
   .tourMark.now circle { fill: var(--hl); stroke: var(--hl); } .tourMark.now text { fill: #11161d; }
   .tourMark { cursor: pointer; }
-  @media (max-width: 1000px) {
-    #bar { flex-wrap: wrap; } #bar h1 { order: -1; width: 100%; margin: 0; text-align: center; } #bar input[type=search] { order: 2; width: 100%; }
+  @media (max-width: 1280px) { .optional { display: none; } } /* the Guide button costs the header its spare width */
+  @media (max-width: 1040px) {
+    #bar { flex-wrap: wrap; } #bar h1 { order: -1; width: 100%; margin: 0; text-align: center; } #bar input[type=search] { order: 2; flex-basis: 100%; }
     #bar .camera { margin-left: auto; } .optional { display: none; }
     #bar #profile { max-width: 9.5em; }
   }
