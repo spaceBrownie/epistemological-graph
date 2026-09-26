@@ -1,4 +1,4 @@
-# Epistemological Civ Tree
+# Epistemological Tree
 
 Interactive tech-tree-style visualization of a cyclic worldview-formation graph. See `PLAN.md` for the architecture and `visualization_agent_handoff.md` for the conceptual model.
 
