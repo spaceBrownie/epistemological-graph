@@ -776,7 +776,8 @@
     const next = d3.min(candidates, d => d.score); const hit = candidates.find(d => d.score === next)?.m;
     if (hit) nodeSel.filter(m => m === hit).node().focus();
   }
-  d3.select(document).on('keydown.clear', ev => { if (ev.key === 'Escape') { clear(); toggleDrawer('left', false); toggleDrawer('right', false); } });
+  // the open guide owns Escape, so closing it keeps the tour, selection and drawers
+  d3.select(document).on('keydown.clear', ev => { if (ev.key === 'Escape' && !guide.open) { clear(); toggleDrawer('left', false); toggleDrawer('right', false); } });
 
   const deep = byId.get(new URLSearchParams(location.search).get('node'));
   if (deep) { select(deep); focusNode(deep); }
