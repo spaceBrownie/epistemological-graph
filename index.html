@@ -120,6 +120,37 @@
   #right .why { margin: 2px 0 6px; color: #c2c8d1; font-size: 12px; }
   .tourNav { display: flex; gap: 6px; justify-content: flex-end; }
   #tourNext { background: #3a3420; border-color: var(--gateway); }
+  #guide { width: min(480px, calc(100% - 32px)); padding: 22px; color: var(--text); background: var(--panel); border: 1px solid #59677e; border-radius: 8px; box-shadow: 0 18px 60px #000b; }
+  #guide::backdrop { background: #070a0fbb; }
+  #guide h2 { margin: 8px 28px 10px 0; color: #eee7d8; font: 600 22px/1.2 Georgia, serif; letter-spacing: 0; }
+  #guide p { min-height: 5.5em; margin: 0; color: #c2c8d1; font-size: 14px; }
+  #guideCount { color: var(--gateway); font-size: 12px; }
+  #guideProgress { height: 3px; margin: 8px 0 14px; overflow: hidden; background: #303847; border-radius: 3px; }
+  #guideProgress span { display: block; width: 33.333%; height: 100%; background: var(--gateway); transition: width .25s ease; }
+  #guideVisual { margin: 0 0 14px; padding: 5px 8px; background: #0c1016; border: 1px solid var(--line); border-radius: 6px; }
+  #guideVisual svg { display: none; width: 100%; height: auto; background: none; touch-action: auto; }
+  #guide.step-0 .guideScene[data-step="0"], #guide.step-1 .guideScene[data-step="1"], #guide.step-2 .guideScene[data-step="2"] { display: block; animation: guideReveal .32s ease-out both; }
+  .guideCaption { fill: #9199a7; font: 600 10px system-ui, sans-serif; letter-spacing: 1px; }
+  .guideNode { fill: #202735; stroke: #59677e; stroke-width: 1.5; }
+  .guideFlow { fill: none; stroke: #4f8fe8; stroke-width: 2; stroke-dasharray: 6 7; animation: guideDash 1.6s linear infinite; }
+  .guideStage { animation: guideStagePulse 2.7s ease-in-out infinite; }
+  .guideStage:nth-of-type(2) { animation-delay: .45s; } .guideStage:nth-of-type(3) { animation-delay: .9s; }
+  .guideLabel { fill: #e0e3e8; font: 11px system-ui, sans-serif; text-anchor: middle; }
+  .guideLane { fill: #151a22; stroke: #303847; }
+  .guideLaneNode { fill: #7fc1ff; animation: guideLanePulse 2.2s ease-in-out infinite; }
+  .guideTourPath { fill: none; stroke: #7fc1ff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 8; animation: guideDash 1.3s linear infinite; }
+  .guideTourStop { fill: #202735; stroke: #7fc1ff; stroke-width: 2; animation: guideStopPulse 2.4s ease-in-out infinite; }
+  .guideTourStop:nth-of-type(2) { animation-delay: .65s; } .guideTourStop:nth-of-type(3) { animation-delay: 1.3s; }
+  .guideTourNumber { fill: #e0e3e8; font: 600 11px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }
+  @keyframes guideDash { to { stroke-dashoffset: -26; } }
+  @keyframes guideStagePulse { 0%, 100% { filter: none; } 35% { filter: drop-shadow(0 0 5px #7fc1ff); } }
+  @keyframes guideLanePulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+  @keyframes guideStopPulse { 0%, 100% { fill: #202735; } 35% { fill: #d4a63a; } }
+  @keyframes guideReveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  #guideNav { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 20px; }
+  #guideNav > div { display: flex; gap: 6px; }
+  #guideTour { background: #3a3420; border-color: var(--gateway); }
+  @media (max-width: 600px) { #guideNav { align-items: stretch; flex-direction: column; } #guideNav > div { justify-content: flex-end; flex-wrap: wrap; } }
   /* during a tour, collapse visually but never spatially: other edges vanish, other nodes become unlabeled terrain */
   #viewport.touring:not(.showAll) #root .edge:not(.lit) { opacity: 0; pointer-events: none; }
   #viewport.touring:not(.showAll) .node.dim { opacity: .22; } #viewport.touring:not(.showAll) .node.dim text { display: none; }
@@ -135,6 +166,7 @@
     #bar #profile { max-width: 9.5em; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  @media (prefers-reduced-motion: reduce) { #guideVisual *, #guideProgress span { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
@@ -148,6 +180,7 @@
     </div>
     <label class="weigh" hidden><span class="lbl">Weigh as</span> <select id="profile" aria-describedby="profileHelp"></select></label>
     <button id="toursToggle" popovertarget="tourMenu" aria-controls="tourMenu">Tours</button>
+    <button id="guideToggle">Guide</button>
     <button id="route" aria-pressed="false">Route</button>
     <button id="allConnections" class="optional" aria-pressed="false" title="Temporarily show unrelated visible connections">Show all connections</button>
     <button id="inspectorToggle" aria-controls="right" aria-expanded="false">Inspector</button>
@@ -170,6 +203,41 @@
   <p id="profileHelp" hidden></p>
   <div id="status" role="status" aria-live="polite"></div>
   <div id="tourMenu" popover aria-label="Tours"></div>
+  <dialog id="guide" aria-labelledby="guideTitle">
+    <span id="guideCount"></span>
+    <button class="close" id="guideClose" aria-label="Close guide">×</button>
+    <div id="guideProgress" aria-hidden="true"><span></span></div>
+    <div id="guideVisual" aria-hidden="true">
+      <svg class="guideScene" data-step="0" viewBox="0 0 440 112">
+        <defs><marker id="guideStageArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path fill="#4f8fe8" d="M0 0 8 4 0 8z"/></marker></defs>
+        <text class="guideCaption" x="16" y="16">X · SUGGESTED FLOW</text>
+        <path class="guideFlow" d="M119 61h34m104 0h34" marker-end="url(#guideStageArrow)"/>
+        <g class="guideStage"><rect class="guideNode" x="16" y="37" width="103" height="48" rx="7"/><text class="guideLabel" x="67.5" y="66">Questions</text></g>
+        <g class="guideStage"><rect class="guideNode" x="153" y="37" width="104" height="48" rx="7"/><text class="guideLabel" x="205" y="66">Arguments</text></g>
+        <g class="guideStage"><rect class="guideNode" x="291" y="37" width="133" height="48" rx="7"/><text class="guideLabel" x="357.5" y="66">Possible outlooks</text></g>
+      </svg>
+      <svg class="guideScene" data-step="1" viewBox="0 0 440 112">
+        <text class="guideCaption" x="16" y="16">Y · CATEGORIES · NO RANK</text>
+        <g><rect class="guideLane" x="16" y="27" width="408" height="22" rx="5"/><text class="guideLabel" x="28" y="42" text-anchor="start">human experience</text><circle class="guideLaneNode" cx="277" cy="38" r="4"/><circle class="guideLaneNode" cx="310" cy="38" r="4"/><circle class="guideLaneNode" cx="343" cy="38" r="4"/></g>
+        <g><rect class="guideLane" x="16" y="56" width="408" height="22" rx="5"/><text class="guideLabel" x="28" y="71" text-anchor="start">epistemology</text><circle class="guideLaneNode" cx="277" cy="67" r="4"/><circle class="guideLaneNode" cx="310" cy="67" r="4"/><circle class="guideLaneNode" cx="343" cy="67" r="4"/></g>
+        <g><rect class="guideLane" x="16" y="85" width="408" height="22" rx="5"/><text class="guideLabel" x="28" y="100" text-anchor="start">history</text><circle class="guideLaneNode" cx="277" cy="96" r="4"/><circle class="guideLaneNode" cx="310" cy="96" r="4"/><circle class="guideLaneNode" cx="343" cy="96" r="4"/></g>
+      </svg>
+      <svg class="guideScene" data-step="2" viewBox="0 0 440 112">
+        <defs><marker id="guideTourArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path fill="#7fc1ff" d="M0 0 8 4 0 8z"/></marker></defs>
+        <text class="guideCaption" x="16" y="16">TOUR · ONE CONNECTION AT A TIME</text>
+        <path class="guideTourPath" d="M53 71C111 22 148 28 202 60s99 41 166-2" marker-end="url(#guideTourArrow)"/>
+        <circle class="guideTourStop" cx="49" cy="74" r="15"/><text class="guideTourNumber" x="49" y="74">1</text>
+        <circle class="guideTourStop" cx="202" cy="60" r="15"/><text class="guideTourNumber" x="202" y="60">2</text>
+        <circle class="guideTourStop" cx="370" cy="58" r="15"/><text class="guideTourNumber" x="370" y="58">3</text>
+      </svg>
+    </div>
+    <h2 id="guideTitle"></h2>
+    <p id="guideText"></p>
+    <div id="guideNav">
+      <button id="guideSkip">Skip guide</button>
+      <div><button id="guideBack">Back</button><button id="guideNext">Next</button><button id="guideExplore" hidden>Explore map</button><button id="guideTour" hidden>Choose a tour</button></div>
+    </div>
+  </dialog>
   <section id="tour" aria-label="Tour" hidden>
     <span id="tourKind"></span><h2 id="tourTitle"></h2>
     <button class="close" id="tourClose" aria-label="End tour" style="position:absolute;top:10px;right:10px;margin:0">×</button>
@@ -373,9 +441,10 @@
     svg.interrupt(); // a quick Next must not leave the camera on the previous step's frame
     const both = nodesTransform([from, to]);
     if (both.k >= .45) return move(both);
-    if (reducedMotion) return svg.call(zoom.transform, nodesTransform([to]));
+    if (reducedMotion) return svg.call(zoom.transform, tourStep === 1 ? both : nodesTransform([to]));
+    // From the overview, hold the first source before a distant hop so it is not skipped.
     svg.transition().duration(350).call(zoom.transform, nodesTransform([from]))
-      .transition().duration(1100).ease(d3.easeCubicInOut).call(zoom.transform, nodesTransform([to]));
+      .transition().delay(tourStep === 1 ? 900 : 0).duration(1100).ease(d3.easeCubicInOut).call(zoom.transform, nodesTransform([to]));
   }
   function home() {
     const k = .82;
@@ -455,6 +524,39 @@
     });
   }
   renderTourMenu();
+  const guideSlides = [
+    ['A map of a line of thought', 'The X axis orders stages left to right along the author’s proposed flow, from initial questions toward possible outlooks. Treat it as a suggested route, not a universal sequence or score. Backward and feedback connections show where reasoning revisits earlier ideas.'],
+    ['Rows are categories, not ranks', 'The Y axis groups arguments into categories such as human experience, epistemology, metaphysics, and history. Their vertical order does not rank them. The global-pressure rails sit outside the ordinary stages.'],
+    ['Tours make the map easier to follow', 'Start with Tours for a guided route through related claims. Each step focuses a connection and explains why it matters. Search for a concept or select a node to inspect it.']
+  ];
+  const guide = document.getElementById('guide');
+  let guideStep = 0;
+  function renderGuide() {
+    const [title, text] = guideSlides[guideStep];
+    guide.classList.remove('step-0', 'step-1', 'step-2');
+    guide.classList.add(`step-${guideStep}`);
+    document.getElementById('guideCount').textContent = `Map guide · ${guideStep + 1} of ${guideSlides.length}`;
+    document.querySelector('#guideProgress span').style.width = `${(guideStep + 1) / guideSlides.length * 100}%`;
+    document.getElementById('guideTitle').textContent = title;
+    document.getElementById('guideText').textContent = text;
+    document.getElementById('guideBack').hidden = guideStep === 0;
+    document.getElementById('guideNext').hidden = guideStep === guideSlides.length - 1;
+    document.getElementById('guideExplore').hidden = guideStep !== guideSlides.length - 1;
+    document.getElementById('guideTour').hidden = guideStep !== guideSlides.length - 1;
+  }
+  function openGuide() { guideStep = 0; renderGuide(); guide.showModal(); document.getElementById('guideNext').focus(); }
+  function finishGuide() { guide.close(); }
+  d3.select('#guideToggle').on('click', openGuide);
+  d3.select('#guideClose, #guideSkip, #guideExplore').on('click', finishGuide);
+  d3.select('#guideBack').on('click', () => { guideStep = Math.max(0, guideStep - 1); renderGuide(); });
+  d3.select('#guideNext').on('click', () => { guideStep = Math.min(guideSlides.length - 1, guideStep + 1); renderGuide(); });
+  d3.select('#guideTour').on('click', () => {
+    finishGuide();
+    const menu = document.getElementById('tourMenu');
+    if (!menu.matches(':popover-open')) menu.showPopover();
+    menu.querySelector('summary')?.focus();
+  });
+  guide.addEventListener('close', () => { try { localStorage.setItem('epistemological-civ-guide-seen', 'yes'); } catch {} });
   function startTour(id) {
     const t = tours.find(t => t.id === id); if (!t) return;
     if (t.profile && t.profile !== profile?.id) setProfile(t.profile); // a deep-linked profile journey brings its audience with it
@@ -677,6 +779,9 @@
   const deep = byId.get(new URLSearchParams(location.search).get('node'));
   if (deep) { select(deep); focusNode(deep); }
   const deepTour = new URLSearchParams(location.search).get('tour'); if (deepTour) startTour(deepTour);
+  let guideSeen = false;
+  try { guideSeen = localStorage.getItem('epistemological-civ-guide-seen') === 'yes'; } catch {}
+  if (!guideSeen && !deep && !deepTour) openGuide();
   function wrap(s, max, lines) { // word-boundary wrap; ellipsis only when the last line overflows
     const out = [''];
     for (const w of s.split(' ')) {
